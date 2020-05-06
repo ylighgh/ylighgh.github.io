@@ -287,9 +287,11 @@ h1 strong, h2 strong, h3 strong, #toctitle strong, .sidebarblock > .content > .t
 .clearfix:before, .clearfix:after, .float-group:before, .float-group:after { content: " "; display: table; }
 .clearfix:after, .float-group:after { clear: both; }
 
-*:not(pre) > code { font-size: 0.9375em; font-style: normal !important; letter-spacing: 0; padding: 0.1em 0.5ex; word-spacing: -0.15em; background-color: #f7f7f8; -webkit-border-radius: 4px; border-radius: 4px; line-height: 1.45; text-rendering: optimizeSpeed; }
+*:not(pre) > code { font-size: 0.9375em; font-style: normal !important; letter-spacing: 0; padding: 0.1em 0.5ex; word-spacing: -0.15em; background-color: #f7f7f8; -webkit-border-radius: 4px; border-radius: 4px; line-height: 1.45; text-rendering: optimizeSpeed; border: 1px dashed #2f6fab;}
 
-pre, pre > code { line-height: 1.45; color: rgba(0, 0, 0, 0.9); font-family: "Droid Sans Mono", "DejaVu Sans Mono", "Monospace", monospace; font-weight: normal; text-rendering: optimizeSpeed; }
+pre {border: 1px dashed gray;}
+
+pre, pre > code { line-height: 1.45; color: rgba(0, 0, 0, 0.9); font-family: "Droid Sans Mono", "DejaVu Sans Mono", "Monospace", monospace; font-weight: normal; text-rendering: optimizeSpeed;}
 
 .keyseq { color: rgba(51, 51, 51, 0.8); }
 
@@ -405,7 +407,9 @@ table.tableblock #preamble > .sectionbody > .paragraph:first-of-type p { font-si
 
 .exampleblock > .content > :last-child > :last-child, .exampleblock > .content .olist > ol > li:last-child > :last-child, .exampleblock > .content .ulist > ul > li:last-child > :last-child, .exampleblock > .content .qlist > ol > li:last-child > :last-child, .sidebarblock > .content > :last-child > :last-child, .sidebarblock > .content .olist > ol > li:last-child > :last-child, .sidebarblock > .content .ulist > ul > li:last-child > :last-child, .sidebarblock > .content .qlist > ol > li:last-child > :last-child { margin-bottom: 0; }
 
-.literalblock pre, .listingblock pre:not(.highlight), .listingblock pre[class="highlight"], .listingblock pre[class^="highlight "], .listingblock pre.CodeRay, .listingblock pre.prettyprint { background: #f7f7f8; }
+.listingblock pre:not(.highlight) {color: white; background: #002b36; }
+
+.literalblock pre, .listingblock pre[class="highlight"], .listingblock pre[class^="highlight "], .listingblock pre.CodeRay, .listingblock pre.prettyprint { background: #f7f7f8; }
 .sidebarblock .literalblock pre, .sidebarblock .listingblock pre:not(.highlight), .sidebarblock .listingblock pre[class="highlight"], .sidebarblock .listingblock pre[class^="highlight "], .sidebarblock .listingblock pre.CodeRay, .sidebarblock .listingblock pre.prettyprint { background: #f2f1f1; }
 
 .literalblock pre, .literalblock pre[class], .listingblock pre, .listingblock pre[class] { -webkit-border-radius: 4px; border-radius: 4px; word-wrap: break-word; padding: 1em; font-size: 0.8125em; }
@@ -739,7 +743,7 @@ p { margin-bottom: 1.25rem; }
   .show-for-print { display: inherit !important; } }
 
 </style>
-<link rel="stylesheet" href="css/font-awesome:.css">
+<link rel="stylesheet" href="css/font-awesome.css">
 </head>
 <body class="book toc2 toc-left">
 <div id="header">
@@ -750,29 +754,66 @@ p { margin-bottom: 1.25rem; }
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">目录</div>
-<ul class="sectlevel0">
-<li><a href="#_linux_basic_command">Linux Basic Command</a>
 <ul class="sectlevel1">
-<li><a href="#_ls">1. ls</a></li>
-<li><a href="#_pwd">2. pwd</a></li>
-<li><a href="#_cd">3. cd</a></li>
-<li><a href="#_mkdir">4. mkdir</a></li>
-<li><a href="#_touch">5. touch</a></li>
-<li><a href="#_cp">6. cp</a></li>
-<li><a href="#_mv">7. mv</a></li>
-<li><a href="#_rm">8. rm</a></li>
-<li><a href="#_输出重定向">9. 输出重定向</a></li>
-<li><a href="#_cat">10. cat</a></li>
+<li><a href="#_前言">前言</a></li>
+<li><a href="#基础指令">1. 基础指令</a>
+<ul class="sectlevel2">
+<li><a href="#_ls">1.1. ls</a></li>
+<li><a href="#_pwd">1.2. pwd</a></li>
+<li><a href="#_cd">1.3. cd</a></li>
+<li><a href="#_mkdir">1.4. mkdir</a></li>
+<li><a href="#_touch">1.5. touch</a></li>
+<li><a href="#_cp">1.6. cp</a></li>
+<li><a href="#_mv">1.7. mv</a></li>
+<li><a href="#_rm">1.8. rm</a></li>
+<li><a href="#_输出重定向">1.9. 输出重定向</a></li>
+<li><a href="#_cat">1.10. cat</a></li>
+</ul>
+</li>
+<li><a href="#进阶指令">2. 进阶指令</a>
+<ul class="sectlevel2">
+<li><a href="#_df">2.1. df</a></li>
+<li><a href="#_free">2.2. free</a></li>
+<li><a href="#_head">2.3. head</a></li>
+<li><a href="#_tail">2.4. tail</a></li>
+<li><a href="#_less">2.5. less</a></li>
+<li><a href="#_wc">2.6. wc</a></li>
+<li><a href="#_date">2.7. date</a></li>
+<li><a href="#_cal">2.8. cal</a></li>
+<li><a href="#_clear">2.9. clear</a></li>
+<li><a href="#_管道">2.10. 管道</a></li>
+</ul>
+</li>
+<li><a href="#高级指令">3. 高级指令</a>
+<ul class="sectlevel2">
+<li><a href="#_hostname">3.1. hostname</a></li>
+<li><a href="#_id">3.2. id</a></li>
+<li><a href="#_whoami">3.3. whoami</a></li>
+<li><a href="#_ps_ef">3.4. ps -ef</a></li>
+<li><a href="#_top">3.5. top</a></li>
 </ul>
 </li>
 </ul>
 </div>
 </div>
 <div id="content">
-<h1 id="_linux_basic_command" class="sect0">Linux Basic Command</h1>
 <div class="sect1">
-<h2 id="_ls">1. ls</h2>
+<h2 id="_前言">前言</h2>
 <div class="sectionbody">
+<div class="paragraph">
+<p>手册仅收录了Linux常用的命令及参数，如需更详细的命令及参数解释</p>
+</div>
+<div class="paragraph">
+<p>请点击： <a href="https://man.linuxde.net">Linux命令大全</a></p>
+</div>
+<div style="page-break-after: always;"></div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="基础指令">1. 基础指令</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_ls">1.1. ls</h3>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 33.3333%;">
@@ -838,10 +879,8 @@ p { margin-bottom: 1.25rem; }
 <p>绝对路径：绝对路径不需要参照物，直接从根"/"开始寻找对应路径;</p>
 </div>
 </div>
-</div>
-<div class="sect1">
-<h2 id="_pwd">2. pwd</h2>
-<div class="sectionbody">
+<div class="sect2">
+<h3 id="_pwd">1.2. pwd</h3>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 33.3333%;">
@@ -859,10 +898,8 @@ p { margin-bottom: 1.25rem; }
 </tbody>
 </table>
 </div>
-</div>
-<div class="sect1">
-<h2 id="_cd">3. cd</h2>
-<div class="sectionbody">
+<div class="sect2">
+<h3 id="_cd">1.3. cd</h3>
 <div class="paragraph">
 <p>(change directory 改变目录)</p>
 </div>
@@ -870,13 +907,11 @@ p { margin-bottom: 1.25rem; }
 <p>作用：用于切换的当前的工作目录</p>
 </div>
 <div class="paragraph">
-<p>语法：cd 路径</p>
+<p>语法：<code>cd 路径</code></p>
 </div>
 </div>
-</div>
-<div class="sect1">
-<h2 id="_mkdir">4. mkdir</h2>
-<div class="sectionbody">
+<div class="sect2">
+<h3 id="_mkdir">1.4. mkdir</h3>
 <div class="paragraph">
 <p>指令：mkdir</p>
 </div>
@@ -908,12 +943,10 @@ p { margin-bottom: 1.25rem; }
 </tbody>
 </table>
 </div>
-</div>
-<div class="sect1">
-<h2 id="_touch">5. touch</h2>
-<div class="sectionbody">
+<div class="sect2">
+<h3 id="_touch">1.5. touch</h3>
 <div class="paragraph">
-<p>指令：touch</p>
+<p>指令：<code>touch</code></p>
 </div>
 <div class="paragraph">
 <p>作用：创建文件</p>
@@ -922,12 +955,10 @@ p { margin-bottom: 1.25rem; }
 <p>语法：touch 文件路径 （文件路径可以是直接的文件名也可以是路径）</p>
 </div>
 </div>
-</div>
-<div class="sect1">
-<h2 id="_cp">6. cp</h2>
-<div class="sectionbody">
+<div class="sect2">
+<h3 id="_cp">1.6. cp</h3>
 <div class="paragraph">
-<p>指令：cp（copy 复制）</p>
+<p>指令：<code>cp</code>（copy 复制）</p>
 </div>
 <div class="paragraph">
 <p>作用：复制文件/文件夹到指定的位置</p>
@@ -960,12 +991,10 @@ Linux在复制的过程中是可以重新对新位置的文件进行重命名的
 </table>
 </div>
 </div>
-</div>
-<div class="sect1">
-<h2 id="_mv">7. mv</h2>
-<div class="sectionbody">
+<div class="sect2">
+<h3 id="_mv">1.7. mv</h3>
 <div class="paragraph">
-<p>指令：mv （move 移动 剪切）</p>
+<p>指令：<code>mv</code> （move 移动 剪切）</p>
 </div>
 <div class="paragraph">
 <p>作用：移动文档到新的位置</p>
@@ -986,12 +1015,10 @@ Linux在复制的过程中是可以重新对新位置的文件进行重命名的
 </table>
 </div>
 </div>
-</div>
-<div class="sect1">
-<h2 id="_rm">8. rm</h2>
-<div class="sectionbody">
+<div class="sect2">
+<h3 id="_rm">1.8. rm</h3>
 <div class="paragraph">
-<p>指令：rm（remove 移除 删除）</p>
+<p>指令：<code>rm</code>（remove 移除 删除）</p>
 </div>
 <div class="paragraph">
 <p>作用：移除/删除 文档</p>
@@ -1044,10 +1071,8 @@ Linux在复制的过程中是可以重新对新位置的文件进行重命名的
 </table>
 </div>
 </div>
-</div>
-<div class="sect1">
-<h2 id="_输出重定向">9. 输出重定向</h2>
-<div class="sectionbody">
+<div class="sect2">
+<h3 id="_输出重定向">1.9. 输出重定向</h3>
 <div class="paragraph">
 <p>一般命令的输出都会显示在终端中，优势哟需要将一些命令而执行结果想要保存到文件中进行后续的分析/统计，则这时候需要使用到的输出重定向技术</p>
 </div>
@@ -1073,12 +1098,10 @@ Linux在复制的过程中是可以重新对新位置的文件进行重命名的
 </table>
 </div>
 </div>
-</div>
-<div class="sect1">
-<h2 id="_cat">10. cat</h2>
-<div class="sectionbody">
+<div class="sect2">
+<h3 id="_cat">1.10. cat</h3>
 <div class="paragraph">
-<p>指令：cat</p>
+<p>指令：<code>cat</code></p>
 </div>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
@@ -1103,13 +1126,483 @@ Linux在复制的过程中是可以重新对新位置的文件进行重命名的
 </div>
 </div>
 </div>
+<div class="sect1">
+<h2 id="进阶指令">2. 进阶指令</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_df">2.1. df</h3>
+<div class="paragraph">
+<p>指令：<code>df  选项</code></p>
+</div>
+<div class="paragraph">
+<p>作用：查看磁盘的空间</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>选项</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>含义</strong></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-h</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">表示以可读性较高的形式展示大小</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_free">2.2. free</h3>
+<div class="paragraph">
+<p>指令：<code>free 选项</code></p>
+</div>
+<div class="paragraph">
+<p>作用：查看内存使用情况</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>选项</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>含义</strong></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-m</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">表示以MB为单位查看内存使用情况</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_head">2.3. head</h3>
+<div class="paragraph">
+<p>指令：<code>head  选项 文件名</code></p>
+</div>
+<div class="paragraph">
+<p>作用：查看一个文件的前n行，如果不指定n，则默认显示前10行</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>选项</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>含义</strong></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-n</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">指定需要查看的行数（n表示数字）</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_tail">2.4. tail</h3>
+<div class="paragraph">
+<p>指令：<code>tail  选项 文件名</code></p>
+</div>
+<div class="paragraph">
+<p>作用1：查看一个文件的末n行，如果不指定n，则默认显示后10行</p>
+</div>
+<div class="paragraph">
+<p>作用1：可以通过tail指令来查看一个文件的动态变化</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>选项</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>含义</strong></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-n</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">指定需要查看的行数（n表示数字）</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-f</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">查看一个文件的动态变化内容（该命令一般用于查看系统的日志比较多）</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_less">2.5. less</h3>
+<div class="paragraph">
+<p>指令：`less  文件名 `</p>
+</div>
+<div class="paragraph">
+<p>作用：查看文件，以较少的内容进行输出，按下辅助功能（<strong>数字 回车 空格键 上下方向键</strong>）查看更多  ，退出按q键</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_wc">2.6. wc</h3>
+<div class="paragraph">
+<p>指令：<code>wc 选项 文件名</code></p>
+</div>
+<div class="paragraph">
+<p>作用：统计文件内容信息（包含行数 单词数 字节数）</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>选项</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>含义</strong></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-l</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">表示lines 行数 输出行数统计</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-w</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">表示words 单词数 显示单词计数（依照空格来判断单词数量）</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-c</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">表示bytes 字节数 输出字节数统计</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_date">2.7. date</h3>
+<div class="paragraph">
+<p>指令 ：<code>date 选项</code></p>
+</div>
+<div class="paragraph">
+<p>作用：表示操作系统时间日期（读取 设置）</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>选项</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>含义</strong></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">+%F</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">输出形式：年-月-日 等价于（date +%Y-%m-%d）</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">"+%F %T"</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">输出形式：年-月-日 当前时间 （引号表示让"年月日与时分秒"成为一个不可分割的整体） 等价于 （date "+%Y-%m-%d %H:%M:%S"）</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-d "-1 day" "+%F %T"</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">获取之前或者之后的某个时间</p></td>
+</tr>
+</tbody>
+</table>
+<div class="ulist">
+<ul>
+<li>
+<p>符号的可选值：+（之后） 或者 -  （之前）</p>
+</li>
+<li>
+<p>单位的可选值：day（天） month（月份） year（年）</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">%F：表示完整的年月日
+%T：表示完整的时分秒
+%Y：表示四位年份
+%m：表示两位月份（带前导0）
+%d：表示日期（带前导0）
+%H：表示小时（带前导0）
+%M：表示分钟（带前导0）
+%S：表示秒数（带前导0）
+
+2018-03-24：03的 0 就是所谓的前导0</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_cal">2.8. cal</h3>
+<div class="paragraph">
+<p>指令：<code>cal 选项</code></p>
+</div>
+<div class="paragraph">
+<p>作用：用来操作日历</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>选项</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>含义</strong></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">直接输出当前月份的日历</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-3</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">表示输出上一个月+本月+下个月的日历</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-y 年份</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">表示输出某一个年份的日历</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_clear">2.9. clear</h3>
+<div class="paragraph">
+<p>指令：<code>clear</code>（Ctrl+L）</p>
+</div>
+<div class="paragraph">
+<p>作用：清除终端中已经存在的命令和结果（信息）</p>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+需要注意的是，该命令并不是真的清楚了之前的信息，而是把之前的信息隐藏到了最上面，通过滚动条继续查看以前的信息
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_管道">2.10. 管道</h3>
+<div class="paragraph">
+<p><strong>管道符：|</strong></p>
+</div>
+<div class="paragraph">
+<p>作用：管道一般可以用于“<strong>过滤</strong>”，“特殊”，“扩展处理”</p>
+</div>
+<div class="paragraph">
+<p>语法：管道不能单独使用，必须配合前面的指令一起使用，其作用主要是辅助作用</p>
+</div>
+<div class="paragraph">
+<p>过滤案例：需要通过管道查询出"/"(根目录)下包含"y"字母的文档名称</p>
+</div>
+<div class="paragraph">
+<p><code>ls / | grep y</code></p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="images/管道作用(过滤)-1.png" alt="管道作用(过滤) 1">
+</div>
+</div>
+<div class="paragraph">
+<p>针对上面这个命令说明：</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>以管道作为分界线，<strong>前面的命令有个输出，后面需要先输入，然后再过滤，最后再输出，通俗的讲就是管道前面的输出就是后面指令的输入</strong></p>
+</li>
+<li>
+<p>grep指令：<strong>主要用于过滤</strong></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>拓展案例：请使用学过的命令，来统计某个目录下的文档的总个数</p>
+</div>
+<div class="paragraph">
+<p><code>ls | wc -l</code></p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="images/管道作用(拓展)-2.png" alt="管道作用(拓展) 2">
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="高级指令">3. 高级指令</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_hostname">3.1. hostname</h3>
+<div class="paragraph">
+<p>指令：<code>hostname 选项</code></p>
+</div>
+<div class="paragraph">
+<p>含义：表示输出当前完整的主机名</p>
+</div>
+<div class="paragraph">
+<p>作用：操作服务器的 <strong>主机名</strong>（读取）</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>选项</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>含义</strong></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-f</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">表示输出当前主机名中的FQDN(全限定域名)</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_id">3.2. id</h3>
+<div class="paragraph">
+<p>指令：<code>id 选项</code></p>
+</div>
+<div class="paragraph">
+<p>作用：查看一个用户的一些基本信息（包含用户id 用户组id 附加组id）该指令如果不指定用户则默认当前目录</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>选项</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>含义</strong></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">用户名</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">显示指定用户的基本信息</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_whoami">3.3. whoami</h3>
+<div class="paragraph">
+<p>指令：<code>whoami</code></p>
+</div>
+<div class="paragraph">
+<p>作用：显示当前登录的用户名，一般用于shell脚本，用于获取当前操作的用户名去方便记录日志</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_ps_ef">3.4. ps -ef</h3>
+<div class="paragraph">
+<p>指令：<code>ps 选项</code></p>
+</div>
+<div class="paragraph">
+<p>作用：主要是查看服务器的进程信息</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>选项</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>含义</strong></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-e</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">表示列出全部的进程</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-f</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">表示显示全部的列（显示全字段）</p></td>
+</tr>
+</tbody>
+</table>
+<div class="imageblock">
+<div class="content">
+<img src="images/ps-ef.png" alt="ps ef">
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">UID：该进行执行的用户id；
+PID：进程id；
+PPID：该进程的父级id，如果一个程序的父级进程找不到，该程序的进程称之为僵尸进程；
+C：表示CPU的占用率，其形式是百分数；
+STIME：该进程的启动时间；
+TTY：终端设备，发起该进程的设备识别符号，如果显示“?”则表示该进程并不是由终端设备发起；
+TIME：表示进程的执行时间；
+CMD：该进程的名称或者对应的路径；</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>案例 ： 在ps的结果中过滤出想要查看的进程状态</p>
+</div>
+<div class="paragraph">
+<p><code>ps -ef | grep 进程名称</code></p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="images/ps-ef拓展.png" alt="ps ef拓展">
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_top">3.5. top</h3>
+<div class="paragraph">
+<p>指令：<code>top</code></p>
+</div>
+<div class="paragraph">
+<p>作用：查看服务器的进程占用资源情况（动态显示）</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="images/top.png" alt="top">
+</div>
+</div>
+<div class="paragraph">
+<p>退出按 <code>q</code> 键或者 <code>Ctrl+C</code></p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="images/top_02.png" alt="top 02">
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">PID：进程id；
+USER：该进程对应的用户；
+PR：优先级；
+NI：用户进程空间内改变过优先级的进程占用CPU百分比；
+VIRT：虚拟内存；
+RES：常驻内存；
+SHR：共享内存；</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-05-05 17:27:51 +0800
+Last updated 2020-05-06 17:40:44 +0800
 </div>
 </div>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/github.min.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/highlight.min.js"></script>
+<link rel="stylesheet" href="css/github.min.css">
+<script src="js/highlight.min.js"></script>
 <script>hljs.initHighlighting()</script>
 <script type="text/x-mathjax-config">
 MathJax.Hub.Config({
@@ -1134,6 +1627,6 @@ MathJax.Hub.Register.StartupHook("AsciiMath Jax Ready", function () {
   })
 })
 </script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_HTMLorMML"></script>
+<script src="js/MathJax/MathJax.js?config=TeX-MML-AM_HTMLorMML"></script>
 </body>
 </html>
