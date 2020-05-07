@@ -791,6 +791,17 @@ p { margin-bottom: 1.25rem; }
 <li><a href="#_whoami">3.3. whoami</a></li>
 <li><a href="#_ps_ef">3.4. ps -ef</a></li>
 <li><a href="#_top">3.5. top</a></li>
+<li><a href="#_du_sh">3.6. du -sh</a></li>
+<li><a href="#_find">3.7. find</a></li>
+<li><a href="#_systemctl">3.8. systemctl</a></li>
+<li><a href="#_kill">3.9. kill</a></li>
+<li><a href="#_ifconfig">3.10. ifconfig</a></li>
+<li><a href="#_reboot">3.11. reboot</a></li>
+<li><a href="#_shutdown">3.12. shutdown</a></li>
+<li><a href="#_uptime">3.13. uptime</a></li>
+<li><a href="#_uname">3.14. uname</a></li>
+<li><a href="#_netstat_tnlp">3.15. netstat -tnlp</a></li>
+<li><a href="#_man">3.16. man</a></li>
 </ul>
 </li>
 </ul>
@@ -1576,6 +1587,9 @@ CMD：该进程的名称或者对应的路径；</code></pre>
 <div class="paragraph">
 <p>退出按 <code>q</code> 键或者 <code>Ctrl+C</code></p>
 </div>
+<div class="paragraph">
+<p>输出的结果：</p>
+</div>
 <div class="imageblock">
 <div class="content">
 <img src="images/top_02.png" alt="top 02">
@@ -1589,7 +1603,303 @@ PR：优先级；
 NI：用户进程空间内改变过优先级的进程占用CPU百分比；
 VIRT：虚拟内存；
 RES：常驻内存；
-SHR：共享内存；</code></pre>
+SHR：共享内存；
+           计算一个进程实际使用的内存 = 常驻内存（RES）- 共享内存（SHR）
+S：表示进程的状态（sleeping，其中S表示睡眠，R表示运行）
+%CPU：表示CPU的占用百分比；
+%MEM：表示内存的占用百分比；
+TIME+：执行时间；
+COMMAND：进程的名称或者路径；</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>在运行top的时候，可以按以下方便快捷键</strong></p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>快捷键</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>含义</strong></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">M</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">表示将结果按照内存（MEM）从高到低进行降序排列</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">P</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">表示将结果按照CPU使用率从高到低进行降序排列</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">当服务器拥有多个CPU的时候，可以使用"1"快捷键来切换是否显示各个CPU的详细信息</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_du_sh">3.6. du -sh</h3>
+<div class="paragraph">
+<p>指令：<code>du -sh 目录路径</code></p>
+</div>
+<div class="paragraph">
+<p>作用：查看目录的真实大小</p>
+</div>
+<div class="paragraph">
+<p>-s：（summaries）只显示汇总的大小</p>
+</div>
+<div class="paragraph">
+<p>-h：表示以高可读性的形式进行显示</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_find">3.7. find</h3>
+<div class="paragraph">
+<p>指令：`find 路径范围 选项 选项的值 `（其参数有55个之多）</p>
+</div>
+<div class="paragraph">
+<p>作用：用于查找文件</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>选项</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>含义</strong></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-name</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">按照文档名称进行搜索（支持模糊搜索）</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-type</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">按照文档的类型进行搜索</p></td>
+</tr>
+</tbody>
+</table>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+文档类型"-"表示文件（在find的时候需要用f来替换），"d"表示文件夹
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>案例：使用find来搜索/etc/sane.d/目录下所有的文件</p>
+</div>
+<div class="paragraph">
+<p>语法：<code>find /etc/sane.d/ -type f</code></p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="images/find_01.png" alt="find 01">
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_systemctl">3.8. systemctl</h3>
+<div class="paragraph">
+<p>指令：<code>systemctl start/stop/restart/status  服务名</code></p>
+</div>
+<div class="paragraph">
+<p>作用：用于控制一些软件的服务启动/停止/重启，查看软件的状态</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_kill">3.9. kill</h3>
+<div class="paragraph">
+<p>指令：<code>kill 进程PID</code></p>
+</div>
+<div class="paragraph">
+<p>与`kill`命令相似但是比kill更加好用的杀死进程的命令：<code>killall</code></p>
+</div>
+<div class="paragraph">
+<p>指令：<code>killall 进程名称</code></p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_ifconfig">3.10. ifconfig</h3>
+<div class="paragraph">
+<p>指令：<code>ifconfig</code>    （获取网卡信息）</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="images/ifconfig_01.png" alt="ifconfig 01">
+</div>
+</div>
+<div class="paragraph">
+<p>enp4s0f1: 本机物理网卡</p>
+</div>
+<div class="paragraph">
+<p>lo：（Loop）本机回环网卡</p>
+</div>
+<div class="paragraph">
+<p>wlo1：本机无线网卡（其中inet 后面的为IP地址）</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_reboot">3.11. reboot</h3>
+<div class="paragraph">
+<p>指令：<code>reboot</code></p>
+</div>
+<div class="paragraph">
+<p>作用：重新启动计算机</p>
+</div>
+<div class="paragraph">
+<p>指令2：<code>reboot -w</code>   模拟重启，但是不重启（只写关机与开机的日志信息）</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_shutdown">3.12. shutdown</h3>
+<div class="paragraph">
+<p>指令：`shutdown -h 时间点 `</p>
+</div>
+<div class="paragraph">
+<p>作用：关机 （慎用）</p>
+</div>
+<div class="paragraph">
+<p>设置系统关机时间为23:00</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="images/shutdown_01.png" alt="shutdown 01">
+</div>
+</div>
+<div class="paragraph">
+<p>如果想要取消关机计划，则可以按照一下方式去尝试</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>针对CentOS7.x之前的版本：<code>Ctrl+C</code></p>
+</li>
+<li>
+<p>针对CentOS7.x之后的版本：<code>shutdown -c</code></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>设置系统立马关机：<code>shutdown -h now</code></p>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+除了shutdown关机以外，还有一下几个命令：<code>init 0</code> <code>halt</code> <code>poweroff</code>
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_uptime">3.13. uptime</h3>
+<div class="paragraph">
+<p>指令：<code>uptime</code></p>
+</div>
+<div class="paragraph">
+<p>作用：输出计算机的持续在线时间（计算机从开机以来到现在的时间，单位为小时）</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="images/uptime.png" alt="uptime">
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_uname">3.14. uname</h3>
+<div class="paragraph">
+<p>指令：<code>uname 选项</code></p>
+</div>
+<div class="paragraph">
+<p>作用：获取计算机操作系统相关信息</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>选项</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>含义</strong></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-a</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">获取计算机全部的系统信息（类型 版本 全部主机名 内核版本 发布时间 开源计划）</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_netstat_tnlp">3.15. netstat -tnlp</h3>
+<div class="paragraph">
+<p>指令：<code>netstat -tnlp</code></p>
+</div>
+<div class="paragraph">
+<p>作用：查看网络连接状态</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="images/netstat.png" alt="netstat">
+</div>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>选项</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>含义</strong></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-t</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">表示只列出tcp协议的连接</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-n</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">表示将地址从字母组合转化成ip地址，将协议转化成端口号来显示</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-l</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">表示过滤出"state（状态）"列中其值为LISTEN（监听）的连接</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-p</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">表示显示发起连接的进程PID和进程名称</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_man">3.16. man</h3>
+<div class="paragraph">
+<p>指令：<code>man 命令</code> 退出按  <code>q</code> 键</p>
+</div>
+<div class="paragraph">
+<p>作用：man（manual） 包含了Linux中全部命令手册</p>
+</div>
+<div class="paragraph">
+<p>案例：通过 <code>man</code> 命令查询cp指令的用法</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="images/man.png" alt="man">
 </div>
 </div>
 </div>
