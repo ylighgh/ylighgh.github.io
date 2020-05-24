@@ -882,9 +882,8 @@ p { margin-bottom: 1.25rem; }
 <li><a href="#_基本概念_3">3.3.1. 基本概念</a></li>
 <li><a href="#_主要用途">3.3.2. 主要用途</a></li>
 <li><a href="#_nginx的特点">3.3.3. Nginx的特点</a></li>
-<li><a href="#_nginx发展趋势">3.3.4. Nginx发展趋势</a></li>
-<li><a href="#_nginx服务架构">3.3.5. Nginx服务架构</a></li>
-<li><a href="#_部署nginx服务">3.3.6. 部署Nginx服务</a></li>
+<li><a href="#_nginx服务架构">3.3.4. Nginx服务架构</a></li>
+<li><a href="#_部署nginx服务">3.3.5. 部署Nginx服务</a></li>
 </ul>
 </li>
 <li><a href="#_php环境构建">3.4. PHP环境构建</a>
@@ -3133,7 +3132,7 @@ mysql -uroot -p000000 -e 'change master to master_host="mysql1",master_user="use
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">[root@ylighgh ~]# mysql -uroot -p000000 -e'show slave status\G'
+<pre>[root@ylighgh ~]# mysql -uroot -p000000 -e'show slave status\G'
 *************************** 1. row ***************************
                Slave_IO_State: Waiting for master to send event
                   Master_Host: mysql1
@@ -3174,7 +3173,7 @@ Master_SSL_Verify_Server_Cert: No
                Last_SQL_Errno: 0
                Last_SQL_Error:
   Replicate_Ignore_Server_Ids:
-             Master_Server_Id: 2</code></pre>
+             Master_Server_Id: 2</pre>
 </div>
 </div>
 </div>
@@ -3220,27 +3219,153 @@ select * from company;'</code></pre>
 <h3 id="_nginx服务">3.3. Nginx服务</h3>
 <div class="sect3">
 <h4 id="_基本概念_3">3.3.1. 基本概念</h4>
-
+<div class="paragraph">
+<p>Nginx是一个高性能的HTTP和反向代理服务器，也是一个IMAP/POP3/SMTP代理服务器。</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="images/nginx_01.jpg" alt="nginx 01">
+</div>
+</div>
 </div>
 <div class="sect3">
 <h4 id="_主要用途">3.3.2. 主要用途</h4>
-
+<div class="paragraph">
+<p>1.服务器</p>
+</div>
+<div class="paragraph">
+<p>2.代码</p>
+</div>
+<div class="paragraph">
+<p>3.代理服务器</p>
+</div>
 </div>
 <div class="sect3">
 <h4 id="_nginx的特点">3.3.3. Nginx的特点</h4>
-
+<div class="paragraph">
+<p>1.跨平台</p>
+</div>
+<div class="paragraph">
+<p>2.配置简单</p>
+</div>
+<div class="paragraph">
+<p>3.非阻塞，高并发连接</p>
+</div>
+<div class="paragraph">
+<p>4.事件驱动</p>
+</div>
 </div>
 <div class="sect3">
-<h4 id="_nginx发展趋势">3.3.4. Nginx发展趋势</h4>
+<h4 id="_nginx服务架构">3.3.4. Nginx服务架构</h4>
+<div class="paragraph">
+<p>Nginx服务器使用 master/worker 多进程模式。主模式（Master process）启动后，会接收和处理外部信号;主进程启动后，通过fork()函数产生一个或多个子进程（work process），每个子进程会进行进程初始化，模块调用以及对事件的接收和处理等工作</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="images/nginx_02.png" alt="nginx 02">
+</div>
+</div>
+<div class="listingblock">
+<div class="title">1.主进程</div>
+<div class="content">
+<pre>主要功能是和外界通信和对内部其他进程进行管理，具体来说有一下几点：
 
+1.读取Nginx配置文件并验证其有效性和正确性
+
+2.建立，绑定和关闭Socket
+
+3.按照配置生成，管理工作进程
+
+4.接受外界指令，比如重启，关闭，重载服务等指令
+
+5.日志文件管理</pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">2.子进程（worker process）</div>
+<div class="content">
+<pre>子进程是由主进程生成，生成数量可以在配置文件中定义。该进程主要工作有：
+
+1.接受客户端请求
+
+2.将请求依次送入各个功能模块进行过滤处理
+
+3.IO调用，获取响应数据
+
+4.与后端服务器通信，接受后端服务器处理结果
+
+5.数据缓存，访问缓存索引，查询和调用缓存数据
+
+6.发送请求结果，响应客户端请求
+
+7.接受主进程指令，如重启，重载，退出等</pre>
+</div>
+</div>
 </div>
 <div class="sect3">
-<h4 id="_nginx服务架构">3.3.5. Nginx服务架构</h4>
+<h4 id="_部署nginx服务">3.3.5. 部署Nginx服务</h4>
+<div class="listingblock">
+<div class="title">安装环境配置</div>
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">#修改主机名
+hostnamectl set-hostname nginx
 
+#关闭防火墙及SELinux服务
+setenforce 0
+systemctl stop firewalld
+
+#安装配置基础服务
+yum -y install gcc gcc-c++ openssl-devel zlib-devel zlib pcre-devel
+
+#创建nginx用户及用户组
+groupadd -g 1001 nginx
+useradd -u 900 nginx -g nginx -s /sbin/nologin</code></pre>
 </div>
-<div class="sect3">
-<h4 id="_部署nginx服务">3.3.6. 部署Nginx服务</h4>
+</div>
+<div class="listingblock">
+<div class="title">验证用户组信息</div>
+<div class="content">
+<pre>[root@nginx ~]# tail -1 /etc/passwd
+nginx:x:900:1001::/home/nginx:/sbin/nologin</pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">编译安装Nginx</div>
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">#解压上传的压缩包
+tar xf nginx-1.12.2.tar.gz
 
+#进入到nginx-1.12.2目录
+cd nginx-1.12.2/
+
+#编译Nginx
+./configure --prefix=/usr/local/nginx --with-http_dav_module \
+--with-http_stub_status_module --with-http_addition_module \
+--with-http_sub_module --with-http_flv_module --with-http_mp4_module \
+--with-http_ssl_module --with-http_gzip_static_module --user=nginx --group=nginx
+
+#安装Nginx
+make &amp;&amp; make install
+
+#创建软链接并启动
+ln -s /usr/local/nginx/sbin/nginx /usr/local/sbin/
+nginx -t
+nginx</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">查看Nginx状态</div>
+<div class="content">
+<pre>80端口启动，则表示Nginx服务启动成功，可以在浏览器访问地址查看是否出现Nginx欢迎页
+[root@nginx ~]# ss -antpl|grep nginx
+LISTEN     0      128          *:80                       *:*                   users:(("nginx",pid=4719,fd=6),("nginx",pid=4718,fd=6))</pre>
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="images/nginx_03.png" alt="nginx 03">
+</div>
+</div>
 </div>
 </div>
 <div class="sect2">
