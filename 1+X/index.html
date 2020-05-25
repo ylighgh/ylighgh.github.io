@@ -762,35 +762,30 @@ p { margin-bottom: 1.25rem; }
 <li><a href="#_linux操作系统介绍">2.1. Linux操作系统介绍</a>
 <ul class="sectlevel3">
 <li><a href="#_linux操作系统简介">2.1.1. Linux操作系统简介</a></li>
-<li><a href="#_linux系统特点与组成">2.1.2. Linux系统特点与组成</a>
-<ul class="sectlevel4">
-<li><a href="#_linux的特点">Linux的特点</a></li>
-<li><a href="#_linux系统的组成">Linux系统的组成</a></li>
-</ul>
-</li>
+<li><a href="#_linux系统特点与组成">2.1.2. Linux系统特点与组成</a></li>
 <li><a href="#_linux系统的版本">2.1.3. Linux系统的版本</a></li>
 <li><a href="#_linux系统应用领域">2.1.4. Linux系统应用领域</a></li>
 <li><a href="#_linux操作系统安装实战">2.1.5. Linux操作系统安装实战</a></li>
 </ul>
 </li>
-<li><a href="#_逻辑卷管理lvm">2.2. 逻辑卷管理LVM</a>
+<li><a href="#_lvm">2.2. LVM</a>
 <ul class="sectlevel3">
 <li><a href="#_lvm概念">2.2.1. LVM概念</a></li>
 <li><a href="#_lvm基本术语">2.2.2. LVM基本术语</a></li>
 <li><a href="#_lvm逻辑卷操作">2.2.3. LVM逻辑卷操作</a></li>
 <li><a href="#_lvm逻辑卷的使用案例">2.2.4. LVM逻辑卷的使用案例</a>
 <ul class="sectlevel4">
+<li><a href="#_分区">分区</a></li>
 <li><a href="#_创建物理卷">创建物理卷</a></li>
 <li><a href="#_创建卷组">创建卷组</a></li>
-<li><a href="#_删除卷组">删除卷组</a></li>
-<li><a href="#_向卷组中添加物理卷">向卷组中添加物理卷</a></li>
 <li><a href="#_创建逻辑卷">创建逻辑卷</a></li>
-<li><a href="#_扩容逻辑卷">扩容逻辑卷</a></li>
+<li><a href="#_格式化和挂载">格式化和挂载</a></li>
+<li><a href="#_扩展逻辑卷">扩展逻辑卷</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li><a href="#_ftp服务">2.3. FTP服务</a>
+<li><a href="#_ftp">2.3. FTP</a>
 <ul class="sectlevel3">
 <li><a href="#_ftp简介">2.3.1. FTP简介</a></li>
 <li><a href="#_ftp数据传输模式">2.3.2. FTP数据传输模式</a></li>
@@ -804,14 +799,14 @@ p { margin-bottom: 1.25rem; }
 </li>
 </ul>
 </li>
-<li><a href="#_nfs服务">2.4. NFS服务</a>
+<li><a href="#_nfs">2.4. NFS</a>
 <ul class="sectlevel3">
 <li><a href="#_nfs概念">2.4.1. NFS概念</a></li>
 <li><a href="#_nfs组成">2.4.2. NFS组成</a></li>
 <li><a href="#_nfs服务的使用案例">2.4.3. NFS服务的使用案例</a></li>
 </ul>
 </li>
-<li><a href="#_cifs服务">2.5. CIFS服务</a>
+<li><a href="#_cifs">2.5. CIFS</a>
 <ul class="sectlevel3">
 <li><a href="#_cifs概念">2.5.1. CIFS概念</a></li>
 <li><a href="#_samba功能">2.5.2. Samba功能</a></li>
@@ -852,27 +847,13 @@ p { margin-bottom: 1.25rem; }
 <li><a href="#_基本概念_2">3.2.1. 基本概念</a></li>
 <li><a href="#_分布式数据库系统工作机制">3.2.2. 分布式数据库系统工作机制</a></li>
 <li><a href="#_分布式数据库系统的特点">3.2.3. 分布式数据库系统的特点</a></li>
-<li><a href="#_主从数据库">3.2.4. 主从数据库</a>
-<ul class="sectlevel4">
-<li><a href="#_概念">概念</a></li>
-<li><a href="#_优点">优点</a></li>
-<li><a href="#_常见的主从形式">常见的主从形式</a></li>
-</ul>
-</li>
+<li><a href="#_主从数据库">3.2.4. 主从数据库</a></li>
 <li><a href="#_部署主从数据库">3.2.5. 部署主从数据库</a>
 <ul class="sectlevel4">
-<li><a href="#_配置部分">配置部分</a>
-<ul class="sectlevel5">
 <li><a href="#_主数据库节点配置">主数据库节点配置</a></li>
 <li><a href="#_从数据库节点配置">从数据库节点配置</a></li>
-</ul>
-</li>
-<li><a href="#_验证">验证</a>
-<ul class="sectlevel5">
 <li><a href="#_验证从节点服务是否开启">验证从节点服务是否开启</a></li>
 <li><a href="#_验证数据库主从服务">验证数据库主从服务</a></li>
-</ul>
-</li>
 </ul>
 </li>
 </ul>
@@ -890,8 +871,7 @@ p { margin-bottom: 1.25rem; }
 <ul class="sectlevel3">
 <li><a href="#_基本概念_4">3.4.1. 基本概念</a></li>
 <li><a href="#_php语言的优点">3.4.2. PHP语言的优点</a></li>
-<li><a href="#_php语言的应用前景">3.4.3. PHP语言的应用前景</a></li>
-<li><a href="#_安装php环境">3.4.4. 安装PHP环境</a></li>
+<li><a href="#_安装php环境">3.4.3. 安装PHP环境</a></li>
 </ul>
 </li>
 <li><a href="#_分布式部署lnmp">3.5. 分布式部署LNMP</a></li>
@@ -937,9 +917,8 @@ p { margin-bottom: 1.25rem; }
 </div>
 <div class="sect3">
 <h4 id="_linux系统特点与组成">2.1.2. Linux系统特点与组成</h4>
-<div class="sect4">
-<h5 id="_linux的特点">Linux的特点</h5>
 <div class="olist arabic">
+<div class="title">Linux的特点</div>
 <ol class="arabic">
 <li>
 <p>开放性</p>
@@ -970,10 +949,8 @@ p { margin-bottom: 1.25rem; }
 </li>
 </ol>
 </div>
-</div>
-<div class="sect4">
-<h5 id="_linux系统的组成">Linux系统的组成</h5>
 <div class="paragraph">
+<div class="title">Linux系统的组成</div>
 <p>Linux系统由四个部分组成：内核（Kernel），命令解释层（Shell），文件系统和应用程序。</p>
 </div>
 <div class="ulist">
@@ -991,7 +968,6 @@ p { margin-bottom: 1.25rem; }
 <p>Linux应用系统：</p>
 </li>
 </ul>
-</div>
 </div>
 </div>
 <div class="sect3">
@@ -1140,7 +1116,7 @@ p { margin-bottom: 1.25rem; }
 </div>
 </div>
 <div class="sect2">
-<h3 id="_逻辑卷管理lvm">2.2. 逻辑卷管理LVM</h3>
+<h3 id="_lvm">2.2. LVM</h3>
 <div class="sect3">
 <h4 id="_lvm概念">2.2.1. LVM概念</h4>
 <div class="paragraph">
@@ -1208,7 +1184,7 @@ p { margin-bottom: 1.25rem; }
 </div>
 </div>
 <div class="sect4">
-<h5 id="_创建物理卷">创建物理卷</h5>
+<h5 id="_分区">分区</h5>
 <div class="paragraph">
 <p>创建物理卷之前，需要对磁盘进行分区。首先使用 <code>fdisk</code> 命令对sdb进行分区操作，分区两个大小为5GB的分区，命令如下：</p>
 </div>
@@ -1230,6 +1206,9 @@ p { margin-bottom: 1.25rem; }
 <img src="images/fdisk-03.png" alt="fdisk 03">
 </div>
 </div>
+</div>
+<div class="sect4">
+<h5 id="_创建物理卷">创建物理卷</h5>
 <div class="paragraph">
 <p>分区完成后，对这两个分区进行创建物理卷操作，命令如下：</p>
 </div>
@@ -1314,9 +1293,6 @@ p { margin-bottom: 1.25rem; }
 <img src="images/vgdisplay.png" alt="vgdisplay">
 </div>
 </div>
-</div>
-<div class="sect4">
-<h5 id="_删除卷组">删除卷组</h5>
 <div class="paragraph">
 <p>删除卷组，命令如下：</p>
 </div>
@@ -1343,9 +1319,6 @@ p { margin-bottom: 1.25rem; }
 <img src="images/vgcreate-02.png" alt="vgcreate 02">
 </div>
 </div>
-</div>
-<div class="sect4">
-<h5 id="_向卷组中添加物理卷">向卷组中添加物理卷</h5>
 <div class="paragraph">
 <p>先使用 <code>fdisk</code> 命令，在/dev/sdb上再分一个/dev/sdb3分区</p>
 </div>
@@ -1422,6 +1395,9 @@ p { margin-bottom: 1.25rem; }
 <img src="images/lvscan.png" alt="lvscan">
 </div>
 </div>
+</div>
+<div class="sect4">
+<h5 id="_格式化和挂载">格式化和挂载</h5>
 <div class="paragraph">
 <p>使用ext4文件系统格式化逻辑卷mylv，命令如下：</p>
 </div>
@@ -1450,7 +1426,7 @@ p { margin-bottom: 1.25rem; }
 </div>
 </div>
 <div class="sect4">
-<h5 id="_扩容逻辑卷">扩容逻辑卷</h5>
+<h5 id="_扩展逻辑卷">扩展逻辑卷</h5>
 <div class="paragraph">
 <p>对创建的LVM卷扩容至1GB，命令如下：</p>
 </div>
@@ -1484,7 +1460,7 @@ p { margin-bottom: 1.25rem; }
 </div>
 </div>
 <div class="sect2">
-<h3 id="_ftp服务">2.3. FTP服务</h3>
+<h3 id="_ftp">2.3. FTP</h3>
 <div class="sect3">
 <h4 id="_ftp简介">2.3.1. FTP简介</h4>
 <div class="paragraph">
@@ -1690,7 +1666,7 @@ echo SELINUXTYPE=targeted&gt;&gt;/etc/selinux/config</code></pre>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_nfs服务">2.4. NFS服务</h3>
+<h3 id="_nfs">2.4. NFS</h3>
 <div class="sect3">
 <h4 id="_nfs概念">2.4.1. NFS概念</h4>
 <div class="paragraph">
@@ -1911,7 +1887,7 @@ mount -t nfs 192.168.1.101:/mnt/test /mnt/</code></pre>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_cifs服务">2.5. CIFS服务</h3>
+<h3 id="_cifs">2.5. CIFS</h3>
 <div class="sect3">
 <h4 id="_cifs概念">2.5.1. CIFS概念</h4>
 <div class="paragraph">
@@ -2819,9 +2795,8 @@ chmod -R 755 /data/web/wordpress.com</code></pre>
 </div>
 <div class="sect3">
 <h4 id="_主从数据库">3.2.4. 主从数据库</h4>
-<div class="sect4">
-<h5 id="_概念">概念</h5>
 <div class="paragraph">
+<div class="title">概念</div>
 <p>MySQL 主从复制是指数据可以从一个MySQL数据库服务器主节点复制到一个或多个从节点。MySQL 默认采用异步复制方式，这样从节点不用一直访问主服务器来更新自己的数据，数据的更新可以在远程连接上进行，从节点可以复制主数据库中的所有数据库或者特定的数据库，或者特定的表。</p>
 </div>
 <div class="imageblock">
@@ -2829,10 +2804,8 @@ chmod -R 755 /data/web/wordpress.com</code></pre>
 <img src="images/MySQL_原理.png" alt="MySQL 原理">
 </div>
 </div>
-</div>
-<div class="sect4">
-<h5 id="_优点">优点</h5>
 <div class="paragraph">
+<div class="title">优点</div>
 <p>1.方便做数据的热备份。作为后备数据库，主数据库服务器故障后，可切换到从数据库服务器继续工作，避免数据丢失。</p>
 </div>
 <div class="paragraph">
@@ -2841,9 +2814,6 @@ chmod -R 755 /data/web/wordpress.com</code></pre>
 <div class="paragraph">
 <p>3.读写分离，使数据库能支撑更大的并发。在报表中尤其重要。由于部分报表SQL语句非常的慢，导致锁表，影响前台服务。如果前台使用主库，报表使用从库，那么报表SQL将不会造成前台锁，保证了前台速度。</p>
 </div>
-</div>
-<div class="sect4">
-<h5 id="_常见的主从形式">常见的主从形式</h5>
 <div class="paragraph">
 <div class="title">一主一从</div>
 <p>是最基础的复制结构，用来分担之前单台数据库服务器的压力，可以进行读写分离。</p>
@@ -2890,7 +2860,6 @@ chmod -R 755 /data/web/wordpress.com</code></pre>
 </div>
 </div>
 </div>
-</div>
 <div class="sect3">
 <h4 id="_部署主从数据库">3.2.5. 部署主从数据库</h4>
 <table class="tableblock frame-all grid-all stretch">
@@ -2921,9 +2890,7 @@ chmod -R 755 /data/web/wordpress.com</code></pre>
 </tbody>
 </table>
 <div class="sect4">
-<h5 id="_配置部分">配置部分</h5>
-<div class="sect5">
-<h6 id="_主数据库节点配置">主数据库节点配置</h6>
+<h5 id="_主数据库节点配置">主数据库节点配置</h5>
 <div class="listingblock">
 <div class="title">主数据库节点（mysql1）配置</div>
 <div class="content">
@@ -2991,10 +2958,8 @@ tmp_table_size = 100M
 general_log=off
 general_log_file=/var/log/mariadb/general.log
 
-# SQL慢查询日志
-slow_query_log=off
-slow_query_log_file=/var/log/mariadb/slowquery.log
-long_query_time = 5
+# SQL慢查询日志===== 验证
+
 
 max_connections = 1000
 
@@ -3022,8 +2987,8 @@ mysql -uroot -p000000 -e 'grant all privileges on *.* to "root"@"%" identified b
 </div>
 </div>
 </div>
-<div class="sect5">
-<h6 id="_从数据库节点配置">从数据库节点配置</h6>
+<div class="sect4">
+<h5 id="_从数据库节点配置">从数据库节点配置</h5>
 <div class="listingblock">
 <div class="title">从数据库节点（mysql2）配置</div>
 <div class="content">
@@ -3122,11 +3087,8 @@ mysql -uroot -p000000 -e 'change master to master_host="mysql1",master_user="use
 </div>
 </div>
 </div>
-</div>
 <div class="sect4">
-<h5 id="_验证">验证</h5>
-<div class="sect5">
-<h6 id="_验证从节点服务是否开启">验证从节点服务是否开启</h6>
+<h5 id="_验证从节点服务是否开启">验证从节点服务是否开启</h5>
 <div class="paragraph">
 <p>在从节点服务器执行命令: <code>mysql -uroot -p000000 -e 'show slave status\G'</code>,如果Slave_IO_Running和Slave_SQL_Running的状态都为YES，则节点服务开启成功</p>
 </div>
@@ -3177,8 +3139,8 @@ Master_SSL_Verify_Server_Cert: No
 </div>
 </div>
 </div>
-<div class="sect5">
-<h6 id="_验证数据库主从服务">验证数据库主从服务</h6>
+<div class="sect4">
+<h5 id="_验证数据库主从服务">验证数据库主从服务</h5>
 <div class="listingblock">
 <div class="title">主节点创建数据库test123,并在库test123中创建company，并插入表数据,然后查看表数据</div>
 <div class="content">
@@ -3210,7 +3172,6 @@ select * from company;'</code></pre>
 </div>
 <div class="paragraph">
 <p>可以查看到主数据库中刚刚创建的库，表，信息，验证从数据库的复制功能成功</p>
-</div>
 </div>
 </div>
 </div>
@@ -3333,10 +3294,10 @@ nginx:x:900:1001::/home/nginx:/sbin/nologin</pre>
 <div class="title">编译安装Nginx</div>
 <div class="content">
 <pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">#解压上传的压缩包
-tar xf nginx-1.12.2.tar.gz
+tar xf ~/nginx-1.12.2.tar.gz
 
 #进入到nginx-1.12.2目录
-cd nginx-1.12.2/
+cd ~/nginx-1.12.2/
 
 #编译Nginx
 ./configure --prefix=/usr/local/nginx --with-http_dav_module \
@@ -3372,24 +3333,295 @@ LISTEN     0      128          *:80                       *:*                   
 <h3 id="_php环境构建">3.4. PHP环境构建</h3>
 <div class="sect3">
 <h4 id="_基本概念_4">3.4.1. 基本概念</h4>
-
+<div class="paragraph">
+<p>PHP（“PHP: Hypertext Preprocessor”，超文本预处理器的字母缩写）是一种被广泛应用的开放源代码的多用途脚本语言，它可嵌入到 HTML中，尤其适合 web 开发。</p>
+</div>
 </div>
 <div class="sect3">
 <h4 id="_php语言的优点">3.4.2. PHP语言的优点</h4>
-
+<div class="paragraph">
+<p>1.流行，容易上手</p>
+</div>
+<div class="paragraph">
+<p>2.开发职位很多</p>
+</div>
+<div class="paragraph">
+<p>3.持续发展</p>
+</div>
+<div class="paragraph">
+<p>4.可植入性强</p>
+</div>
+<div class="paragraph">
+<p>5.拓展性强</p>
+</div>
 </div>
 <div class="sect3">
-<h4 id="_php语言的应用前景">3.4.3. PHP语言的应用前景</h4>
+<h4 id="_安装php环境">3.4.3. 安装PHP环境</h4>
+<div class="listingblock">
+<div class="title">安装环境配置</div>
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">#修改主机名
+hostnamectl set-hostname php
 
+#关闭防火墙及SELinux服务
+setenforce 0
+systemctl stop firewalld
+
+#安装配置基础服务
+yum -y install gcc gcc-c++ openssl-devel libxml2-devel libcurl-devel bzip2-devel
+
+###安装libmcrypt
+#解压上传的安装包
+tar xf ~/libmcrypt-2.5.8.tar.gz
+#进入目录
+cd ~/libmcrypt-2.5.8/
+#编译安装
+./configure --prefix=/usr/local/libmcrypt &amp;&amp; make &amp;&amp; make install</code></pre>
 </div>
-<div class="sect3">
-<h4 id="_安装php环境">3.4.4. 安装PHP环境</h4>
+</div>
+<div class="listingblock">
+<div class="title">安装PHP环境</div>
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">#解压上传的压缩包
+tar xf ~/php-5.6.27.tar.gz
 
+#进入目录
+cd ~/php-5.6.27/
+
+#编译
+./configure --prefix=/usr/local/php5.6 --with-mysql=mysqlnd \
+--with-pdo-mysql=mysqlnd --with-mysqli=mysqlnd --with-openssl --enable-fpm \
+--enable-sockets --enable-sysvshm --enable-mbstring --with-freetype-dir --with-jpeg-dir \
+--with-png-dir --with-zlib --with-libxml-dir=/usr --enable-xml --with-mhash \
+--with-mcrypt=/usr/local/libmcrypt --with-config-file-path=/etc \
+--with-config-file-scan-dir=/etc/php.d --with-bz2 --enable-maintainer-zts
+
+#安装
+make &amp;&amp; make install</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">配置PHP环境</div>
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">#创建用户ID
+groupadd -g 1001 nginx
+useradd -u 900 nginx -g nginx -s /sbin/nologin
+
+#修改PHP配置文件
+cp php.ini-production /etc/php.ini
+cp sapi/fpm/init.d.php-fpm /etc/init.d/php-fpm
+
+#授予执行权限
+chmod +x /etc/init.d/php-fpm
+
+#设置开机启动
+chkconfig --add php-fpm
+chkconfig php-fpm on
+
+#修改PHP主配置文件
+cp /usr/local/php5.6/etc/php-fpm.conf.default /usr/local/php5.6/etc/php-fpm.conf
+
+#修改PHP主配置文件内容
+cat &lt;&lt; EOF &gt; /usr/local/php5.6/etc/php-fpm.conf
+[global]
+pid = run/php-fpm.pid
+[www]
+user = nginx
+group = nginx
+listen = 192.168.1.108:9000
+pm = dynamic
+pm.max_children = 50
+pm.start_servers = 5
+pm.min_spare_servers = 5
+pm.max_spare_servers = 35
+EOF
+
+#启动PHP服务
+systemctl start php-fpm</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">查看PHP状态</div>
+<div class="content">
+<pre>[root@php]# systemctl status php-fpm
+● php-fpm.service - LSB: starts php-fpm
+   Loaded: loaded (/etc/rc.d/init.d/php-fpm; bad; vendor preset: disabled)
+   Active: active (running) since Tue 2020-05-12 18:12:48 CST; 10min ago
+     Docs: man:systemd-sysv-generator(8)
+  Process: 23356 ExecStart=/etc/rc.d/init.d/php-fpm start (code=exited, status=0/SUCCESS)
+   CGroup: /system.slice/php-fpm.service
+           ├─23358 php-fpm: master process (/usr/local/php5.6/etc/php-fpm.conf)
+           ├─23359 php-fpm: pool www
+           └─23360 php-fpm: pool www
+
+May 12 18:12:48 php systemd[1]: Starting LSB: starts php-fpm...
+May 12 18:12:48 php php-fpm[23356]: Starting php-fpm  done
+May 12 18:12:48 php systemd[1]: Started LSB: starts php-fpm.
+
+[root@php# ss -antpl|grep php
+LISTEN     0      128    192.168.1.106:9000                     *:*                   users:(("php-fpm",pid=12367,fd=0),("php-fpm",pid=12366,fd=0),("php-fpm",pid=12365,fd=0),("php-fpm",pid=12364,fd=0),("php-fpm",pid=12363,fd=0),("php-fpm",pid=12362,fd=7))</pre>
+</div>
+</div>
 </div>
 </div>
 <div class="sect2">
 <h3 id="_分布式部署lnmp">3.5. 分布式部署LNMP</h3>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 4. 规划节点</caption>
+<colgroup>
+<col style="width: 30.303%;">
+<col style="width: 33.3333%;">
+<col style="width: 36.3637%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">IP地址</th>
+<th class="tableblock halign-left valign-top">主机名</th>
+<th class="tableblock halign-left valign-top">节点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">192.168.1.102</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">MySQL1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">主数据库节点</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">192.168.1.105</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">MySQL2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">从数据库节点</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">192.168.1.108</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">PHP</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">PHP环境节点</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">192.168.1.109</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Nginx</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Nginx服务节点</p></td>
+</tr>
+</tbody>
+</table>
+<div class="listingblock">
+<div class="title">修改Nginx配置文件</div>
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">cat &lt;&lt; EOF &gt; /usr/local/nginx/conf/nginx.conf
+worker_processes  1;
+events {
+    worker_connections  1024;
+}
+http {
+    include       mime.types;
+    default_type  application/octet-stream;
+    sendfile        on;
+    keepalive_timeout  65;
+    server {
+        listen       80;
+        server_name  localhost;
+        location / {
+            root   /www;
+            index  index.html index.htm index.php;
+        }
+        location ~ \.php\$ {
+            root           /www;
+            fastcgi_pass   192.168.1.108:9000;
+            fastcgi_index  index.php;
+            fastcgi_param  SCRIPT_FILENAME  \$document_root\$fastcgi_script_name;
+            include        fastcgi_params;
+        }
+    }
+}
+EOF</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Nginx部署Wordpress</div>
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">mkdir /www
 
+#解压上传的Wordpress安装包
+unzip ~/wordpress-4.7.3-zh_CN.zip
+
+mv ~/wordpress/* /www/
+
+chown -R nginx:nginx /www
+chmod -R 755 /www
+
+#检测配置
+nginx -t &amp;&amp; nginx -s reload</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">PHP部署Wordpress</div>
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">mkdir /www
+
+#解压上传的Wordpress安装包
+unzip ~/wordpress-4.7.3-zh_CN.zip
+
+mv ~/wordpress/* /www/
+
+chown -R nginx:nginx /www
+chmod -R 755 /www</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">创建数据库</div>
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">#在mysql1上创建Wordpress数据库
+mysql -uroot -p000000 -e 'create database wordpress;'</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<div class="title">1.安装界面</div>
+<p>浏览器地址栏输入http://192.168.1.109，进入Wordpress安装界面,输入数据库配置信息</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="images/分布式部署LNMP_01.png" alt="分布式部署LNMP 01">
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>数据库名：在主数据库节点创建的数据库</p>
+</li>
+<li>
+<p>用户名：数据库的用户名</p>
+</li>
+<li>
+<p>密码：数据库的密码</p>
+</li>
+<li>
+<p>数据库主机：主数据库节点主机IP地址</p>
+</li>
+<li>
+<p>表前缀：系统默认</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<div class="title">2.站点配置信息</div>
+<p>输入站点的配置信息，然后点击 <code>安装Wordpress</code></p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="images/分布式部署LNMP_02.png" alt="分布式部署LNMP 02">
+</div>
+</div>
+<div class="paragraph">
+<div class="title">3.站点首页</div>
+<p>安装完成后会跳到网站管理后台界面，再次在浏览器地址栏输入http://192.168.1.109，即可看到网站首页</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="images/分布式部署LNMP_03.png" alt="分布式部署LNMP 03">
+</div>
+</div>
+<div class="paragraph">
+<p>分布式部署LNMP环境搭建完成</p>
+</div>
 </div>
 </div>
 </div>
