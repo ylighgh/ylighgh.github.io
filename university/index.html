@@ -1012,9 +1012,55 @@ p { margin-bottom: 1.25rem; }
 </tr>
 </table>
 </div>
-<div class="paragraph">
-<p>19</p>
-</div>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 1. 转义字符</caption>
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">转义字符</th>
+<th class="tableblock halign-left valign-top">含义</th>
+<th class="tableblock halign-left valign-top">转义字符</th>
+<th class="tableblock halign-left valign-top">含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">\\</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">\</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">\n</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">换行（光标移动到下一行开头）</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">\"</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">"</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">\r</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">回车(光标移动到本行开头)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">\"</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">'</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">\b</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">退格(光标移动到前一列)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">\a</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">响铃</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">\ddd</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1到3位八进制对应的字符</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">\0</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">NULL</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">\xhh</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1到2位十六进制对应的字符</p></td>
+</tr>
+</tbody>
+</table>
 </div>
 <div class="sect3">
 <h4 id="_运算符和表达式">1.1.4. 运算符和表达式</h4>
