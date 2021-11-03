@@ -768,6 +768,11 @@ p { margin-bottom: 1.25rem; }
 <li><a href="#_数据类型的转换">1.1.5. 数据类型的转换</a></li>
 </ul>
 </li>
+<li><a href="#_算法">1.2. 算法</a>
+<ul class="sectlevel3">
+<li><a href="#_bubble_sort">1.2.1. Bubble Sort</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li><a href="#_Math_chapter">2. Math</a></li>
@@ -1078,6 +1083,44 @@ p { margin-bottom: 1.25rem; }
 </div>
 <div class="sect3">
 <h4 id="_数据类型的转换">1.1.5. 数据类型的转换</h4>
+
+</div>
+</div>
+<div class="sect2">
+<h3 id="_算法">1.2. 算法</h3>
+<div class="sect3">
+<h4 id="_bubble_sort">1.2.1. Bubble Sort</h4>
+<div class="listingblock">
+<div class="content">
+<pre>#include &lt;stdio.h&gt;
+void swap(int *x, int *y)
+{
+    int t = *x; //t=a[i]
+    *x = *y;    //a[j]=a[j+1]
+    *y = t;
+}
+
+int main()
+{
+    int a[] = {1, 3, 12, 7, 227, 23, 56, 32};
+    int i, j, t;
+    int len = sizeof(a) / sizeof(a[0]);
+    for (i = len; i &gt; 0; i--)
+    {
+        for (j = 0; j &lt; i; j++)
+        {
+            if (a[j] &lt; a[j + 1])
+            {
+                swap(&amp;a[j], &amp;a[j + 1]);
+            }
+        }
+        printf("%d ", a[i]);
+    }
+    printf("\n");
+    return 0;
+}</pre>
+</div>
+</div>
 <div style="page-break-after: always;"></div>
 </div>
 </div>
