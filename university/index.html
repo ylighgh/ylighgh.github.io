@@ -775,6 +775,11 @@ p { margin-bottom: 1.25rem; }
 <li><a href="#_insertion_sort">1.2.3. Insertion sort</a></li>
 </ul>
 </li>
+<li><a href="#_function">1.3. Function</a>
+<ul class="sectlevel3">
+<li><a href="#_swap">1.3.1. swap</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li><a href="#_Math_chapter">2. Math</a></li>
@@ -1126,7 +1131,7 @@ p { margin-bottom: 1.25rem; }
 <h4 id="_insertion_sort">1.2.3. Insertion sort</h4>
 <div class="listingblock">
 <div class="content">
-<pre>	for(i=1;i&lt;sizeof(a)/sizeof((a[0]));i++){
+<pre class="highlightjs highlight"><code class="language-none hljs">	for(i=1;i&lt;sizeof(a)/sizeof((a[0]));i++){
 		t=a[i];
 		for(j=0;j&lt;i;j++){
 			if(a[j]&gt;t){
@@ -1138,7 +1143,23 @@ p { margin-bottom: 1.25rem; }
 			a[p]=a[p-1];
 			a[p]=t;
 
-	}</pre>
+	}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_function">1.3. Function</h3>
+<div class="sect3">
+<h4 id="_swap">1.3.1. swap</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">void swap(int *x, int *y)
+{
+    int t = *x; //t=a
+    *x = *y;    //a=b
+    *y = t; //a=t
+}</code></pre>
 </div>
 </div>
 <div style="page-break-after: always;"></div>
