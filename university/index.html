@@ -757,61 +757,32 @@ p { margin-bottom: 1.25rem; }
 <div id="toctitle">目录</div>
 <ul class="sectlevel1">
 <li><a href="#_前言">前言</a></li>
-<li><a href="#_C_chapter">1. C</a>
+<li><a href="#_Linux_chapter">1. Linux</a>
 <ul class="sectlevel2">
-<li><a href="#_数据类型运算符和表达式">1.1. 数据类型、运算符和表达式</a>
+<li><a href="#_archlinux">1.1. Archlinux</a>
 <ul class="sectlevel3">
-<li><a href="#_基本概念">1.1.1. 基本概念</a></li>
-<li><a href="#_数据类型">1.1.2. 数据类型</a></li>
-<li><a href="#_常量和变量">1.1.3. 常量和变量</a></li>
-<li><a href="#_运算符和表达式">1.1.4. 运算符和表达式</a></li>
-<li><a href="#_数据类型的转换">1.1.5. 数据类型的转换</a></li>
-</ul>
-</li>
-<li><a href="#_algorithm">1.2. Algorithm</a>
-<ul class="sectlevel3">
-<li><a href="#_bubble_sort">1.2.1. Bubble Sort</a></li>
-<li><a href="#_select_sort">1.2.2. Select sort</a></li>
-<li><a href="#_insertion_sort">1.2.3. Insertion sort</a></li>
-</ul>
-</li>
-<li><a href="#_function">1.3. Function</a>
-<ul class="sectlevel3">
-<li><a href="#_swap">1.3.1. swap</a></li>
+<li><a href="#_grub">1.1.1. GRUB</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li><a href="#_Math_chapter">2. Math</a></li>
-<li><a href="#_Composition_chapter">3. Composition</a></li>
-<li><a href="#_Database_chapter">4. Database</a></li>
-<li><a href="#_Linux_chapter">5. Linux</a>
+<li><a href="#_Python_chapter">2. Python</a>
 <ul class="sectlevel2">
-<li><a href="#_archlinux">5.1. Archlinux</a>
+<li><a href="#_reptile">2.1. Reptile</a>
 <ul class="sectlevel3">
-<li><a href="#_grub">5.1.1. GRUB</a></li>
+<li><a href="#_requests">2.1.1. Requests</a></li>
+<li><a href="#_re">2.1.2. Re</a></li>
+<li><a href="#_bs4">2.1.3. Bs4</a></li>
+<li><a href="#_xpath">2.1.4. Xpath</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li><a href="#_Python_chapter">6. Python</a>
+<li><a href="#_JAVA_chapter">3. JAVA</a>
 <ul class="sectlevel2">
-<li><a href="#_reptile">6.1. Reptile</a>
+<li><a href="#_javabasic">3.1. JavaBasic</a>
 <ul class="sectlevel3">
-<li><a href="#_requests">6.1.1. Requests</a></li>
-<li><a href="#_re">6.1.2. Re</a></li>
-<li><a href="#_bs4">6.1.3. Bs4</a></li>
-<li><a href="#_xpath">6.1.4. Xpath</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li><a href="#_JAVA_chapter">7. JAVA</a></li>
-<li><a href="#_History_chapter">8. History</a>
-<ul class="sectlevel2">
-<li><a href="#_课后习题">8.1. 课后习题</a>
-<ul class="sectlevel3">
-<li><a href="#_第一章">8.1.1. 第一章</a></li>
+<li><a href="#_basic">3.1.1. Basic</a></li>
 </ul>
 </li>
 </ul>
@@ -837,381 +808,12 @@ p { margin-bottom: 1.25rem; }
 </div>
 </div>
 <div class="sect1">
-<h2 id="_C_chapter">1. C</h2>
+<h2 id="_Linux_chapter">1. Linux</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_数据类型运算符和表达式">1.1. 数据类型、运算符和表达式</h3>
+<h3 id="_archlinux">1.1. Archlinux</h3>
 <div class="sect3">
-<h4 id="_基本概念">1.1.1. 基本概念</h4>
-<div class="paragraph">
-<p><strong>C语言程序</strong>：由一系列 <strong>语句</strong> 组成，而语句又是由 <strong>数据</strong>、<strong>表达式</strong>、<strong>函数</strong> 等基本 <strong>语法单位</strong> 组成按照一定的 <strong>语法规则</strong> 组成。</p>
-</div>
-<div class="paragraph">
-<p><strong>语句</strong>：注释语句、赋值语句、分支语句、循环语句、break语句、continue语句、goto语句等。</p>
-</div>
-<div class="paragraph">
-<p><strong>数据</strong>：数据内容(值)+数据形式(类型)，常量、符号常量和变量。</p>
-</div>
-<div class="paragraph">
-<p><strong>表达式</strong>：算数表达式、赋值表达式、逗号表达式、关系表达式、逻辑表达式。</p>
-</div>
-<div class="dlist">
-<dl>
-<dt class="hdlist1"><strong>标识符</strong></dt>
-<dd>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>标识符由字母、数字和下划线组成，且 <strong>数字不能开头</strong></p>
-</li>
-<li>
-<p>标识符 <strong>区分大小写</strong></p>
-</li>
-<li>
-<p>自定义的标识符 <strong>不能使用关键字和预定义的标识符</strong></p>
-</li>
-</ol>
-</div>
-</dd>
-</dl>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_数据类型">1.1.2. 数据类型</h4>
-<div class="dlist">
-<dl>
-<dt class="hdlist1">数据类型</dt>
-<dd>
-<div class="dlist">
-<dl>
-<dt class="hdlist1">基本类型</dt>
-<dd>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>整型 int</p>
-</li>
-<li>
-<p>实型 (浮点型)</p>
-<div class="ulist">
-<ul>
-<li>
-<p>单精度型 float</p>
-</li>
-<li>
-<p>双精度型 double</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p>构造类型</p>
-<div class="ulist">
-<ul>
-<li>
-<p>数组类型</p>
-</li>
-<li>
-<p>结构体类型 struct</p>
-</li>
-<li>
-<p>共用体类型 union</p>
-</li>
-<li>
-<p>枚举类型</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p>指针类型 *</p>
-</li>
-<li>
-<p>空类型(无值类型)void</p>
-</li>
-<li>
-<p>字符型 char</p>
-</li>
-</ol>
-</div>
-</dd>
-</dl>
-</div>
-</dd>
-</dl>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_常量和变量">1.1.3. 常量和变量</h4>
-<div class="paragraph">
-<p><strong>常量</strong>：在程序运行期间其值不发生变化的量，即具体值。</p>
-</div>
-<div class="paragraph">
-<p><strong>变量</strong>：在程序运行期间其值可以发生变化的量，即用来保存和表示数据的符号</p>
-</div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-note" title="Note"></i>
-</td>
-<td class="content">
-<div class="ulist">
-<ul>
-<li>
-<p>变量需遵循先定义后使用；</p>
-</li>
-<li>
-<p>变量类型由其变量定义时所决定；</p>
-</li>
-<li>
-<p>变量值可变；</p>
-</li>
-</ul>
-</div>
-</td>
-</tr>
-</table>
-</div>
-<div class="dlist">
-<dl>
-<dt class="hdlist1">常量分类</dt>
-<dd>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>整型常量</p>
-<div class="ulist">
-<ul>
-<li>
-<p>十进制</p>
-</li>
-<li>
-<p>八进制——以0开头</p>
-</li>
-<li>
-<p>十六进制——以0x开头</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p>实型常量——仅十进制表示</p>
-<div class="ulist">
-<ul>
-<li>
-<p>小数形式</p>
-</li>
-<li>
-<p>指数形式：字母e(或E)前必须有数字，后必须为整数，如1e3、1,.8e-3、-123e-6、-.1e-3</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p>字符常量——单个字符组成，定界符英文单引号''</p>
-</li>
-<li>
-<p>字符串常量——单个或多个字符组成，定界符英文双引号""</p>
-</li>
-<li>
-<p>符号常量</p>
-</li>
-</ol>
-</div>
-</dd>
-</dl>
-</div>
-<div class="admonitionblock tip">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-tip" title="Tip"></i>
-</td>
-<td class="content">
-<div class="ulist">
-<ul>
-<li>
-<p>数据后加u或U——表示 <strong>无符号</strong> 类型，如535u</p>
-</li>
-<li>
-<p>数据后加l或L——表示 <strong>长</strong> 整型，如-1L</p>
-</li>
-<li>
-<p>默认实型常量为double类型，若有后缀"f"或"F"则为float类型</p>
-</li>
-<li>
-<p>字符串在存储时会自动在最后加一个标识符'\0'</p>
-</li>
-<li>
-<p>连续两个英文双引号("")表示 <strong>空字符</strong></p>
-</li>
-</ul>
-</div>
-</td>
-</tr>
-</table>
-</div>
-<table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 1. 转义字符</caption>
-<colgroup>
-<col style="width: 25%;">
-<col style="width: 25%;">
-<col style="width: 25%;">
-<col style="width: 25%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">转义字符</th>
-<th class="tableblock halign-left valign-top">含义</th>
-<th class="tableblock halign-left valign-top">转义字符</th>
-<th class="tableblock halign-left valign-top">含义</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">\\</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">\</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">\n</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">换行（光标移动到下一行开头）</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">\"</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">"</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">\r</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">回车(光标移动到本行开头)</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">\"</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">'</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">\b</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">退格(光标移动到前一列)</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">\a</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">响铃</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">\ddd</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">1到3位八进制对应的字符</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">\0</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">NULL</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">\xhh</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">1到2位十六进制对应的字符</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="sect3">
-<h4 id="_运算符和表达式">1.1.4. 运算符和表达式</h4>
-
-</div>
-<div class="sect3">
-<h4 id="_数据类型的转换">1.1.5. 数据类型的转换</h4>
-
-</div>
-</div>
-<div class="sect2">
-<h3 id="_algorithm">1.2. Algorithm</h3>
-<div class="sect3">
-<h4 id="_bubble_sort">1.2.1. Bubble Sort</h4>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">    for (i = 1; i &lt; sizeof(a)/sizeof(a[0]); i++)
-    {
-        for (j = 0; j &lt;  sizeof(a)/sizeof(a[0])-i; j++)
-        {
-            if (a[j] &gt; a[j + 1])
-            {
-                swap(&amp;a[j],&amp;a[j+1]);
-            }
-        }
-    }</code></pre>
-</div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_select_sort">1.2.2. Select sort</h4>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">	for(i=0;i&lt;sizeof(a)/sizeof((a[0]))-1;i++){
-		location=i;
-		for(j=i+1;j&lt;sizeof(a)/sizeof((a[0]));j++){
-			if(a[location]&lt;a[j]){
-				location=j;
-			}
-		}
-		if(location!=i){
-			swap(&amp;a[i],&amp;a[location]);
-		}</code></pre>
-</div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_insertion_sort">1.2.3. Insertion sort</h4>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">	for(i=1;i&lt;sizeof(a)/sizeof((a[0]));i++){
-		t=a[i];
-		for(j=0;j&lt;i;j++){
-			if(a[j]&gt;t){
-				break;
-			}
-		}
-		if(j==i) continue;
-		for(p=i;p&gt;j;p--)
-			a[p]=a[p-1];
-			a[p]=t;
-
-	}</code></pre>
-</div>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_function">1.3. Function</h3>
-<div class="sect3">
-<h4 id="_swap">1.3.1. swap</h4>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">void swap(int *x, int *y)
-{
-    int t = *x; //t=a
-    *x = *y;    //a=b
-    *y = t; //a=t
-}</code></pre>
-</div>
-</div>
-<div style="page-break-after: always;"></div>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_Math_chapter">2. Math</h2>
-<div class="sectionbody">
-<div style="page-break-after: always;"></div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_Composition_chapter">3. Composition</h2>
-<div class="sectionbody">
-<div style="page-break-after: always;"></div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_Database_chapter">4. Database</h2>
-<div class="sectionbody">
-<div style="page-break-after: always;"></div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_Linux_chapter">5. Linux</h2>
-<div class="sectionbody">
-<div class="sect2">
-<h3 id="_archlinux">5.1. Archlinux</h3>
-<div class="sect3">
-<h4 id="_grub">5.1.1. GRUB</h4>
+<h4 id="_grub">1.1.1. GRUB</h4>
 <div class="paragraph">
 <p><strong>关于BIOS找不到引导介质的解决方法</strong></p>
 </div>
@@ -1267,12 +869,12 @@ vim /etc/fstab</code></pre>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_Python_chapter">6. Python</h2>
+<h2 id="_Python_chapter">2. Python</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_reptile">6.1. Reptile</h3>
+<h3 id="_reptile">2.1. Reptile</h3>
 <div class="sect3">
-<h4 id="_requests">6.1.1. Requests</h4>
+<h4 id="_requests">2.1.1. Requests</h4>
 <div class="paragraph">
 <p><a href="https://docs.python-requests.org/en/latest/">官方文档</a></p>
 </div>
@@ -1296,7 +898,7 @@ vim /etc/fstab</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_re">6.1.2. Re</h4>
+<h4 id="_re">2.1.2. Re</h4>
 <div class="paragraph">
 <p><a href="https://www.runoob.com/regexp/regexp-syntax.html">正则表达式规则</a></p>
 </div>
@@ -1351,7 +953,7 @@ vim /etc/fstab</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_bs4">6.1.3. Bs4</h4>
+<h4 id="_bs4">2.1.3. Bs4</h4>
 <div class="paragraph">
 <p><a href="https://www.crummy.com/software/BeautifulSoup/bs4/doc/">官方文档</a></p>
 </div>
@@ -1403,7 +1005,7 @@ vim /etc/fstab</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_xpath">6.1.4. Xpath</h4>
+<h4 id="_xpath">2.1.4. Xpath</h4>
 <div class="paragraph">
 <p><strong>Xpath</strong></p>
 </div>
@@ -1446,46 +1048,45 @@ for li in li_list:
 </div>
 </div>
 <div class="sect1">
-<h2 id="_JAVA_chapter">7. JAVA</h2>
-<div class="sectionbody">
-<div style="page-break-after: always;"></div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_History_chapter">8. History</h2>
+<h2 id="_JAVA_chapter">3. JAVA</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_课后习题">8.1. 课后习题</h3>
+<h3 id="_javabasic">3.1. JavaBasic</h3>
 <div class="sect3">
-<h4 id="_第一章">8.1.1. 第一章</h4>
-<div class="qlist qanda">
-<ol>
-<li>
-<p><em>为什么说鸦片战争是中国近代史的起点</em></p>
-<p>答：</p>
-<div class="olist loweralpha">
-<ol class="loweralpha" type="a">
-<li>
-<p>社会性质发生了变化，由独立自主的封建国家沦为半殖民半封建社会。</p>
-</li>
-<li>
-<p>社会阶级发生了变化，战前两大主要阶级为封建地主阶级和农民阶级，战后出现新兴的资产阶级和无产阶级。</p>
-</li>
-<li>
-<p>社会主要矛盾发生了变化，战前主要矛盾为封建地主阶级和农民阶级之间的矛盾，战后主要矛盾包括封建地主阶级和农民阶级以及中华民族与外国资本主义之间的矛盾。</p>
-</li>
-<li>
-<p>革命任务发生了变化，原先的革命任务是反对本国封建势力，战后增加了反对外国殖民侵略的任务，革命的性质由传统的农民战争转为旧民主主义革命。</p>
-</li>
-</ol>
+<h4 id="_basic">3.1.1. Basic</h4>
+<div class="listingblock">
+<div class="title">input</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">// 步骤
+        // 1.引入Scanner类所在的包
+        // 2.创建Scanner对象实例
+import java.util.scanner
+
+Scanner MyScanner = new Scanner(System.in);
+
+//接收一个字符串
+String name = MyScanner.next();</code></pre>
 </div>
-</li>
-<li>
-<p><em>资本——帝国主义的入侵给中国带来了什么？</em></p>
-<p>&lt;&lt;&lt;</p>
-</li>
-</ol>
 </div>
+<div class="listingblock">
+<div class="title">output</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">System.out.print(); //不换行输出
+System.out.println(); //换行输出
+System.out.printf(); //格式化输出</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">StringConvert</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">Integer.parseInt();     //字符串转为Int型
+Double.parseDouble();   //字符串转为Double型
+
+char sex_char='男';
+String sex_string = sex_char + ""; //将字符型转为字符串</code></pre>
+</div>
+</div>
+<div style="page-break-after: always;"></div>
 </div>
 </div>
 </div>
@@ -4155,7 +3756,7 @@ for li in li_list:
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2021-12-27 21:38:47 +0800
+Last updated 2022-01-20 12:59:52 +0800
 </div>
 </div>
 <script src="js/highlight.min.js"></script>
