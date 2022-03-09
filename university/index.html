@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 2.0.16">
 <meta name="author" content="尹磊">
-<title>大学杂记</title>
+<title>杂记</title>
 <style>
 /*! normalize.css v2.1.2 | MIT License | git.io/normalize */
 /* ========================================================================== HTML5 display definitions ========================================================================== */
@@ -748,7 +748,7 @@ p { margin-bottom: 1.25rem; }
 </head>
 <body class="book toc2 toc-left">
 <div id="header">
-<h1>大学杂记</h1>
+<h1>杂记</h1>
 <div class="details">
 <span id="author" class="author">尹磊</span><br>
 <span id="email" class="email"><a href="mailto:yssuvu@gmail.com">yssuvu@gmail.com</a></span><br>
@@ -769,9 +769,14 @@ p { margin-bottom: 1.25rem; }
 <li><a href="#_密码管理">1.1.6. 密码管理</a></li>
 </ul>
 </li>
-<li><a href="#_archlinux">1.2. Archlinux</a>
+<li><a href="#_linux服务">1.2. Linux服务</a>
 <ul class="sectlevel3">
-<li><a href="#_grub">1.2.1. GRUB</a></li>
+<li><a href="#_计划任务">1.2.1. 计划任务</a></li>
+</ul>
+</li>
+<li><a href="#_archlinux">1.3. Archlinux</a>
+<ul class="sectlevel3">
+<li><a href="#_grub">1.3.1. GRUB</a></li>
 </ul>
 </li>
 </ul>
@@ -812,7 +817,7 @@ p { margin-bottom: 1.25rem; }
 <h2 id="_前言">前言</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>大学学习思考杂记</p>
+<p>思考杂记</p>
 </div>
 <div style="page-break-after: always;"></div>
 </div>
@@ -1062,9 +1067,83 @@ hostnamectl set-hostname [新名称] //永久生效</code></pre>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_archlinux">1.2. Archlinux</h3>
+<h3 id="_linux服务">1.2. Linux服务</h3>
 <div class="sect3">
-<h4 id="_grub">1.2.1. GRUB</h4>
+<h4 id="_计划任务">1.2.1. 计划任务</h4>
+<div class="ulist">
+<ul>
+<li>
+<p>一次性计划任务</p>
+<div class="ulist">
+<ul>
+<li>
+<p>命令: <code>at 时间</code></p>
+</li>
+<li>
+<p>查看计划任务 : <code>at -l</code></p>
+</li>
+<li>
+<p>删除任务: <code>atrm 任务序号</code></p>
+</li>
+<li>
+<p>非交互式创建计划任务: <code>echo "systemctl start httpd" | at 20:30</code></p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>周期性计划任务</p>
+<div class="ulist">
+<ul>
+<li>
+<p>命令: <code>crontab -e</code></p>
+</li>
+<li>
+<p>查看计划任务 : <code>crontab -l</code></p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>计划任务格式为:</p>
+</div>
+<div class="paragraph">
+<p>分 时 日 月 星期 命令</p>
+</div>
+<div class="paragraph">
+<p>假设在每周一、三、五的凌晨3 点25 分，都需要使用tar 命令把某个网站的数据目录进行打包处理，使其作为一个备份文件</p>
+</div>
+<div class="paragraph">
+<p>命令: <code>25 3 * * 1,3,5 /usr/bin/tar -zcvf backup.tar.gz /var/www</code></p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">TIP</dt>
+<dd>
+<p>在 <code>crond</code> 服务的计划任务参数中，所有命令一定要用绝对路径的方式来写，如果不知道绝对路径，请用 <code>whereis</code> 命令进行查询
+=== Shell</p>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_archlinux">1.3. Archlinux</h3>
+<div class="sect3">
+<h4 id="_grub">1.3.1. GRUB</h4>
 <div class="paragraph">
 <p><strong>关于BIOS找不到引导介质的解决方法</strong></p>
 </div>
@@ -4034,7 +4113,7 @@ ArrayName[i].length //一维数组中元素的个数</code></pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2022-01-20 12:59:52 +0800
+Last updated 2022-03-09 16:06:35 +0800
 </div>
 </div>
 <script src="js/highlight.min.js"></script>
