@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="generator" content="Asciidoctor 2.0.16">
+<meta name="generator" content="Asciidoctor 2.0.17">
 <meta name="author" content="尹磊">
 <title>杂记</title>
 <style>
@@ -772,11 +772,13 @@ p { margin-bottom: 1.25rem; }
 <li><a href="#_linux服务">1.2. Linux服务</a>
 <ul class="sectlevel3">
 <li><a href="#_计划任务">1.2.1. 计划任务</a></li>
+<li><a href="#_python38">1.2.2. Python38</a></li>
 </ul>
 </li>
-<li><a href="#_archlinux">1.3. Archlinux</a>
+<li><a href="#_shell">1.3. Shell</a></li>
+<li><a href="#_archlinux">1.4. Archlinux</a>
 <ul class="sectlevel3">
-<li><a href="#_grub">1.3.1. GRUB</a></li>
+<li><a href="#_grub">1.4.1. GRUB</a></li>
 </ul>
 </li>
 </ul>
@@ -1134,16 +1136,49 @@ hostnamectl set-hostname [新名称] //永久生效</code></pre>
 <dt class="hdlist1">TIP</dt>
 <dd>
 <p>在 <code>crond</code> 服务的计划任务参数中，所有命令一定要用绝对路径的方式来写，如果不知道绝对路径，请用 <code>whereis</code> 命令进行查询
-=== Shell</p>
+=== CentOS7</p>
 </dd>
 </dl>
 </div>
 </div>
+<div class="sect3">
+<h4 id="_python38">1.2.2. Python38</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"># 下载
+wget https://www.python.org/ftp/python/3.8.1/Python-3.8.1.tgz
+tar -zxvf Python-3.8.1.tgz
+
+# 进入文件夹
+cd Python-3.8.1
+
+# 配置安装位置
+./configure prefix=/usr/local/python3
+
+# 安装
+make &amp;&amp; make install
+
+# 添加python3的软链接
+ln -s /usr/local/python3/bin/python3.8 /usr/bin/python3
+
+# 添加 pip3 的软链接
+ln -s /usr/local/python3/bin/pip3.8 /usr/bin/pip3
+
+# 设置pip源
+pip3 install --upgrade -i https://pypi.tuna.tsinghua.edu.cn/simple pip
+pip3 config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple</code></pre>
+</div>
+</div>
+</div>
 </div>
 <div class="sect2">
-<h3 id="_archlinux">1.3. Archlinux</h3>
+<h3 id="_shell">1.3. Shell</h3>
+
+</div>
+<div class="sect2">
+<h3 id="_archlinux">1.4. Archlinux</h3>
 <div class="sect3">
-<h4 id="_grub">1.3.1. GRUB</h4>
+<h4 id="_grub">1.4.1. GRUB</h4>
 <div class="paragraph">
 <p><strong>关于BIOS找不到引导介质的解决方法</strong></p>
 </div>
@@ -4113,7 +4148,7 @@ ArrayName[i].length //一维数组中元素的个数</code></pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2022-03-09 16:06:35 +0800
+Last updated 2022-03-23 21:58:39 +0800
 </div>
 </div>
 <script src="js/highlight.min.js"></script>
