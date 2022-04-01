@@ -774,9 +774,15 @@ p { margin-bottom: 1.25rem; }
 <li><a href="#_计划任务">1.2.1. 计划任务</a></li>
 </ul>
 </li>
-<li><a href="#_archlinux">1.3. Archlinux</a>
+<li><a href="#_centos7">1.3. CentOS7</a>
 <ul class="sectlevel3">
-<li><a href="#_grub">1.3.1. GRUB</a></li>
+<li><a href="#_python38">1.3.1. Python38</a></li>
+</ul>
+</li>
+<li><a href="#_shell">1.4. Shell</a></li>
+<li><a href="#_archlinux">1.5. Archlinux</a>
+<ul class="sectlevel3">
+<li><a href="#_grub">1.5.1. GRUB</a></li>
 </ul>
 </li>
 </ul>
@@ -1133,17 +1139,53 @@ hostnamectl set-hostname [新名称] //永久生效</code></pre>
 <dl>
 <dt class="hdlist1">TIP</dt>
 <dd>
-<p>在 <code>crond</code> 服务的计划任务参数中，所有命令一定要用绝对路径的方式来写，如果不知道绝对路径，请用 <code>whereis</code> 命令进行查询
-=== Shell</p>
+<p>在 <code>crond</code> 服务的计划任务参数中，所有命令一定要用绝对路径的方式来写，如果不知道绝对路径，请用 <code>whereis</code> 命令进行查询</p>
 </dd>
 </dl>
 </div>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_archlinux">1.3. Archlinux</h3>
+<h3 id="_centos7">1.3. CentOS7</h3>
 <div class="sect3">
-<h4 id="_grub">1.3.1. GRUB</h4>
+<h4 id="_python38">1.3.1. Python38</h4>
+<div class="listingblock">
+<div class="title">CentOS7 安装python38</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"># 下载
+wget https://www.python.org/ftp/python/3.8.1/Python-3.8.1.tgz
+tar -zxvf Python-3.8.1.tgz
+
+# 进入文件夹
+cd Python-3.8.1
+
+# 配置安装位置
+./configure prefix=/usr/local/python3
+
+# 安装
+make &amp;&amp; make install
+
+# 添加python3的软链接
+ln -s /usr/local/python3/bin/python3.8 /usr/bin/python3
+
+# 添加 pip3 的软链接
+ln -s /usr/local/python3/bin/pip3.8 /usr/bin/pip3
+
+# 设置pip源
+pip3 install --upgrade -i https://pypi.tuna.tsinghua.edu.cn/simple pip
+pip3 config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_shell">1.4. Shell</h3>
+
+</div>
+<div class="sect2">
+<h3 id="_archlinux">1.5. Archlinux</h3>
+<div class="sect3">
+<h4 id="_grub">1.5.1. GRUB</h4>
 <div class="paragraph">
 <p><strong>关于BIOS找不到引导介质的解决方法</strong></p>
 </div>
