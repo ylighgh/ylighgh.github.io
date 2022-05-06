@@ -759,51 +759,39 @@ p { margin-bottom: 1.25rem; }
 <li><a href="#_前言">前言</a></li>
 <li><a href="#_Linux_chapter">1. Linux</a>
 <ul class="sectlevel2">
-<li><a href="#_linux基础">1.1. Linux基础</a>
+<li><a href="#_linux服务">1.1. Linux服务</a>
 <ul class="sectlevel3">
-<li><a href="#_运行级别">1.1.1. 运行级别</a></li>
-<li><a href="#_关机和重启">1.1.2. 关机和重启</a></li>
-<li><a href="#_软链接与硬链接">1.1.3. 软链接与硬链接</a></li>
-<li><a href="#_系统硬件">1.1.4. 系统硬件</a></li>
-<li><a href="#_用户管理">1.1.5. 用户管理</a></li>
-<li><a href="#_密码管理">1.1.6. 密码管理</a></li>
-</ul>
-</li>
-<li><a href="#_linux服务">1.2. Linux服务</a>
-<ul class="sectlevel3">
-<li><a href="#_计划任务">1.2.1. 计划任务</a></li>
-<li><a href="#_python38">1.2.2. Python38</a></li>
-</ul>
-</li>
-<li><a href="#_shell">1.3. Shell</a></li>
-<li><a href="#_archlinux">1.4. Archlinux</a>
-<ul class="sectlevel3">
-<li><a href="#_grub">1.4.1. GRUB</a></li>
+<li><a href="#_计划任务">1.1.1. 计划任务</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li><a href="#_Python_chapter">2. Python</a>
+<li><a href="#_Python_chapter">2. CentOS</a>
 <ul class="sectlevel2">
-<li><a href="#_reptile">2.1. Reptile</a>
+<li><a href="#_centos7">2.1. CentOS7</a>
 <ul class="sectlevel3">
-<li><a href="#_requests">2.1.1. Requests</a></li>
-<li><a href="#_re">2.1.2. Re</a></li>
-<li><a href="#_bs4">2.1.3. Bs4</a></li>
-<li><a href="#_xpath">2.1.4. Xpath</a></li>
+<li><a href="#_python38">2.1.1. Python38</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li><a href="#_JAVA_chapter">3. JAVA</a>
+<li><a href="#_Nginx_chapter">3. Nginx</a></li>
+<li><a href="#_Zabbix_chapter">4. Zabbix</a></li>
+<li><a href="#_Jenkins_chapter">5. Jenkins</a></li>
+<li><a href="#_RabbitMQ_chapter">6. RabbitMQ</a></li>
+<li><a href="#_Kafka_chapter">7. Kafka</a></li>
+<li><a href="#_Gitlab_chapter">8. Gitlab</a></li>
+<li><a href="#_Git_chapter">9. Git</a></li>
+<li><a href="#_JAVA_chapter">10. JAVA</a>
 <ul class="sectlevel2">
-<li><a href="#_javabasic">3.1. JavaBasic</a>
+<li><a href="#_javabasic">10.1. JavaBasic</a>
 <ul class="sectlevel3">
-<li><a href="#_basic">3.1.1. Basic</a></li>
+<li><a href="#_basic">10.1.1. Basic</a></li>
 </ul>
 </li>
 </ul>
 </li>
+<li><a href="#_Redis_chapter">11. Redis</a></li>
 <li><a href="#_TheExtendedASCIITable_chapter">Appendix A: The Extended ASCII Table</a>
 <ul class="sectlevel2">
 <li><a href="#_ascii_control_characters_character_code_0_31">A.1. ASCII control characters (character code 0-31)</a></li>
@@ -828,250 +816,9 @@ p { margin-bottom: 1.25rem; }
 <h2 id="_Linux_chapter">1. Linux</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_linux基础">1.1. Linux基础</h3>
+<h3 id="_linux服务">1.1. Linux服务</h3>
 <div class="sect3">
-<h4 id="_运行级别">1.1.1. 运行级别</h4>
-<div class="paragraph">
-<p>Linux系统运行级别:Linux系统有7个运行级别,不同的运行级别运行的程序和功能都不一样,而Linux系统默认是运行在一个标准的级别上,系统运行级别文件/etc/inittab文件</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-note hljs" data-lang="note">运行级别0:所有进程被终止,机器将有序的停止,关机时系统处于这个运行级别(关机)
-运行级别1:单用户模式,(root用户进行系统维护),系统里运行的所有服务都不会启动
-运行级别2:多用户模式(网络文件系统NFS服务为没有被启动)
-运行级别3:完全多用户模式,(有NFS网络文件系统)标准的运行级别
-运行级别4:系统未使用
-运行级别5:登陆后,进入带GUI的图形化界面,标准的运行级别
-运行级别6:系统正常关闭并重启
-
-#查看当前的运行级别
-runlevel
-
-#切换运行级别
-init 数字
-
-#获取当前系统默认运行级别
-systemctl get-default
-
-#修改系统默认运行级别
-systemctl set-default TARGET.target</code></pre>
-</div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_关机和重启">1.1.2. 关机和重启</h4>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">#关机
-halt
-init 0
-poweroff
-shutdown
-shutdown -h 10    //10分钟后关机
-shutdown -h now   //立刻关机
-
-
-
-#重启
-init 6
-reboot
-shutdown -r now
-shutdown -r 10    //10分钟后重启</code></pre>
-</div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_软链接与硬链接">1.1.3. 软链接与硬链接</h4>
-<div class="paragraph">
-<div class="title">软链接</div>
-<p>特点:软链接可以跨分区,可以对目录进行链接,源文件删除后,链接文件不可用</p>
-</div>
-<div class="paragraph">
-<p>格式: <code>ln -s 源文件路径 目标文件路径</code></p>
-</div>
-<div class="paragraph">
-<div class="title">硬链接</div>
-<p>特点:硬链接不可以跨分区,不可以对目录进行链接,源文件删除后,链接文件仍然可以使用</p>
-</div>
-<div class="paragraph">
-<p>格式: <code>ln  源文件路径 目标文件路径</code></p>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_系统硬件">1.1.4. 系统硬件</h4>
-<div class="paragraph">
-<p>内核(kernel)</p>
-</div>
-<div class="paragraph">
-<p>命令: <code>uname -rs</code></p>
-</div>
-<div class="listingblock shell">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">[root@localhost ~]# uname -rs
-Linux 3.10.0-1062.el7.x86_64
-
-Linux  #内核名称
-3      #主版本
-10     #次版本
-0      #修改版本
-1062   #补丁次数
-el7    #Enterprise Linux(企业版Linux)
-X86_64 #CPU架构</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>CPU</p>
-</div>
-<div class="paragraph">
-<p>命令: <code>lscpu</code></p>
-</div>
-<div class="paragraph">
-<p>系统内存</p>
-</div>
-<div class="paragraph">
-<p>命令: <code>free -mh</code></p>
-</div>
-<div class="paragraph">
-<p>网卡</p>
-</div>
-<div class="paragraph">
-<p>命令: <code>ifconfig 网卡名</code></p>
-</div>
-<div class="paragraph">
-<p>主机名</p>
-</div>
-<div class="listingblock shell">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">hostname [新名称]  //临时生效,重启恢复
-hostnamectl set-hostname [新名称] //永久生效</code></pre>
-</div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_用户管理">1.1.5. 用户管理</h4>
-<div class="paragraph">
-<p>用户模板目录: <code>/etc/skel</code></p>
-</div>
-<div class="paragraph">
-<p>默认信息目录: <code>/etc/default/useradd</code></p>
-</div>
-<div class="paragraph">
-<p>创建用户: <code>useraddd</code></p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>常用选项:</p>
-<div class="ulist">
-<ul>
-<li>
-<p>-u 指定用户UID</p>
-</li>
-<li>
-<p>-d 指定用户家目录</p>
-</li>
-<li>
-<p>-c 用户描述信息</p>
-</li>
-<li>
-<p>-g 指定用户基本组</p>
-</li>
-<li>
-<p>-G 指定用户附加组</p>
-</li>
-<li>
-<p>-s 指定用户的shell</p>
-</li>
-</ul>
-</div>
-</li>
-</ul>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_密码管理">1.1.6. 密码管理</h4>
-<div class="paragraph">
-<p>命令格式: <code>passwd [-选项] 用户名</code></p>
-</div>
-<div class="paragraph">
-<p>密码规范: 长度不能少于8个字符,复杂度(数字,字母区分大小写,特殊字符)</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>常用选项:</p>
-<div class="ulist">
-<ul>
-<li>
-<p>-S 查看密码信息</p>
-</li>
-<li>
-<p>-l 锁定用户密码</p>
-</li>
-<li>
-<p>-u 解锁用户密码</p>
-</li>
-<li>
-<p>-d 删除密码</p>
-</li>
-<li>
-<p>--stdin 通过管道方式设置用户密码</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p>非交互式设置用户密码</p>
-</li>
-<li>
-<p>命令格式: <code>echo 密码|passwd --stdin 用户名</code></p>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p>用户密码文件: <code>/etc/shadow</code></p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>字段含义:</p>
-<div class="ulist">
-<ul>
-<li>
-<p>第三个字段:密码最后一次修改日期</p>
-</li>
-<li>
-<p>第四个字段:密码的修改期限,为0表示随时可以修改,为10表示10天之内不能修改</p>
-</li>
-<li>
-<p>第五个字段:密码有效期</p>
-</li>
-<li>
-<p>第六个字段:密码到期前警告时间</p>
-</li>
-<li>
-<p>第七个字段:密码过期后的宽限时间</p>
-</li>
-<li>
-<p>第八个字段:账号失效时间(日期从1970年1月1日起)</p>
-</li>
-<li>
-<p>第八个字段:保留</p>
-</li>
-</ul>
-</div>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p>新建用户登录就提示修改密码: <code>chage -d 0 用户名</code></p>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_linux服务">1.2. Linux服务</h3>
-<div class="sect3">
-<h4 id="_计划任务">1.2.1. 计划任务</h4>
+<h4 id="_计划任务">1.1.1. 计划任务</h4>
 <div class="ulist">
 <ul>
 <li>
@@ -1135,14 +882,22 @@ hostnamectl set-hostname [新名称] //永久生效</code></pre>
 <dl>
 <dt class="hdlist1">TIP</dt>
 <dd>
-<p>在 <code>crond</code> 服务的计划任务参数中，所有命令一定要用绝对路径的方式来写，如果不知道绝对路径，请用 <code>whereis</code> 命令进行查询
-=== CentOS7</p>
+<p>在 <code>crond</code> 服务的计划任务参数中，所有命令一定要用绝对路径的方式来写，如果不知道绝对路径，请用 <code>whereis</code> 命令进行查询</p>
 </dd>
 </dl>
 </div>
+<div style="page-break-after: always;"></div>
 </div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_Python_chapter">2. CentOS</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_centos7">2.1. CentOS7</h3>
 <div class="sect3">
-<h4 id="_python38">1.2.2. Python38</h4>
+<h4 id="_python38">2.1.1. Python38</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"># 下载
@@ -1169,256 +924,60 @@ pip3 install --upgrade -i https://pypi.tuna.tsinghua.edu.cn/simple pip
 pip3 config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple</code></pre>
 </div>
 </div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_shell">1.3. Shell</h3>
-
-</div>
-<div class="sect2">
-<h3 id="_archlinux">1.4. Archlinux</h3>
-<div class="sect3">
-<h4 id="_grub">1.4.1. GRUB</h4>
-<div class="paragraph">
-<p><strong>关于BIOS找不到引导介质的解决方法</strong></p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">mount /dev/sdc3 /mnt
-
-mkdir /mnt/home
-mount /dev/sdc4 /mnt/home
-
-mkdir /mnt/efi
-mount /dev/sdc1 /mnt/efi
-
-#切换到挂载系统
-arch-chroot /mnt
-
-grub-install --target=x86_64-efi --efi-directory=efi --removeable --bootloader=GRUB --recheck
-
-##--removeable 表示是移动介质
-##--recheck 检查设备
-
-#重新生成grub文件
-grub-mkconfig -o /boot/grub/grub.cfg</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p><strong>开机提示timed out waiting for device</strong></p>
-</div>
-<div class="admonitionblock warning">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-warning" title="Warning"></i>
-</td>
-<td class="content">
-引导找不到，导致UUID更改，恢复方法如下：
-</td>
-</tr>
-</table>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">#执行命令记录EFI分区的UUID
-blkid
-
-#编辑fstab文件将UUID重新写入
-vim /etc/fstab</code></pre>
-</div>
-</div>
 <div style="page-break-after: always;"></div>
 </div>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_Python_chapter">2. Python</h2>
+<h2 id="_Nginx_chapter">3. Nginx</h2>
 <div class="sectionbody">
-<div class="sect2">
-<h3 id="_reptile">2.1. Reptile</h3>
-<div class="sect3">
-<h4 id="_requests">2.1.1. Requests</h4>
-<div class="paragraph">
-<p><a href="https://docs.python-requests.org/en/latest/">官方文档</a></p>
-</div>
-<div class="paragraph">
-<p><strong>导入Requests包</strong></p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">improt requests</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p><strong>模拟User-Agent</strong></p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">headers = {
-    "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/94.0.4606.61 Safari/537.36"
-}</code></pre>
-</div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_re">2.1.2. Re</h4>
-<div class="paragraph">
-<p><a href="https://www.runoob.com/regexp/regexp-syntax.html">正则表达式规则</a></p>
-</div>
-<div class="paragraph">
-<p><a href="https://tool.oschina.net/regex#">正则表达式测试地址</a></p>
-</div>
-<div class="paragraph">
-<p><strong>Re匹配规则</strong></p>
-</div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-note" title="Note"></i>
-</td>
-<td class="content">
-<div class="ulist">
-<ul>
-<li>
-<p>findall:匹配字符串中所有的符合正则的内容</p>
-</li>
-<li>
-<p>finditer:匹配字符串中所有的内容[返回的是迭代器],需要把它从迭代器中遍历出来,从迭代器中拿到内容需要.group()</p>
-</li>
-<li>
-<p>search:找到一个结果就返回,返回的结果是match对象,拿数据需要.group()</p>
-</li>
-<li>
-<p>match:从头开始匹配</p>
-</li>
-</ul>
-</div>
-</td>
-</tr>
-</table>
-</div>
-<div class="paragraph">
-<p><strong>导入Requests包</strong></p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">improt re</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p><strong>定义匹配规则</strong></p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">obj = re.compile(r".*?&lt;ul&gt;(?P&lt;匹配的内容(自定义名称)&gt;.*?)&lt;/ul&gt;", re.S)  # re.S : 让.能匹配换行符</code></pre>
-</div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_bs4">2.1.3. Bs4</h4>
-<div class="paragraph">
-<p><a href="https://www.crummy.com/software/BeautifulSoup/bs4/doc/">官方文档</a></p>
-</div>
-<div class="paragraph">
-<p><strong>BeautifulSoup</strong></p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">from bs4 import BeautifulSoup</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p><strong>将获取的源码交给bs处理</strong></p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">soup = BeautifulSoup(resp.text, "html.parser") //指定html解析器</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p><strong>从bs对象中查找数据</strong></p>
-</div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-note" title="Note"></i>
-</td>
-<td class="content">
-<div class="ulist">
-<ul>
-<li>
-<p>find(标签，属性=值):匹配需要找的标签</p>
-</li>
-<li>
-<p>find_all:找到所以的标签</p>
-</li>
-<li>
-<p>get:获取对象中的属性值</p>
-</li>
-<li>
-<p>str:获取对象中的文本</p>
-</li>
-</ul>
-</div>
-</td>
-</tr>
-</table>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_xpath">2.1.4. Xpath</h4>
-<div class="paragraph">
-<p><strong>Xpath</strong></p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">from lxml import etree</code></pre>
-</div>
-</div>
-<div class="admonitionblock tip">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-tip" title="Tip"></i>
-</td>
-<td class="content">
-Xpath是在XML文档中搜索内容的一门语言
-</td>
-</tr>
-</table>
-</div>
-<div class="paragraph">
-<p><strong>bilibilirank</strong></p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs"># 定义范围
-li_list = html.xpath('//*[@id="app"]/div/div[2]/div[2]/ul/li')
-
-for li in li_list:
-    rank_num = li.xpath('./div[1]/text()')[0]
-    rank_title = li.xpath('./div[2]/div[2]/a/text()')[0] //text:获取标签内的内容
-    rank_href = li.xpath('./div[2]/div[2]/a/@href')[0] //@标签名：获取标签的属性
-    # print(no,title,href.strip("//"))
-    csvwriter.writerow([rank_num, rank_title, "https:" + rank_href])</code></pre>
-</div>
-</div>
 <div style="page-break-after: always;"></div>
 </div>
 </div>
+<div class="sect1">
+<h2 id="_Zabbix_chapter">4. Zabbix</h2>
+<div class="sectionbody">
+<div style="page-break-after: always;"></div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_JAVA_chapter">3. JAVA</h2>
+<h2 id="_Jenkins_chapter">5. Jenkins</h2>
+<div class="sectionbody">
+<div style="page-break-after: always;"></div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_RabbitMQ_chapter">6. RabbitMQ</h2>
+<div class="sectionbody">
+<div style="page-break-after: always;"></div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_Kafka_chapter">7. Kafka</h2>
+<div class="sectionbody">
+<div style="page-break-after: always;"></div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_Gitlab_chapter">8. Gitlab</h2>
+<div class="sectionbody">
+<div style="page-break-after: always;"></div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_Git_chapter">9. Git</h2>
+<div class="sectionbody">
+<div style="page-break-after: always;"></div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_JAVA_chapter">10. JAVA</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_javabasic">3.1. JavaBasic</h3>
+<h3 id="_javabasic">10.1. JavaBasic</h3>
 <div class="sect3">
-<h4 id="_basic">3.1.1. Basic</h4>
+<h4 id="_basic">10.1.1. Basic</h4>
 <div class="listingblock">
 <div class="title">input</div>
 <div class="content">
@@ -1481,6 +1040,12 @@ ArrayName[i].length //一维数组中元素的个数</code></pre>
 <div style="page-break-after: always;"></div>
 </div>
 </div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_Redis_chapter">11. Redis</h2>
+<div class="sectionbody">
+<div style="page-break-after: always;"></div>
 </div>
 </div>
 <div class="sect1">
@@ -4148,7 +3713,7 @@ ArrayName[i].length //一维数组中元素的个数</code></pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2022-03-23 21:58:39 +0800
+Last updated 2022-05-06 22:03:07 +0800
 </div>
 </div>
 <script src="js/highlight.min.js"></script>
