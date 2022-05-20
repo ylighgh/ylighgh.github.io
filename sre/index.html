@@ -784,15 +784,6 @@ p { margin-bottom: 1.25rem; }
 <li><a href="#_Git_chapter">9. Git</a></li>
 <li><a href="#_MySQL_chapter">10. MySQL</a></li>
 <li><a href="#_Redis_chapter">11. Redis</a></li>
-<li><a href="#_Shell_chapter">12. Shell</a>
-<ul class="sectlevel2">
-<li><a href="#_nginx">12.1. Nginx</a>
-<ul class="sectlevel3">
-<li><a href="#_nginxkeepalived健康检测">12.1.1. Nginx+Keepalived健康检测</a></li>
-</ul>
-</li>
-</ul>
-</li>
 </ul>
 </div>
 </div>
@@ -977,41 +968,10 @@ pip3 config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple</code>
 <div style="page-break-after: always;"></div>
 </div>
 </div>
-<div class="sect1">
-<h2 id="_Shell_chapter">12. Shell</h2>
-<div class="sectionbody">
-<div class="sect2">
-<h3 id="_nginx">12.1. Nginx</h3>
-<div class="sect3">
-<h4 id="_nginxkeepalived健康检测">12.1.1. Nginx+Keepalived健康检测</h4>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">cat &lt;&lt;EOF&gt; nginx_check.sh
-#!/bin/bash
-if [ "$(ps -ef | grep "nginx: master process"| grep -v grep )" == "" ]
-then
-    #以上作用：如果进程没有nginx，则启动
-    systemctl start nginx
-    #间隔时间
-    sleep 5
-if [ "$(ps -ef | grep "nginx: master process"| grep -v grep )" == "" ]
-then
-    #以上作用：如果进程没有nginx，则停止keepalived
-    killall keepalived
-fi
-fi
-EOF</code></pre>
-</div>
-</div>
-<div style="page-break-after: always;"></div>
-</div>
-</div>
-</div>
-</div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2022-05-07 11:36:23 +0800
+Last updated 2022-05-06 22:16:32 +0800
 </div>
 </div>
 <script src="js/highlight.min.js"></script>
