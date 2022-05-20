@@ -772,8 +772,16 @@ p { margin-bottom: 1.25rem; }
 <li><a href="#_php7">2.2. PHP7</a></li>
 </ul>
 </li>
-<li><a href="#_Nginx_chapter">3. Nginx</a></li>
-<li><a href="#_Zabbix_chapter">4. Zabbix</a></li>
+<li><a href="#_Nginx_chapter">3. Nginx</a>
+<ul class="sectlevel2">
+<li><a href="#_安装">3.1. 安装</a></li>
+</ul>
+</li>
+<li><a href="#_Zabbix_chapter">4. Zabbix</a>
+<ul class="sectlevel2">
+<li><a href="#_安装_2">4.1. 安装</a></li>
+</ul>
+</li>
 <li><a href="#_Jenkins_chapter">5. Jenkins</a></li>
 <li><a href="#_RabbitMQ_chapter">6. RabbitMQ</a></li>
 <li><a href="#_Kafka_chapter">7. Kafka</a></li>
@@ -916,18 +924,14 @@ pip3 config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple</code>
 </div>
 <div class="sect2">
 <h3 id="_php7">2.2. PHP7</h3>
-<div class="paragraph">
-<p><strong>增加SCL源</strong></p>
-</div>
 <div class="listingblock">
+<div class="title">增加SCL源</div>
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">yum install -y centos-release-scl</code></pre>
 </div>
 </div>
-<div class="paragraph">
-<p><strong>安装PHP7.2</strong></p>
-</div>
 <div class="listingblock">
+<div class="title">安装PHP7.2</div>
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">yum install -y rh-php72 \
     rh-php72-php  \
@@ -944,26 +948,20 @@ pip3 config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple</code>
     rh-php72-php-devel</code></pre>
 </div>
 </div>
-<div class="paragraph">
-<p><strong>进入 <code>rh-php72</code> 环境</strong></p>
-</div>
 <div class="listingblock">
+<div class="title">进入 <code>rh-php72</code> 环境</div>
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">scl enable rh-php72 bash</code></pre>
 </div>
 </div>
-<div class="paragraph">
-<p><strong>备份php.ini</strong></p>
-</div>
 <div class="listingblock">
+<div class="title">备份php.ini</div>
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">cp /etc/opt/rh/rh-php72/php.ini /etc/opt/rh/rh-php72/php.ini.default</code></pre>
 </div>
 </div>
-<div class="paragraph">
-<p><strong>修改php.ini</strong></p>
-</div>
 <div class="listingblock">
+<div class="title">修改php.ini</div>
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"># 启用 '&lt;? ... ?&gt;' 代码风格
 sed -i '197s/short_open_tag = Off/short_open_tag = On/' /etc/opt/rh/rh-php72/php.ini
@@ -975,26 +973,20 @@ sed -i '314s/disable_functions =/disable_functions = system,exec,shell_exec,pass
 sed -i '902s#;date.timezone =#date.timezone = Asia/Shanghai#' /etc/opt/rh/rh-php72/php.ini</code></pre>
 </div>
 </div>
-<div class="paragraph">
-<p><strong>增加开机启动</strong></p>
-</div>
 <div class="listingblock">
+<div class="title">增加开机启动</div>
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">systemctl enable rh-php72-php-fpm</code></pre>
 </div>
 </div>
-<div class="paragraph">
-<p><strong>启动 <code>PHP-FPM</code> 服务</strong></p>
-</div>
 <div class="listingblock">
+<div class="title">启动 <code>PHP-FPM</code> 服务</div>
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">systemctl start rh-php72-php-fpm</code></pre>
 </div>
 </div>
-<div class="paragraph">
-<p><strong>查看 <code>PHP-FPM</code> 服务状态</strong></p>
-</div>
 <div class="listingblock">
+<div class="title">查看 <code>PHP-FPM</code> 服务状态</div>
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"># systemctl status rh-php72-php-fpm
 ● rh-php72-php-fpm.service - The PHP FastCGI Process Manager
@@ -1025,13 +1017,261 @@ LISTEN     0      128    127.0.0.1:9000                     *:*                 
 <div class="sect1">
 <h2 id="_Nginx_chapter">3. Nginx</h2>
 <div class="sectionbody">
-<div style="page-break-after: always;"></div>
+<div class="sect2">
+<h3 id="_安装">3.1. 安装</h3>
+<div class="listingblock">
+<div class="title">增加 Nginx 官方源</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">cat &lt;&lt; EOF &gt; /etc/yum.repos.d/nginx.repo
+[nginx-stable]
+name=nginx stable repo
+baseurl=http://nginx.org/packages/centos/\$releasever/\$basearch/
+gpgcheck=1
+enabled=1
+gpgkey=https://nginx.org/keys/nginx_signing.key
+module_hotfixes=true
+
+[nginx-mainline]
+name=nginx mainline repo
+baseurl=http://nginx.org/packages/mainline/centos/\$releasever/\$basearch/
+gpgcheck=1
+enabled=0
+gpgkey=https://nginx.org/keys/nginx_signing.key
+module_hotfixes=true
+EOF</code></pre>
+</div>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>EPEL 源中的 <code>nginx.service</code> 由于 <code>KILL</code> 参数问题，启动后无法停止，不建议使用。</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="listingblock">
+<div class="title">安装Nginx</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">yum install -y nginx</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">备份Nginx配置文件</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">echo y|cp /etc/nginx/nginx.conf /etc/nginx/nginx.conf.default</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">修改 nginx.conf</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">cat &lt;&lt; EOF &gt; /etc/nginx/nginx.conf
+# For more information on configuration, see:
+#   * Official English Documentation: http://nginx.org/en/docs/
+#   * Official Russian Documentation: http://nginx.org/ru/docs/
+
+user nginx;
+worker_processes auto;
+error_log  /var/log/nginx/error.log warn;
+pid        /var/run/nginx.pid;
+
+worker_rlimit_nofile 65535;
+
+events {
+    worker_connections 65535;
+}
+
+http {
+    include             /etc/nginx/mime.types;
+    default_type        application/octet-stream;
+
+    log_format  main  '\$host \$server_port \$remote_addr - \$remote_user [\$time_local] "\$request" '
+                      '\$status \$request_time \$body_bytes_sent "\$http_referer" '
+                      '"\$http_user_agent" "\$http_x_forwarded_for"';
+
+    access_log  /var/log/nginx/access.log  main;
+
+    sendfile            on;
+    tcp_nopush          on;
+    tcp_nodelay         on;
+    keepalive_timeout   65;
+    types_hash_max_size 2048;
+
+    server_names_hash_bucket_size 128;
+    server_name_in_redirect off;
+    client_header_buffer_size 32k;
+    large_client_header_buffers 4 32k;
+
+    client_header_timeout  3m;
+    client_body_timeout    3m;
+    client_max_body_size 50m;
+    client_body_buffer_size 256k;
+    send_timeout           3m;
+
+    gzip  on;
+    gzip_min_length  1k;
+    gzip_buffers     4 16k;
+    gzip_http_version 1.0;
+    gzip_comp_level 2;
+    gzip_types image/svg+xml application/x-font-wof text/plain text/xml text/css application/xml application/xhtml+xml application/rss+xml application/javascript application/x-javascript text/javascript;
+    gzip_vary on;
+
+    proxy_redirect off;
+    proxy_set_header Host \$host;
+    proxy_set_header X-Real-IP \$remote_addr;
+    proxy_set_header REMOTE-HOST \$remote_addr;
+    proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
+    proxy_connect_timeout 60;
+    proxy_send_timeout 60;
+    proxy_read_timeout 60;
+    proxy_buffer_size 256k;
+    proxy_buffers 4 256k;
+    proxy_busy_buffers_size 256k;
+    proxy_temp_file_write_size 256k;
+    proxy_next_upstream error timeout invalid_header http_500 http_503 http_404;
+    proxy_max_temp_file_size 128m;
+    #让代理服务端不要主动关闭客户端的连接，协助处理499返回代码问题
+    proxy_ignore_client_abort on;
+
+    fastcgi_buffer_size 64k;
+    fastcgi_buffers 4 64k;
+    fastcgi_busy_buffers_size 128k;
+
+    index index.html index.htm index.php default.html default.htm default.php;
+
+    # Load modular configuration files from the /etc/nginx/conf.d directory.
+    # See http://nginx.org/en/docs/ngx_core_module.html#include
+    # for more information.
+    include /etc/nginx/conf.d/*.conf;
+}
+EOF</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">增加默认Host</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">mkdir /etc/nginx/conf.d
+
+cat &lt;&lt; EOF &gt; /etc/nginx/conf.d/default.conf
+server {
+    listen       80 default_server;
+    listen       [::]:80 default_server;
+    server_name  _;
+    root         /usr/share/nginx/html;
+
+    # Load configuration files for the default server block.
+    include /etc/nginx/default.d/*.conf;
+
+    location / {
+    }
+
+    error_page 404 /404.html;
+        location = /40x.html {
+    }
+
+    error_page 500 502 503 504 /50x.html;
+        location = /50x.html {
+    }
+}
+EOF</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">检测配置</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">nginx -t &amp;&amp; rm -f /var/run/nginx.pid</code></pre>
+</div>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p><code>nginx -t</code> 之后，<code>/var/run/nginx.pid</code> 空文件会一直被保留，而 <code>nginx.service</code> 并不能处理 <code>PIDFile</code> 为空的情况，导致启动失败。</p>
+</div>
+<div class="paragraph">
+<p>需要手动删除 <code>/var/run/nginx.pid</code></p>
+</div>
+<div class="paragraph">
+<p>from nginx/1.16.1</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="listingblock">
+<div class="title">启动Nginx</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">systemctl start nginx</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">查看Nginx状态</div>
+<div class="content">
+<pre># systemctl status nginx
+● nginx.service - The nginx HTTP and reverse proxy server
+   Loaded: loaded (/usr/lib/systemd/system/nginx.service; disabled; vendor preset: disabled)
+   Active: active (running) since Fri 2019-11-29 14:02:31 CST; 1h 18min ago
+ Main PID: 15759 (nginx)
+   CGroup: /system.slice/nginx.service
+           ├─15759 nginx: master process /usr/sbin/nginx
+           └─17285 nginx: worker process
+
+Nov 29 14:02:31 iZ6weebcmroarpx8rrxscrZ systemd[1]: Starting The nginx HTTP and reverse proxy server...
+Nov 29 14:02:31 iZ6weebcmroarpx8rrxscrZ nginx[15753]: nginx: the configuration file /etc/nginx/nginx.conf syntax is ok
+Nov 29 14:02:31 iZ6weebcmroarpx8rrxscrZ nginx[15753]: nginx: configuration file /etc/nginx/nginx.conf test is successful
+Nov 29 14:02:31 iZ6weebcmroarpx8rrxscrZ systemd[1]: Failed to parse PID from file /run/nginx.pid: Invalid argument
+Nov 29 14:02:31 iZ6weebcmroarpx8rrxscrZ systemd[1]: Started The nginx HTTP and reverse proxy server.
+
+
+# ss -antpl|grep nginx
+LISTEN     0      128          *:80                       *:*                   users:(("nginx",pid=17285,fd=6),("nginx",pid=15759,fd=6))
+LISTEN     0      128         :::80                      :::*                   users:(("nginx",pid=17285,fd=7),("nginx",pid=15759,fd=7))</pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">增加开机启动</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">systemctl enable nginx
+&lt;&lt;&lt;</code></pre>
+</div>
+</div>
+</div>
 </div>
 </div>
 <div class="sect1">
 <h2 id="_Zabbix_chapter">4. Zabbix</h2>
 <div class="sectionbody">
+<div class="sect2">
+<h3 id="_安装_2">4.1. 安装</h3>
+<div class="paragraph">
+<p><a href="https://repo.zabbix.com/zabbix/">Zabbix官方源</a></p>
+</div>
+<div class="listingblock">
+<div class="title">获取源</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">---
+yum install -y https://repo.zabbix.com/zabbix/5.0/rhel/7/x86_64/zabbix-release-5.0-1.el7.noarch.rpm
+sed -i 's#http://repo.zabbix.com#https://mirrors.tuna.tsinghua.edu.cn/zabbix#g' /etc/yum.repos.d/zabbix.repo
+---</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">安装</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">yum install -y zabbix-server-mysql zabbix-agent zabbix-get</code></pre>
+</div>
+</div>
 <div style="page-break-after: always;"></div>
+</div>
 </div>
 </div>
 <div class="sect1">
