@@ -759,7 +759,7 @@ p { margin-bottom: 1.25rem; }
 <li><a href="#_前言">前言</a></li>
 <li><a href="#_Linux_chapter">1. Linux</a>
 <ul class="sectlevel2">
-<li><a href="#_linux服务">1.1. Linux服务</a>
+<li><a href="#_系统服务">1.1. 系统服务</a>
 <ul class="sectlevel3">
 <li><a href="#_计划任务">1.1.1. 计划任务</a></li>
 </ul>
@@ -768,11 +768,8 @@ p { margin-bottom: 1.25rem; }
 </li>
 <li><a href="#_Python_chapter">2. CentOS</a>
 <ul class="sectlevel2">
-<li><a href="#_centos7">2.1. CentOS7</a>
-<ul class="sectlevel3">
-<li><a href="#_python38">2.1.1. Python38</a></li>
-</ul>
-</li>
+<li><a href="#_python38">2.1. Python38</a></li>
+<li><a href="#_php7">2.2. PHP7</a></li>
 </ul>
 </li>
 <li><a href="#_Nginx_chapter">3. Nginx</a></li>
@@ -784,6 +781,15 @@ p { margin-bottom: 1.25rem; }
 <li><a href="#_Git_chapter">9. Git</a></li>
 <li><a href="#_MySQL_chapter">10. MySQL</a></li>
 <li><a href="#_Redis_chapter">11. Redis</a></li>
+<li><a href="#_Shell_chapter">12. Shell</a>
+<ul class="sectlevel2">
+<li><a href="#_nginx">12.1. Nginx</a>
+<ul class="sectlevel3">
+<li><a href="#_nginxkeepalived健康检查">12.1.1. Nginx+Keepalived健康检查</a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 </div>
 </div>
@@ -801,7 +807,7 @@ p { margin-bottom: 1.25rem; }
 <h2 id="_Linux_chapter">1. Linux</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_linux服务">1.1. Linux服务</h3>
+<h3 id="_系统服务">1.1. 系统服务</h3>
 <div class="sect3">
 <h4 id="_计划任务">1.1.1. 计划任务</h4>
 <div class="ulist">
@@ -880,9 +886,7 @@ p { margin-bottom: 1.25rem; }
 <h2 id="_Python_chapter">2. CentOS</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_centos7">2.1. CentOS7</h3>
-<div class="sect3">
-<h4 id="_python38">2.1.1. Python38</h4>
+<h3 id="_python38">2.1. Python38</h3>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"># 下载
@@ -909,8 +913,112 @@ pip3 install --upgrade -i https://pypi.tuna.tsinghua.edu.cn/simple pip
 pip3 config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple</code></pre>
 </div>
 </div>
-<div style="page-break-after: always;"></div>
 </div>
+<div class="sect2">
+<h3 id="_php7">2.2. PHP7</h3>
+<div class="paragraph">
+<p><strong>增加SCL源</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">yum install -y centos-release-scl</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>安装PHP7.2</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">yum install -y rh-php72 \
+    rh-php72-php  \
+    rh-php72-php-bcmath \
+    rh-php72-php-fpm \
+    rh-php72-php-gd \
+    rh-php72-php-intl \
+    rh-php72-php-mbstring \
+    rh-php72-php-mysqlnd \
+    rh-php72-php-opcache \
+    rh-php72-php-pdo \
+    rh-php72-php-pecl-apcu \
+    rh-php72-php-xmlrpc \
+    rh-php72-php-devel</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>进入 <code>rh-php72</code> 环境</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">scl enable rh-php72 bash</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>备份php.ini</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">cp /etc/opt/rh/rh-php72/php.ini /etc/opt/rh/rh-php72/php.ini.default</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>修改php.ini</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"># 启用 '&lt;? ... ?&gt;' 代码风格
+sed -i '197s/short_open_tag = Off/short_open_tag = On/' /etc/opt/rh/rh-php72/php.ini
+
+# 禁止一些危险性高的函数
+sed -i '314s/disable_functions =/disable_functions = system,exec,shell_exec,passthru,set_time_limit,ini_alter,dl,openlog,syslog,readlink,symlink,link,leak,popen,escapeshellcmd,virtual,socket_create,mail,eval/' /etc/opt/rh/rh-php72/php.ini
+
+# 配置中国时区
+sed -i '902s#;date.timezone =#date.timezone = Asia/Shanghai#' /etc/opt/rh/rh-php72/php.ini</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>增加开机启动</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">systemctl enable rh-php72-php-fpm</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>启动 <code>PHP-FPM</code> 服务</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">systemctl start rh-php72-php-fpm</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>查看 <code>PHP-FPM</code> 服务状态</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"># systemctl status rh-php72-php-fpm
+● rh-php72-php-fpm.service - The PHP FastCGI Process Manager
+   Loaded: loaded (/usr/lib/systemd/system/rh-php72-php-fpm.service; enabled; vendor preset: disabled)
+   Active: active (running) since Fri 2019-11-29 13:36:03 CST; 1h 56min ago
+ Main PID: 15360 (php-fpm)
+   Status: "Processes active: 0, idle: 6, Requests: 56, slow: 0, Traffic: 0req/sec"
+   CGroup: /system.slice/rh-php72-php-fpm.service
+           ├─15360 php-fpm: master process (/etc/opt/rh/rh-php72/php-fpm.conf)
+           ├─15361 php-fpm: pool www
+           ├─15362 php-fpm: pool www
+           ├─15363 php-fpm: pool www
+           ├─15364 php-fpm: pool www
+           ├─15365 php-fpm: pool www
+           └─17211 php-fpm: pool www
+
+Nov 29 13:36:03 iZ6weebcmroarpx8rrxscrZ systemd[1]: Starting The PHP FastCGI Process Manager...
+Nov 29 13:36:03 iZ6weebcmroarpx8rrxscrZ systemd[1]: Started The PHP FastCGI Process Manager.
+
+# ss -antpl|grep php-fpm
+LISTEN     0      128    127.0.0.1:9000                     *:*                   users:(("php-fpm",pid=17211,fd=9),("php-fpm",pid=15365,fd=9),("php-fpm",pid=15364,fd=9),("php-fpm",pid=15363,fd=9),("php-fpm",pid=15362,fd=9),("php-fpm",pid=15361,fd=9),("php-fpm",pid=15360,fd=7))</code></pre>
+</div>
+</div>
+<div style="page-break-after: always;"></div>
 </div>
 </div>
 </div>
@@ -968,10 +1076,41 @@ pip3 config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple</code>
 <div style="page-break-after: always;"></div>
 </div>
 </div>
+<div class="sect1">
+<h2 id="_Shell_chapter">12. Shell</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_nginx">12.1. Nginx</h3>
+<div class="sect3">
+<h4 id="_nginxkeepalived健康检查">12.1.1. Nginx+Keepalived健康检查</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">cat &lt;&lt;EOF&gt; nginx_check.sh
+#!/bin/bash
+if [ "$(ps -ef | grep "nginx: master process"| grep -v grep )" == "" ]
+then
+    #以上作用：如果进程没有nginx，则启动
+    systemctl start nginx
+    #间隔时间
+    sleep 5
+if [ "$(ps -ef | grep "nginx: master process"| grep -v grep )" == "" ]
+then
+    #以上作用：如果进程没有nginx，则停止keepalived
+    killall keepalived
+fi
+fi
+EOF</code></pre>
+</div>
+</div>
+<div style="page-break-after: always;"></div>
+</div>
+</div>
+</div>
+</div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2022-05-06 22:16:32 +0800
+Last updated 2022-05-20 22:24:49 +0800
 </div>
 </div>
 <script src="js/highlight.min.js"></script>
