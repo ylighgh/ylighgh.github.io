@@ -787,7 +787,11 @@ p { margin-bottom: 1.25rem; }
 <li><a href="#_Kafka_chapter">7. Kafka</a></li>
 <li><a href="#_Gitlab_chapter">8. Gitlab</a></li>
 <li><a href="#_Git_chapter">9. Git</a></li>
-<li><a href="#_MySQL_chapter">10. MySQL</a></li>
+<li><a href="#_MySQL_chapter">10. MySQL</a>
+<ul class="sectlevel3">
+<li><a href="#_安装_3">10.1. 安装</a></li>
+</ul>
+</li>
 <li><a href="#_Redis_chapter">11. Redis</a></li>
 <li><a href="#_Shell_chapter">12. Shell</a>
 <ul class="sectlevel2">
@@ -1252,22 +1256,85 @@ LISTEN     0      128         :::80                      :::*                   
 <div class="sectionbody">
 <div class="sect2">
 <h3 id="_安装_2">4.1. 安装</h3>
-<div class="paragraph">
-<p><a href="https://repo.zabbix.com/zabbix/">Zabbix官方源</a></p>
-</div>
 <div class="listingblock">
-<div class="title">获取源</div>
+<div class="title">配置zabbix 5.0的源</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">---
-yum install -y https://repo.zabbix.com/zabbix/5.0/rhel/7/x86_64/zabbix-release-5.0-1.el7.noarch.rpm
-sed -i 's#http://repo.zabbix.com#https://mirrors.tuna.tsinghua.edu.cn/zabbix#g' /etc/yum.repos.d/zabbix.repo
----</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">rpm  -Uvh  https://mirrors.aliyun.com/zabbix/zabbix/5.0/rhel/5/x86_64/zabbix-release-5.0-1.el5.noarch.rpm
+
+sed -i 's#http://repo.zabbix.com#https://mirrors.aliyun.com/zabbix#g' /etc/yum.repos.d/zabbix.repo</code></pre>
 </div>
 </div>
 <div class="listingblock">
-<div class="title">安装</div>
+<div class="title">安装Zabbix-server</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">yum install -y zabbix-server-mysql zabbix-agent zabbix-get</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">yum -y install zabbix-server-mysql  zabbix-web-mysql zabbix-agent</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">导入zabbix初始数据</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">zcat /usr/share/doc/zabbix-server-mysql*/create.sql.gz | mysql -uzabbix -pzabbix zabbix</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">创建数据库</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">mysql -uroot -pgeek -e "create database zabbix character set utf8 collate utf8_bin;create user 'zabbix'@'localhost' identified by 'zabbix';grant all privileges on zabbix.* to 'zabbix'@'localhost';flush privileges;"</code></pre>
+</div>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>增加Nginx Host设置</p>
+</li>
+</ol>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>cat &lt;&lt; EOF &gt; /etc/nginx/conf.d/zabbix.conf
+server {
+    listen       8088;
+
+    server_name  zabbix.com;
+    root         /data/web/zabbix.com;
+    error_log /var/log/nginx/zabbix.com_error.log;
+    access_log /var/log/nginx/zabbix.com_access.log  main;
+
+    location / {
+        try_files \$uri /index.php\$is_args\$query_string;
+    }
+
+    location ~ \.php\$ {
+        try_files \$uri \$uri/ 404;
+
+        fastcgi_pass unix://run/php-fpm/www.sock;
+        include fastcgi.conf;
+    }
+}
+EOF</pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">重载Nginx配置</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">nginx -s reload</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">准备Zabbix</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">mkdir -p /data/web/zabbix.com</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">使用 -O 参数指定保存文件名，会强制覆盖已经存在的文件</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">wget https://cdn.zabbix.com/zabbix/sources/stable/5.0/zabbix-5.0.8.tar.gz -O zabbix-5.0.8.tar.gz
+tar xf zabbix-5.0.8.tar.gz
+mv zabbix-5.0.8/* /data/web/zabbix.com
+rm -rf zabbix-5.0.8
+chown -R nginx:nginx /data/web/zabbix.com
+chmod -R 755 /data/web/zabbix.com</code></pre>
 </div>
 </div>
 <div style="page-break-after: always;"></div>
@@ -1307,7 +1374,132 @@ sed -i 's#http://repo.zabbix.com#https://mirrors.tuna.tsinghua.edu.cn/zabbix#g' 
 <div class="sect1">
 <h2 id="_MySQL_chapter">10. MySQL</h2>
 <div class="sectionbody">
+<div class="sect3">
+<h4 id="_安装_3">10.1. 安装</h4>
+<div class="listingblock">
+<div class="title">安装 MySQL</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">yum install -y mariadb-server</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">备份 <code>my.cnf</code></div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">cp /etc/my.cnf /etc/my.cnf.default</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">修改 <code>my.cnf</code></div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">cat &lt;&lt; EOF &gt; /etc/my.cnf
+[mysqld]
+datadir=/var/lib/mysql
+socket=/var/lib/mysql/mysql.sock
+# Disabling symbolic-links is recommended to prevent assorted security risks
+symbolic-links=0
+# Settings user and group are ignored when systemd is used.
+# If you need to run mysqld under a different user or group,
+# customize your systemd unit file for mariadb according to the
+# instructions in http://fedoraproject.org/wiki/Systemd
+max_allowed_packet=20M
+max_heap_table_size = 100M
+read_buffer_size = 2M
+read_rnd_buffer_size = 16M
+sort_buffer_size = 8M
+join_buffer_size = 8M
+tmp_table_size = 100M
+# 查询缓存
+#query_cache_limit=4M
+#query_cache_type=on
+#query_cache_size=2G
+bind-address = 127.0.0.1
+# 跳过主机名解析，比如localhost，foo.com之类，加速访问
+skip-name-resolve
+# SQL执行日志
+general_log=off
+general_log_file=/var/log/mariadb/general.log
+# SQL慢查询日志
+slow_query_log=off
+slow_query_log_file=/var/log/mariadb/slowquery.log
+long_query_time = 5
+max_connections = 1000
+# 兼容老MySQL代码，比如使用空字符串代替NULL插入数据
+sql_mode = ""
+[mysqld_safe]
+log-error=/var/log/mariadb/mariadb.log
+pid-file=/var/run/mariadb/mariadb.pid
+#
+# include all files from the config directory
+#
+!includedir /etc/my.cnf.d
+EOF</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">配置 <code>mysqldump</code> 命令参数</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">sed -i '16 aquick\nquote-names\nmax_allowed_packet = 100M' /etc/my.cnf.d/mysql-clients.cnf</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">创建日志文件</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">touch /var/log/mariadb/general.log /var/log/mariadb/slowquery.log
+chown mysql:mysql /var/log/mariadb/general.log /var/log/mariadb/slowquery.log</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">增加开机启动</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">systemctl enable mariadb</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">启动 <code>MySQL</code> 服务</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">systemctl start mariadb</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">查看 <code>MySQL</code> 服务状态</div>
+<div class="content">
+<pre># systemctl status mariadb
+● mariadb.service - MariaDB database server
+   Loaded: loaded (/usr/lib/systemd/system/mariadb.service; enabled; vendor preset: disabled)
+   Active: active (running) since Fri 2019-11-29 14:18:12 CST; 1h 7min ago
+  Process: 16688 ExecStartPost=/usr/libexec/mariadb-wait-ready $MAINPID (code=exited, status=0/SUCCESS)
+  Process: 16653 ExecStartPre=/usr/libexec/mariadb-prepare-db-dir %n (code=exited, status=0/SUCCESS)
+ Main PID: 16687 (mysqld_safe)
+   CGroup: /system.slice/mariadb.service
+           ├─16687 /bin/sh /usr/bin/mysqld_safe --basedir=/usr
+           └─17043 /usr/libexec/mysqld --basedir=/usr --datadir=/var/lib/mysql --plugin-dir=/usr/lib64/mysql/plugin --log-error=/var/log/mariadb/mariadb.lo...
+Nov 29 14:18:10 iZ6weebcmroarpx8rrxscrZ systemd[1]: Starting MariaDB database server...
+Nov 29 14:18:10 iZ6weebcmroarpx8rrxscrZ mariadb-prepare-db-dir[16653]: Database MariaDB is probably initialized in /var/lib/mysql already, nothing is done.
+Nov 29 14:18:11 iZ6weebcmroarpx8rrxscrZ mysqld_safe[16687]: 191129 14:18:11 mysqld_safe Logging to '/var/log/mariadb/mariadb.log'.
+Nov 29 14:18:11 iZ6weebcmroarpx8rrxscrZ mysqld_safe[16687]: 191129 14:18:11 mysqld_safe Starting mysqld daemon with databases from /var/lib/mysql
+Nov 29 14:18:12 iZ6weebcmroarpx8rrxscrZ systemd[1]: Started MariaDB database server.
+# ss -antpl|grep mysql
+LISTEN     0      50     127.0.0.1:3306                     *:*                   users:(("mysqld",pid=17043,fd=14))</pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">修改root密码</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">mysqladmin -uroot password "geek"</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">删除测试数据库和空密码用户</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">mysql -uroot -pgeek -e 'show databases;'
+mysql -uroot -pgeek -e 'drop database test;'
+mysql -uroot -pgeek mysql -e 'delete from db;'
+mysql -uroot -pgeek mysql -e 'delete from user where Password="";'
+mysql -uroot -pgeek -e 'flush privileges;'</code></pre>
+</div>
+</div>
 <div style="page-break-after: always;"></div>
+</div>
 </div>
 </div>
 <div class="sect1">
