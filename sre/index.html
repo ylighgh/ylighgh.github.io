@@ -1317,13 +1317,18 @@ sed -i '25s/; php/php/' /etc/opt/rh/rh-php72/php-fpm.d/zabbix.conf</code></pre>
 <div class="listingblock">
 <div class="title">启动zabbix服务</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">systemctl start zabbix-server zabbix-agent httpd rh-php72-php-fpm
-systemctl enable zabbix-server zabbix-agent httpd rh-php72-php-fpm</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">systemctl start zabbix-server zabbix-agent httpd rh-php72-php-fpm</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">设置开机自启</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">systemctl enable zabbix-server zabbix-agent httpd rh-php72-php-fpm</code></pre>
 </div>
 </div>
 <div class="paragraph">
 <div class="title">访问</div>
-<p>访问: `http://your_ip/zabbix`进行zabbix安装</p>
+<p>访问: <code><a href="http://your_ip/zabbix" class="bare">http://your_ip/zabbix</a></code> 进行zabbix安装</p>
 </div>
 <div class="paragraph">
 <p>数据库密码: <code>zabbix</code></p>
