@@ -780,6 +780,7 @@ p { margin-bottom: 1.25rem; }
 <li><a href="#_Zabbix_chapter">4. Zabbix</a>
 <ul class="sectlevel2">
 <li><a href="#_安装_2">4.1. 安装</a></li>
+<li><a href="#_卸载">4.2. 卸载</a></li>
 </ul>
 </li>
 <li><a href="#_Jenkins_chapter">5. Jenkins</a></li>
@@ -1244,10 +1245,10 @@ LISTEN     0      128         :::80                      :::*                   
 <div class="listingblock">
 <div class="title">增加开机启动</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">systemctl enable nginx
-&lt;&lt;&lt;</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">systemctl enable nginx</code></pre>
 </div>
 </div>
+<div style="page-break-after: always;"></div>
 </div>
 </div>
 </div>
@@ -1337,9 +1338,28 @@ sed -i '25s/; php/php/' /etc/opt/rh/rh-php72/php-fpm.d/zabbix.conf</code></pre>
 <p>账户: <code>Admin</code></p>
 </div>
 <div class="paragraph">
-<p>密码: <code>zabbix</code>
-&lt;&lt;&lt;</p>
+<p>密码: <code>zabbix</code></p>
 </div>
+</div>
+<div class="sect2">
+<h3 id="_卸载">4.2. 卸载</h3>
+<div class="listingblock">
+<div class="title">完全卸载Zabbix</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"># 找到zabbix的安装包
+rpm -qa|grep zabbix
+
+# 卸载zabbix
+yum -y remove 包名
+
+# 删除文件目录
+find / -name zabbix -exec rm {} +
+
+# 删除zabbix数据库
+mysql -uroot -pgeek -e 'drop database zabbix;'</code></pre>
+</div>
+</div>
+<div style="page-break-after: always;"></div>
 </div>
 </div>
 </div>
