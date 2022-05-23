@@ -781,6 +781,7 @@ p { margin-bottom: 1.25rem; }
 <ul class="sectlevel2">
 <li><a href="#_安装_2">4.1. 安装</a></li>
 <li><a href="#_卸载">4.2. 卸载</a></li>
+<li><a href="#_添加主机">4.3. 添加主机</a></li>
 </ul>
 </li>
 <li><a href="#_Jenkins_chapter">5. Jenkins</a></li>
@@ -1340,6 +1341,13 @@ sed -i '25s/; php/php/' /etc/opt/rh/rh-php72/php-fpm.d/zabbix.conf</code></pre>
 <div class="paragraph">
 <p>密码: <code>zabbix</code></p>
 </div>
+<div class="paragraph">
+<div class="title">处理乱码</div>
+<p><code>Windows</code> :直接将windows字体文件上传至服务器的 <code>/usr/share/zabbix/assets/fonts</code> 文件夹下</p>
+</div>
+<div class="paragraph">
+<p><code>Linux</code> : <code>scp /usr/share/fonts/WindowsFonts/方正粗黑宋简体.ttf root@192.168.43.57:/usr/share/zabbix/assets/fonts/graphfont.ttf</code></p>
+</div>
 </div>
 <div class="sect2">
 <h3 id="_卸载">4.2. 卸载</h3>
@@ -1358,6 +1366,56 @@ find / -name zabbix -exec rm {} +
 # 删除zabbix数据库
 mysql -uroot -pgeek -e 'drop database zabbix;'</code></pre>
 </div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_添加主机">4.3. 添加主机</h3>
+<div class="listingblock">
+<div class="title">配置zabbix 5.0的源</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">rpm -Uvh https://mirrors.aliyun.com/zabbix/zabbix/5.0/rhel/7/x86_64/zabbix-release-5.0-1.el7.noarch.rpm
+
+sed -i 's#http://repo.zabbix.com#https://mirrors.aliyun.com/zabbix#g' /etc/yum.repos.d/zabbix.repo
+
+yum clean all
+yum makecache</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">安装</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">yum -y install zabbix-agent</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">配置</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">sed -i '117s/127.0.0.1/zabbix_server_ip/' /etc/zabbix/zabbix_agentd.conf</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">启动</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">systemctl start zabbix-agent</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">开机自启</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">systemctl enable zabbix-agent</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+zabbix网页配置:配置&#8212;&#8203;主机&#8212;&#8203;创建主机,模板---Liunx模板
+</td>
+</tr>
+</table>
 </div>
 <div style="page-break-after: always;"></div>
 </div>
