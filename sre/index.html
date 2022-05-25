@@ -764,6 +764,11 @@ p { margin-bottom: 1.25rem; }
 <li><a href="#_计划任务">1.1.1. 计划任务</a></li>
 </ul>
 </li>
+<li><a href="#_ssh">1.2. SSH</a>
+<ul class="sectlevel3">
+<li><a href="#_无密钥登陆">1.2.1. 无密钥登陆</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li><a href="#_Python_chapter">2. CentOS</a>
@@ -775,6 +780,12 @@ p { margin-bottom: 1.25rem; }
 <li><a href="#_Nginx_chapter">3. Nginx</a>
 <ul class="sectlevel2">
 <li><a href="#_安装">3.1. 安装</a></li>
+<li><a href="#_常用功能">3.2. 常用功能</a>
+<ul class="sectlevel3">
+<li><a href="#_反向代理">3.2.1. 反向代理</a></li>
+<li><a href="#_负载均衡">3.2.2. 负载均衡</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li><a href="#_Zabbix_chapter">4. Zabbix</a>
@@ -790,16 +801,31 @@ p { margin-bottom: 1.25rem; }
 <li><a href="#_Gitlab_chapter">8. Gitlab</a></li>
 <li><a href="#_Git_chapter">9. Git</a></li>
 <li><a href="#_MySQL_chapter">10. MySQL</a>
-<ul class="sectlevel3">
+<ul class="sectlevel2">
 <li><a href="#_安装_3">10.1. 安装</a></li>
 </ul>
 </li>
 <li><a href="#_Redis_chapter">11. Redis</a></li>
-<li><a href="#_Shell_chapter">12. Shell</a>
+<li><a href="#_Rsync_chapter">12. Rsync</a>
 <ul class="sectlevel2">
-<li><a href="#_nginx">12.1. Nginx</a>
+<li><a href="#_数据传输">12.1. 数据传输</a></li>
+</ul>
+</li>
+<li><a href="#_Rsync_chapter">13. JavaWeb</a>
+<ul class="sectlevel2">
+<li><a href="#_java_web">13.1. Java_web</a>
 <ul class="sectlevel3">
-<li><a href="#_nginxkeepalived健康检查">12.1.1. Nginx+Keepalived健康检查</a></li>
+<li><a href="#_jdk">13.1.1. JDK</a></li>
+<li><a href="#_tomcat">13.1.2. Tomcat</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#_Shell_chapter">14. Shell</a>
+<ul class="sectlevel2">
+<li><a href="#_nginx">14.1. Nginx</a>
+<ul class="sectlevel3">
+<li><a href="#_nginxkeepalived健康检查">14.1.1. Nginx+Keepalived健康检查</a></li>
 </ul>
 </li>
 </ul>
@@ -890,6 +916,41 @@ p { margin-bottom: 1.25rem; }
 <p>在 <code>crond</code> 服务的计划任务参数中，所有命令一定要用绝对路径的方式来写，如果不知道绝对路径，请用 <code>whereis</code> 命令进行查询</p>
 </dd>
 </dl>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_ssh">1.2. SSH</h3>
+<div class="sect3">
+<h4 id="_无密钥登陆">1.2.1. 无密钥登陆</h4>
+<div class="listingblock">
+<div class="title">生成密钥对</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">ssh-keygen -N "" -f ~/.ssh/yss
+
+# 生成带邮箱的密钥对
+ssh-keygen -N "" -f ~/.ssh/yss -C xxxx@xxx.com</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">上传公钥文件</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">ssh-copy-id -i $HOME/.ssh/yss.pub root@IP</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">配置SSH客户端私钥</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">touch ~/.ssh/config
+
+chmod 755 ~/.ssh/config
+cat &lt;&lt; EOF &gt;&gt; ~/.ssh/config
+Host IP
+    IdentityFile ~/.ssh/mk
+EOF
+
+chmod 400 ~/.ssh/config</code></pre>
+</div>
 </div>
 <div style="page-break-after: always;"></div>
 </div>
@@ -1249,7 +1310,52 @@ LISTEN     0      128         :::80                      :::*                   
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">systemctl enable nginx</code></pre>
 </div>
 </div>
+</div>
+<div class="sect2">
+<h3 id="_常用功能">3.2. 常用功能</h3>
+<div class="sect3">
+<h4 id="_反向代理">3.2.1. 反向代理</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">location / {
+    proxy_pass http://10.0.2.30;
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_负载均衡">3.2.2. 负载均衡</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">upstream nameserver {
+    server 10.0.2.20:80;
+    server 10.0.2.30:80;
+}
+
+server{
+    location / {
+    # 添加反向代理,代理地址填写upstream声明的名字
+    proxy_pass http://nameserver;
+    # 重写请求头部,保证网站所有页面都能访问成功
+    proxy_set_header Host $host;
+    }
+}</code></pre>
+</div>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+加权轮询 <code>server 10.0.2.20:80 weight=1</code>
+</td>
+</tr>
+</table>
+</div>
 <div style="page-break-after: always;"></div>
+</div>
 </div>
 </div>
 </div>
@@ -1454,8 +1560,8 @@ zabbix网页配置:配置&#8212;&#8203;主机&#8212;&#8203;创建主机,模板--
 <div class="sect1">
 <h2 id="_MySQL_chapter">10. MySQL</h2>
 <div class="sectionbody">
-<div class="sect3">
-<h4 id="_安装_3">10.1. 安装</h4>
+<div class="sect2">
+<h3 id="_安装_3">10.1. 安装</h3>
 <div class="listingblock">
 <div class="title">安装 MySQL</div>
 <div class="content">
@@ -1589,12 +1695,184 @@ mysql -uroot -pgeek -e 'flush privileges;'</code></pre>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_Shell_chapter">12. Shell</h2>
+<h2 id="_Rsync_chapter">12. Rsync</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_nginx">12.1. Nginx</h3>
+<h3 id="_数据传输">12.1. 数据传输</h3>
+<div class="listingblock">
+<div class="title">下行同步(下载)</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">rsync -avz 服务器地址:/服务器目录/* /本地目录</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">上行同步(上传)</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">rsync -avz /本地目录/* 服务器地址:/服务器目录/</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">参数解释</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">-a: 归档模式,递归保留对象属性
+-v: 显示同步过程
+-z: 在传输时进行压缩</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">创建数据同步用户</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">useradd test
+echo "testupload" | passwd test --stdin
+
+# 设置acl权限
+setfacl -m u:test:rwx /filesrc</code></pre>
+</div>
+</div>
+<div style="page-break-after: always;"></div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_Rsync_chapter">13. JavaWeb</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_java_web">13.1. Java_web</h3>
 <div class="sect3">
-<h4 id="_nginxkeepalived健康检查">12.1.1. Nginx+Keepalived健康检查</h4>
+<h4 id="_jdk">13.1.1. JDK</h4>
+<div class="paragraph">
+<p><a href="https://www.oracle.com/java/technologies/downloads/#java11">Java11下载地址</a></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">mkdir /usr/java</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">tar -xf jdk-11.0.15.1_linux-x64_bin.tar.gz -C /usr/java</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">cat &lt;&lt;EOF&gt;&gt; /etc/profile
+# set java environment
+export JAVA_HOME=/usr/java/jdk-11.0.15.1
+export CLASSPATH=\$JAVA_HOME/lib/tools.jar:\$JAVA_HOME/lib/dt.jar:\$JAVA_HOME/lib
+export PATH=\$JAVA_HOME/bin:\$PATH
+EOF</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">source /etc/profile</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">查看Java版本号</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">[yss@master-2022 workspace]# java -version
+java version "11.0.15.1" 2022-04-22 LTS
+Java(TM) SE Runtime Environment 18.9 (build 11.0.15.1+2-LTS-10)
+Java HotSpot(TM) 64-Bit Server VM 18.9 (build 11.0.15.1+2-LTS-10, mixed mode)</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_tomcat">13.1.2. Tomcat</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">wget https://mirrors.aliyun.com/apache/tomcat/tomcat-8/v8.5.78/bin/apache-tomcat-8.5.78.tar.gz</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">tar -xf apache-tomcat-8.5.78.tar.gz</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">mv apache-tomcat-8.5.78 /usr/local/tomcat/
+useradd www
+chown -R www.www /usr/local/tomcat/</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">mv /usr/local/tomcat/conf/server.xml /usr/local/tomcat/conf/server.xml_bak</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">cat &lt;&lt;EOF&gt; /usr/local/tomcat/conf/server.xml
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;Server port="8006" shutdown="SHUTDOWN"&gt;
+&lt;Listener className="org.apache.catalina.core.JreMemoryLeakPreventionListener"/&gt;
+&lt;Listener className="org.apache.catalina.mbeans.GlobalResourcesLifecycleListener"/&gt;
+&lt;Listener className="org.apache.catalina.core.ThreadLocalLeakPreventionListener"/&gt;
+&lt;Listener className="org.apache.catalina.core.AprLifecycleListener"/&gt;
+&lt;GlobalNamingResources&gt;
+&lt;Resource name="UserDatabase" auth="Container"
+ type="org.apache.catalina.UserDatabase"
+ description="User database that can be updated and saved"
+ factory="org.apache.catalina.users.MemoryUserDatabaseFactory"
+ pathname="conf/tomcat-users.xml"/&gt;
+&lt;/GlobalNamingResources&gt;
+&lt;Service name="Catalina"&gt;
+&lt;Connector port="8080"
+ protocol="HTTP/1.1"
+ connectionTimeout="20000"
+ redirectPort="8443"
+ maxThreads="1000"
+ minSpareThreads="20"
+ acceptCount="1000"
+ maxHttpHeaderSize="65536"
+ debug="0"
+ disableUploadTimeout="true"
+ useBodyEncodingForURI="true"
+ enableLookups="false"
+ URIEncoding="UTF-8"/&gt;
+&lt;Engine name="Catalina" defaultHost="localhost"&gt;
+&lt;Realm className="org.apache.catalina.realm.LockOutRealm"&gt;
+&lt;Realm className="org.apache.catalina.realm.UserDatabaseRealm"
+  resourceName="UserDatabase"/&gt;
+&lt;/Realm&gt;
+&lt;Host name="localhost" appBase="/data/wwwroot/default" unpackWARs="true" autoDeploy="true"&gt;
+&lt;Context path="" docBase="/data/wwwroot/default" debug="0" reloadable="false" crossContext="true"/&gt;
+&lt;Valve className="org.apache.catalina.valves.AccessLogValve" directory="logs"
+prefix="localhost_access_log." suffix=".txt" pattern="%h %l %u %t &amp;quot;%r&amp;quot; %s %b" /&gt;
+&lt;/Host&gt;
+&lt;/Engine&gt;
+&lt;/Service&gt;
+&lt;/Server&gt;
+EOF</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">cat &lt;&lt;EOF&gt; /usr/local/tomcat/bin/setenv.sh
+JAVA_OPTS='-Djava.security.egd=file:/dev/./urandom -server -Xms256m -Xmx496m -Dfile.encoding=UTF-8'
+EOF</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">[root@master-2022 bin]# ss -antpl|grep 8080
+LISTEN     0      128          *:8080                     *:*                   users:(("java",pid=10900,fd=40))</code></pre>
+</div>
+</div>
+<div style="page-break-after: always;"></div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_Shell_chapter">14. Shell</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_nginx">14.1. Nginx</h3>
+<div class="sect3">
+<h4 id="_nginxkeepalived健康检查">14.1.1. Nginx+Keepalived健康检查</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">cat &lt;&lt;EOF&gt; nginx_check.sh
@@ -1622,7 +1900,7 @@ EOF</code></pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2022-05-20 22:24:49 +0800
+Last updated 2022-05-25 17:07:44 +0800
 </div>
 </div>
 <script src="js/highlight.min.js"></script>
