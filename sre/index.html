@@ -815,8 +815,16 @@ p { margin-bottom: 1.25rem; }
 <ul class="sectlevel2">
 <li><a href="#_java_web">13.1. Java_web</a>
 <ul class="sectlevel3">
-<li><a href="#_jdk">13.1.1. JDK</a></li>
-<li><a href="#_tomcat">13.1.2. Tomcat</a></li>
+<li><a href="#_jdk">13.1.1. JDK</a>
+<ul class="sectlevel4">
+<li><a href="#_源码包安装">源码包安装</a></li>
+</ul>
+</li>
+<li><a href="#_tomcat">13.1.2. Tomcat</a>
+<ul class="sectlevel4">
+<li><a href="#_源码包安装_2">源码包安装</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -1740,20 +1748,25 @@ setfacl -m u:test:rwx /filesrc</code></pre>
 <h3 id="_java_web">13.1. Java_web</h3>
 <div class="sect3">
 <h4 id="_jdk">13.1.1. JDK</h4>
+<div class="sect4">
+<h5 id="_源码包安装">源码包安装</h5>
 <div class="paragraph">
 <p><a href="https://www.oracle.com/java/technologies/downloads/#java11">Java11下载地址</a></p>
 </div>
 <div class="listingblock">
+<div class="title">创建目录</div>
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">mkdir /usr/java</code></pre>
 </div>
 </div>
 <div class="listingblock">
+<div class="title">解压文件</div>
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">tar -xf jdk-11.0.15.1_linux-x64_bin.tar.gz -C /usr/java</code></pre>
 </div>
 </div>
 <div class="listingblock">
+<div class="title">设置环境变量</div>
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">cat &lt;&lt;EOF&gt;&gt; /etc/profile
 # set java environment
@@ -1764,6 +1777,7 @@ EOF</code></pre>
 </div>
 </div>
 <div class="listingblock">
+<div class="title">加载环境变量</div>
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">source /etc/profile</code></pre>
 </div>
@@ -1778,31 +1792,52 @@ Java HotSpot(TM) 64-Bit Server VM 18.9 (build 11.0.15.1+2-LTS-10, mixed mode)</c
 </div>
 </div>
 </div>
+</div>
 <div class="sect3">
 <h4 id="_tomcat">13.1.2. Tomcat</h4>
+<div class="sect4">
+<h5 id="_源码包安装_2">源码包安装</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">wget https://mirrors.aliyun.com/apache/tomcat/tomcat-8/v8.5.78/bin/apache-tomcat-8.5.78.tar.gz</code></pre>
 </div>
 </div>
 <div class="listingblock">
+<div class="title">解压文件夹</div>
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">tar -xf apache-tomcat-8.5.78.tar.gz</code></pre>
 </div>
 </div>
 <div class="listingblock">
+<div class="title">重命名Tomcat目录</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">mv apache-tomcat-8.5.78 /usr/local/tomcat/
-useradd www
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">mv apache-tomcat-8.5.78 /usr/local/tomcat/</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">设置文件的所属用户</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">useradd www
 chown -R www.www /usr/local/tomcat/</code></pre>
 </div>
 </div>
 <div class="listingblock">
+<div class="title">目录说明</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">bin：存放Tomcat的一些脚本文件，包含启动和关闭Tomcat服务脚本。
+conf：存放Tomcat服务器的各种全局配置文件，其中最重要的是server.xml和web.xml。
+webapps：Tomcat的主要Web发布目录，默认情况下把Web应用文件放于此目录。
+logs：存放Tomcat执行时的日志文件。</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">备份默认文件</div>
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">mv /usr/local/tomcat/conf/server.xml /usr/local/tomcat/conf/server.xml_bak</code></pre>
 </div>
 </div>
 <div class="listingblock">
+<div class="title">修改配置文件</div>
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">cat &lt;&lt;EOF&gt; /usr/local/tomcat/conf/server.xml
 &lt;?xml version="1.0" encoding="UTF-8"?&gt;
@@ -1849,6 +1884,7 @@ EOF</code></pre>
 </div>
 </div>
 <div class="listingblock">
+<div class="title">设置JVM内存参数</div>
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">cat &lt;&lt;EOF&gt; /usr/local/tomcat/bin/setenv.sh
 JAVA_OPTS='-Djava.security.egd=file:/dev/./urandom -server -Xms256m -Xmx496m -Dfile.encoding=UTF-8'
@@ -1856,12 +1892,84 @@ EOF</code></pre>
 </div>
 </div>
 <div class="listingblock">
+<div class="title">增加系统服务进程</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">cat &lt;&lt;EOF &gt; /lib/systemd/system/tomcat.service
+[Unit]
+Description=Tomcat
+After=syslog.target
+
+[Service]
+Type=forking
+ExecStart=/usr/local/tomcat/bin/catalina.sh start
+ExecReload=/bin/kill -s HUP $MAINPID
+ExecStop=/bin/kill -s QUIT $MAINPID
+PrivateTmp=true
+User=root
+SuccessExitStatus=143
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+systemctl daemon-reload</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">启动tomcat服务</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">systemctl start tomcat</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">设置开启自启</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">systemctl enable tomcat</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">查看tomcat状态</div>
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">[root@master-2022 bin]# ss -antpl|grep 8080
-LISTEN     0      128          *:8080                     *:*                   users:(("java",pid=10900,fd=40))</code></pre>
+LISTEN     0      128          *:8080                     *:*                   users:(("java",pid=10900,fd=40))
+
+[root@master-2022 bin]# systemctl status tomcat
+● tomcat.service - Tomcat
+   Loaded: loaded (/usr/lib/systemd/system/tomcat.service; disabled; vendor preset: disabled)
+   Active: active (running) since Wed 2022-05-25 21:01:04 CST; 5s ago
+  Process: 13510 ExecStart=/usr/local/tomcat/bin/catalina.sh start (code=exited, status=0/SUCCESS)
+ Main PID: 13522 (java)
+   CGroup: /system.slice/tomcat.service
+           └─13522 /usr/bin/java -Djava.util.logging.config.file=/usr...
+
+May 25 21:01:04 master-2022 systemd[1]: Starting Tomcat...
+May 25 21:01:04 master-2022 catalina.sh[13510]: Tomcat started.
+May 25 21:01:04 master-2022 systemd[1]: Started Tomcat.</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">JavaWeb环境测试</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"># 创建网站根目录
+mkdir -p /data/wwwroot/default
+echo 'Tomcat test' &gt; /data/wwwroot/default/index.jsp
+chown -R www.www /data/wwwroot</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">[root@master-2022 bin]# curl -i 127.0.0.1:8080
+HTTP/1.1 200
+Set-Cookie: JSESSIONID=68ABB16FBD9C3E8C65A2C89668EDEF74; Path=/; HttpOnly
+Content-Type: text/html;charset=ISO-8859-1
+Content-Length: 12
+Date: Wed, 25 May 2022 13:03:21 GMT
+
+Tomcat test</code></pre>
 </div>
 </div>
 <div style="page-break-after: always;"></div>
+</div>
 </div>
 </div>
 </div>
