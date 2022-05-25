@@ -811,7 +811,7 @@ p { margin-bottom: 1.25rem; }
 <li><a href="#_数据传输">12.1. 数据传输</a></li>
 </ul>
 </li>
-<li><a href="#_Rsync_chapter">13. Java</a>
+<li><a href="#_Java_chapter">13. Java</a>
 <ul class="sectlevel2">
 <li><a href="#_java_web">13.1. Java_web</a>
 <ul class="sectlevel3">
@@ -1742,7 +1742,7 @@ setfacl -m u:test:rwx /filesrc</code></pre>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_Rsync_chapter">13. Java</h2>
+<h2 id="_Java_chapter">13. Java</h2>
 <div class="sectionbody">
 <div class="sect2">
 <h3 id="_java_web">13.1. Java_web</h3>
@@ -1821,13 +1821,19 @@ Java HotSpot(TM) 64-Bit Server VM 18.9 (build 11.0.15.1+2-LTS-10, mixed mode)</c
 chown -R www.www /usr/local/tomcat/</code></pre>
 </div>
 </div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p><code>/usr/local/tomcat/</code> 目录目录说明</p>
+</li>
+</ol>
+</div>
 <div class="listingblock">
-<div class="title">目录说明</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">bin：存放Tomcat的一些脚本文件，包含启动和关闭Tomcat服务脚本。
+<pre>bin：存放Tomcat的一些脚本文件，包含启动和关闭Tomcat服务脚本。
 conf：存放Tomcat服务器的各种全局配置文件，其中最重要的是server.xml和web.xml。
 webapps：Tomcat的主要Web发布目录，默认情况下把Web应用文件放于此目录。
-logs：存放Tomcat执行时的日志文件。</code></pre>
+logs：存放Tomcat执行时的日志文件。</pre>
 </div>
 </div>
 <div class="listingblock">
@@ -1957,6 +1963,7 @@ chown -R www.www /data/wwwroot</code></pre>
 </div>
 </div>
 <div class="listingblock">
+<div class="title">测试</div>
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">[root@master-2022 bin]# curl -i 127.0.0.1:8080
 HTTP/1.1 200
