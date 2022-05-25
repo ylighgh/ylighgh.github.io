@@ -809,6 +809,7 @@ p { margin-bottom: 1.25rem; }
 <li><a href="#_Rsync_chapter">12. Rsync</a>
 <ul class="sectlevel2">
 <li><a href="#_数据传输">12.1. 数据传输</a></li>
+<li><a href="#_实时同步">12.2. 实时同步</a></li>
 </ul>
 </li>
 <li><a href="#_Java_chapter">13. Java</a>
@@ -1735,6 +1736,42 @@ echo "testupload" | passwd test --stdin
 
 # 设置acl权限
 setfacl -m u:test:rwx /filesrc</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_实时同步">12.2. 实时同步</h3>
+<div class="paragraph">
+<p>rsync+inotify</p>
+</div>
+<div class="listingblock">
+<div class="title">inotify安装</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">wget  http://github.com/downloads/rvoicilas/inotify-tools/inotify-tools-3.14.tar.gz
+
+tar -xf inotify-tools-3.14.tar.gz
+
+cd inotify-tools-3.14
+
+yum -y install gcc*
+
+./configure &amp;&amp; make &amp;&amp; make install</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">同步脚本</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">cat &lt;&lt;EOF&gt; rsync.sh
+#!/bin/bash
+a="inotifywait -mrq -e create,delete,modify /filesrc"
+b="rsync -avz /filesrc/* root@192.168.88.20:/filedest"
+\$a | while read directory event file
+do
+    \$b
+done
+EOF
+
+chmod +x rsync.sh</code></pre>
 </div>
 </div>
 <div style="page-break-after: always;"></div>
