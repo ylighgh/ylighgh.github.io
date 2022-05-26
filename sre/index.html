@@ -830,11 +830,25 @@ p { margin-bottom: 1.25rem; }
 </li>
 </ul>
 </li>
-<li><a href="#_Shell_chapter">14. Shell</a>
+<li><a href="#_ElasticSearch_chapter">14. ElasticStack</a>
 <ul class="sectlevel2">
-<li><a href="#_nginx">14.1. Nginx</a>
+<li><a href="#_elk环境配置">14.1. ELK环境配置</a>
 <ul class="sectlevel3">
-<li><a href="#_nginxkeepalived健康检查">14.1.1. Nginx+Keepalived健康检查</a></li>
+<li><a href="#_安装java">14.1.1. 安装Java</a></li>
+<li><a href="#_增加yum源">14.1.2. 增加YUM源</a></li>
+<li><a href="#_elasticsearch">14.1.3. ElasticSearch</a></li>
+<li><a href="#_kibana">14.1.4. Kibana</a></li>
+<li><a href="#_logstash">14.1.5. LogStash</a></li>
+<li><a href="#_filebeat">14.1.6. FileBeat</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#_Shell_chapter">15. Shell</a>
+<ul class="sectlevel2">
+<li><a href="#_nginx">15.1. Nginx</a>
+<ul class="sectlevel3">
+<li><a href="#_nginxkeepalived健康检查">15.1.1. Nginx+Keepalived健康检查</a></li>
 </ul>
 </li>
 </ul>
@@ -2028,21 +2042,193 @@ Tomcat test</code></pre>
 </div>
 </div>
 <div style="page-break-after: always;"></div>
-<div class="paragraph">
-<p>Unresolved directive in seia.asc - include::book/14-ElasticStack/ElasticStack.asc[]</p>
-</div>
 </div>
 </div>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_Shell_chapter">14. Shell</h2>
+<h2 id="_ElasticSearch_chapter">14. ElasticStack</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_nginx">14.1. Nginx</h3>
+<h3 id="_elk环境配置">14.1. ELK环境配置</h3>
+<div class="paragraph">
+<p><strong>CentOS7</strong></p>
+</div>
 <div class="sect3">
-<h4 id="_nginxkeepalived健康检查">14.1.1. Nginx+Keepalived健康检查</h4>
+<h4 id="_安装java">14.1.1. 安装Java</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">yum install -y java-11-openjdk java-11-openjdk-devel java-11-openjdk-headless</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_增加yum源">14.1.2. 增加YUM源</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">rpm --import https://artifacts.elastic.co/GPG-KEY-elasticsearch
+
+cat &lt;&lt; EOF &gt; /etc/yum.repos.d/elasticsearch.repo
+[elasticsearch]
+name=Elasticsearch repository for 7.x packages
+baseurl=https://artifacts.elastic.co/packages/7.x/yum
+gpgcheck=1
+gpgkey=https://artifacts.elastic.co/GPG-KEY-elasticsearch
+enabled=0
+autorefresh=1
+type=rpm-md
+EOF</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_elasticsearch">14.1.3. ElasticSearch</h4>
+<div class="listingblock">
+<div class="title">安装</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">yum --disablerepo="*" --enablerepo="elasticsearch" install -y elasticsearch</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">配置</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">sed -i '17s/#cluster.name: my-application/cluster.name: myapp/' /etc/elasticsearch/elasticsearch.yml
+
+sed -i '23s/#node.name: node-1/node.name: node-1/' /etc/elasticsearch/elasticsearch.yml
+
+sed -i '56s/#network.host: 192.168.0.1/network.host: 0.0.0.0/' /etc/elasticsearch/elasticsearch.yml
+
+sed -i '70s/#discovery.seed_hosts: .*/discovery.seed_hosts: ["0.0.0.0\/0"]/' /etc/elasticsearch/elasticsearch.yml
+
+sed -i '74s/#cluster.initial_master_nodes: .*/cluster.initial_master_nodes: ["node-1"]/' /etc/elasticsearch/elasticsearch.yml</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">开机启动</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">systemctl enable elasticsearch</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">启动服务</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">systemctl start elasticsearch</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_kibana">14.1.4. Kibana</h4>
+<div class="listingblock">
+<div class="title">安装</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">yum --disablerepo="*" --enablerepo="elasticsearch" install -y kibana</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">配置</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">sed -i '7s/#server.host: "localhost"/server.host: "0.0.0.0"/' /etc/kibana/kibana.yml
+sed -i '32s/#elasticsearch.hosts: .*/elasticsearch.hosts: ["http:\/\/0.0.0.0:9200"]/' /etc/kibana/kibana.yml
+sed -i '115s/#i18n.locale: "en"/i18n.locale: "en"/' /etc/kibana/kibana.yml</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">开机启动</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">systemctl enable kibana</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">启动服务</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">systemctl start kibana</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<div class="title">最后</div>
+<p>如果系统IP为 172.24.109.12，则访问 <a href="http://172.24.109.12:5601/" class="bare">http://172.24.109.12:5601/</a></p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_logstash">14.1.5. LogStash</h4>
+<div class="listingblock">
+<div class="title">安装</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">yum --disablerepo="*" --enablerepo="elasticsearch" install -y logstash</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">测试</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">cat &lt;&lt;EOF&gt; /etc/logstash/conf.d/test.conf
+input { stdin { } }
+
+output {
+  elasticsearch { hosts =&gt; ["127.0.0.1:9200"] }
+  stdout { codec =&gt; rubydebug }
+}
+EOF</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">1. 用命令行方式启动logstash
+
+/usr/share/logstash/bin/logstash  -f /etc/logstash/conf.d/test.conf
+
+
+2. 通过stdin输入，观察logstash。如输入：“this is a test”，会有如下输出
+{
+      "@version" =&gt; "1",
+       "message" =&gt; "this is test",
+          "host" =&gt; "slave-2022",
+    "@timestamp" =&gt; 2022-05-26T13:49:06.697Z
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_filebeat">14.1.6. FileBeat</h4>
+<div class="listingblock">
+<div class="title">安装</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl -L -O https://artifacts.elastic.co/downloads/beats/filebeat/filebeat-7.17.4-x86_64.rpm
+sudo rpm -vi filebeat-7.17.4-x86_64.rpm</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">验证</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">cat &lt;&lt;EOF&gt; /etc/logstash/conf.d/nginx-es.conf
+input {
+        beats {
+                host =&gt; "0.0.0.0"
+                port =&gt; 5400	# 对应在filebeat的配置中，output到logstash的5400端口
+        }
+}
+
+output {
+        elasticsearch {
+                hosts =&gt; ["127.0.0.1:9200"]
+                index =&gt; "rc_index_pattern-%{+YYYY.MM.dd}"
+        }
+}
+EOF</code></pre>
+</div>
+</div>
+<div style="page-break-after: always;"></div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_Shell_chapter">15. Shell</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_nginx">15.1. Nginx</h3>
+<div class="sect3">
+<h4 id="_nginxkeepalived健康检查">15.1.1. Nginx+Keepalived健康检查</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">cat &lt;&lt;EOF&gt; nginx_check.sh
