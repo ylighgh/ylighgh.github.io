@@ -2184,7 +2184,26 @@ EOF</code></pre>
        "message" =&gt; "this is test",
           "host" =&gt; "slave-2022",
     "@timestamp" =&gt; 2022-05-26T13:49:06.697Z
-}</code></pre>
+}
+
+3. 查看索引 curl -s "127.0.0.1:9200/_cat/indices?v"
+health status index                           uuid                   pri rep docs.count docs.deleted store.size pri.store.size
+yellow open   logstash-2022.05.27-000001      jUvsxcK1RVSUv1EVvSZqVw   1   1          1            0      4.6kb          4.6kb
+
+4.发现有一个新索引logstash-2022.05.27-000001，查看新索引的内容
+curl -XGET '127.0.0.1:9200/logstash-2022.05.27-000001/_doc/_search/?pretty'</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">开机启动</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">systemctl enable logstash</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">启动服务</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">systemctl start logstash</code></pre>
 </div>
 </div>
 </div>
@@ -2194,13 +2213,40 @@ EOF</code></pre>
 <div class="title">安装</div>
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl -L -O https://artifacts.elastic.co/downloads/beats/filebeat/filebeat-7.17.4-x86_64.rpm
-sudo rpm -vi filebeat-7.17.4-x86_64.rpm</code></pre>
+rpm -vi filebeat-7.17.4-x86_64.rpm</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">配置</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">sed -i '7s/#server.host: "localhost"/server.host: "0.0.0.0"/' /etc/kibana/kibana.yml
+sed -i '28s/false/true/' /etc/filebeat/filebeat.yml
+sed -i '32s/*.log/nginx\/access*.log/' /etc/filebeat/filebeat.yml
+sed -i '135s/^/#/' /etc/filebeat/filebeat.yml
+sed -i '137s/^/#/' /etc/filebeat/filebeat.yml
+sed -i '148s/#//' /etc/filebeat/filebeat.yml
+sed -i '150s/#//' /etc/filebeat/filebeat.yml
+sed -i '150s/localhost:5044/127.0.0.1:5400/' /etc/filebeat/filebeat.yml</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">开机启动</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">systemctl enable filebeat</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">启动服务</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">systemctl start filebeat</code></pre>
 </div>
 </div>
 <div class="listingblock">
 <div class="title">验证</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">cat &lt;&lt;EOF&gt; /etc/logstash/conf.d/nginx-es.conf
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">rm -rf /etc/logstash/conf.d/test.conf
+
+cat &lt;&lt;EOF&gt; /etc/logstash/conf.d/nginx-es.conf
 input {
         beats {
                 host =&gt; "0.0.0.0"
@@ -2215,6 +2261,15 @@ output {
         }
 }
 EOF</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">查看索引</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl -s "127.0.0.1:9200/_cat/indices?v"
+yellow open   rc_index_pattern-2022.05.27     RPDzQQbARqWXNzaCvxsI2w   1   1         33            0     32.6kb         32.6kb
+检查ES内容，发现ES已自动创建索引rc_index_pattern-2022.05.27并且已经有Nginx日志内容
+curl -XGET '127.0.0.1:9200/rc_index_pattern-2022.05.27/_doc/_search/?pretty'</code></pre>
 </div>
 </div>
 <div style="page-break-after: always;"></div>
