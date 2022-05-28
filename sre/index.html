@@ -2094,13 +2094,9 @@ EOF</code></pre>
 <div class="title">配置</div>
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">sed -i '17s/#cluster.name: my-application/cluster.name: myapp/' /etc/elasticsearch/elasticsearch.yml
-
 sed -i '23s/#node.name: node-1/node.name: node-1/' /etc/elasticsearch/elasticsearch.yml
-
 sed -i '56s/#network.host: 192.168.0.1/network.host: 0.0.0.0/' /etc/elasticsearch/elasticsearch.yml
-
 sed -i '70s/#discovery.seed_hosts: .*/discovery.seed_hosts: ["0.0.0.0\/0"]/' /etc/elasticsearch/elasticsearch.yml
-
 sed -i '74s/#cluster.initial_master_nodes: .*/cluster.initial_master_nodes: ["node-1"]/' /etc/elasticsearch/elasticsearch.yml</code></pre>
 </div>
 </div>
@@ -2286,7 +2282,7 @@ output {
 EOF
 
 # 检查配置文件语法是否有错误
-/usr/share/logstash/bin/logstash --config.test_and_exit -f nginx-es.conf</code></pre>
+/usr/share/logstash/bin/logstash --config.test_and_exit -f /etc/logstash/conf.d/nginx-es.conf/nginx-es.conf</code></pre>
 </div>
 </div>
 <div class="listingblock">
@@ -2331,6 +2327,9 @@ input{
 filter{
         grok{
                 match =&gt; { "message" =&gt; "%{IPORHOST:host_ip} %{NUMBER:server_port} %{IPORHOST:remote_ip} - %{DATA:remote_user} \[%{HTTPDATE:time_local}\] \"%{WORD:request_method} %{DATA:url} HTTP/%{NUMBER:http_version}\" %{NUMBER:status} %{NUMBER:request_time} %{NUMBER:body_bytes_sent} \"%{DATA:http_referrer}\" \"%{DATA:http_user_agent}\"" }
+        }
+        date {
+                match =&gt; [ "time_local", "dd/MMM/yyyy:HH:mm:ss Z" ]
         }
 }
 output {
