@@ -841,8 +841,8 @@ p { margin-bottom: 1.25rem; }
 </li>
 <li><a href="#_nginx日志分析">14.2. Nginx日志分析</a>
 <ul class="sectlevel3">
-<li><a href="#_使用filebeat实时导入">14.2.1. 使用FileBeat实时导入</a></li>
-<li><a href="#_导入nginx日志到elasticsearch">14.2.2. 导入Nginx日志到Elasticsearch</a></li>
+<li><a href="#_filebeat实时导入">14.2.1. FileBeat实时导入</a></li>
+<li><a href="#_nginx日志普通导入">14.2.2. Nginx日志普通导入</a></li>
 </ul>
 </li>
 </ul>
@@ -2214,7 +2214,7 @@ rm -f /etc/logstash/conf.d/test.conf</code></pre>
 <p><a href="https://www.elastic.co/guide/en/kibana/7.14/xpack-grokdebugger.html">Gork表达式</a></p>
 </div>
 <div class="sect3">
-<h4 id="_使用filebeat实时导入">14.2.1. 使用FileBeat实时导入</h4>
+<h4 id="_filebeat实时导入">14.2.1. FileBeat实时导入</h4>
 <div class="paragraph">
 <p>Filebeat会把日志传送到Logstash，Logstash再把日志传到ES</p>
 </div>
@@ -2306,7 +2306,7 @@ curl -XGET '127.0.0.1:9200/nginx_es-2022.05.27/_doc/_search/?pretty'</code></pre
 </div>
 </div>
 <div class="sect3">
-<h4 id="_导入nginx日志到elasticsearch">14.2.2. 导入Nginx日志到Elasticsearch</h4>
+<h4 id="_nginx日志普通导入">14.2.2. Nginx日志普通导入</h4>
 <div class="paragraph">
 <p><strong>准备日志文件</strong></p>
 </div>
@@ -2316,7 +2316,7 @@ curl -XGET '127.0.0.1:9200/nginx_es-2022.05.27/_doc/_search/?pretty'</code></pre
 <div class="listingblock">
 <div class="title">配置文件</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">mkdir -p ~/es_log
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">mkdir -p ~/es_log/nginx_logs
 
 cat &lt;&lt; EOF &gt; ~/es_log/logstash.conf
 input{
