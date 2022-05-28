@@ -841,7 +841,8 @@ p { margin-bottom: 1.25rem; }
 </li>
 <li><a href="#_nginx日志分析">14.2. Nginx日志分析</a>
 <ul class="sectlevel3">
-<li><a href="#_filebeat">14.2.1. FileBeat</a></li>
+<li><a href="#_使用filebeat实时导入">14.2.1. 使用FileBeat实时导入</a></li>
+<li><a href="#_导入nginx日志到elasticsearch">14.2.2. 导入Nginx日志到Elasticsearch</a></li>
 </ul>
 </li>
 </ul>
@@ -1182,9 +1183,10 @@ http {
     include             /etc/nginx/mime.types;
     default_type        application/octet-stream;
 
-    log_format  main  '\$host \$server_port \$remote_addr - \$remote_user [\$time_local] "\$request" '
+    log_format  main  escape=json '\$host \$server_port \$remote_addr - \$remote_user [\$time_local] "\$request" '
                       '\$status \$request_time \$body_bytes_sent "\$http_referer" '
                       '"\$http_user_agent" "\$http_x_forwarded_for"';
+
 
     access_log  /var/log/nginx/access.log  main;
 
@@ -2189,19 +2191,11 @@ health status index                           uuid                   pri rep doc
 yellow open   logstash-2022.05.27-000001      jUvsxcK1RVSUv1EVvSZqVw   1   1          1            0      4.6kb          4.6kb
 
 4.发现有一个新索引logstash-2022.05.27-000001，查看新索引的内容
-curl -XGET '127.0.0.1:9200/logstash-2022.05.27-000001/_doc/_search/?pretty'</code></pre>
-</div>
-</div>
-<div class="listingblock">
-<div class="title">开机启动</div>
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">systemctl enable logstash</code></pre>
-</div>
-</div>
-<div class="listingblock">
-<div class="title">启动服务</div>
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">systemctl start logstash</code></pre>
+curl -XGET '127.0.0.1:9200/logstash-2022.05.27-000001/_doc/_search/?pretty'
+
+
+5.删除测试文件
+rm -f /etc/logstash/conf.d/test.conf</code></pre>
 </div>
 </div>
 </div>
@@ -2220,7 +2214,7 @@ curl -XGET '127.0.0.1:9200/logstash-2022.05.27-000001/_doc/_search/?pretty'</cod
 <p><a href="https://www.elastic.co/guide/en/kibana/7.14/xpack-grokdebugger.html">Gork表达式</a></p>
 </div>
 <div class="sect3">
-<h4 id="_filebeat">14.2.1. FileBeat</h4>
+<h4 id="_使用filebeat实时导入">14.2.1. 使用FileBeat实时导入</h4>
 <div class="paragraph">
 <p>Filebeat会把日志传送到Logstash，Logstash再把日志传到ES</p>
 </div>
@@ -2258,11 +2252,17 @@ sed -i '150s/localhost:5044/127.0.0.1:5400/' /etc/filebeat/filebeat.yml</code></
 </div>
 </div>
 <div class="listingblock">
+<div class="title">Nginx日志格式</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">log_format  main   '$host $server_port $remote_addr - $remote_user [$time_local] "$request" '
+                      '$status $request_time $body_bytes_sent "$http_referer" '
+                      '"$http_user_agent" "$http_x_forwarded_for"';</code></pre>
+</div>
+</div>
+<div class="listingblock">
 <div class="title">验证</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">rm -rf /etc/logstash/conf.d/test.conf
-
-cat &lt;&lt;EOF&gt; /etc/logstash/conf.d/nginx-es.conf
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">cat &lt;&lt;EOF&gt; /etc/logstash/conf.d/nginx-es.conf
 input {
         beats {
                 host =&gt; "0.0.0.0"
@@ -2271,7 +2271,7 @@ input {
 }
 filter{
         grok{
-                match =&gt; { "message" =&gt; "%{IPORHOST:host_ip} %{NUMBER:server_port} %{IPORHOST:remote_ip} - - \[%{HTTPDATE:time_local}\] \"%{WORD:request_method} %{DATA:uri} HTTP/%{NUMBER:http_version}\" %{NUMBER:status} %{NUMBER:request_time} %{NUMBER:body_bytes_sent} \"%{DATA:http_referrer}\" \"%{DATA:http_user_agent}\"" }
+                match =&gt; { "message" =&gt; "%{IPORHOST:host_ip} %{NUMBER:server_port} %{IPORHOST:remote_ip} - %{DATA:remote_user} \[%{HTTPDATE:time_local}\] \"%{WORD:request_method} %{DATA:url} HTTP/%{NUMBER:http_version}\" %{NUMBER:status} %{NUMBER:request_time} %{NUMBER:body_bytes_sent} \"%{DATA:http_referrer}\" \"%{DATA:http_user_agent}\"" }
         }
         date {
                 match =&gt; [ "time_local", "dd/MMM/yyyy:HH:mm:ss Z" ]
@@ -2279,7 +2279,7 @@ filter{
 }
 output {
         elasticsearch {
-                hosts =&gt; ["127.0.0.1:9200"]
+                hosts =&gt; ["0.0.0.0:9200"]
                 index =&gt; "nginx_es-%{+YYYY.MM.dd}"
         }
 }
@@ -2290,12 +2290,66 @@ EOF
 </div>
 </div>
 <div class="listingblock">
+<div class="title">启动logstash服务</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">systemctl start logstash</code></pre>
+</div>
+</div>
+<div class="listingblock">
 <div class="title">查看索引</div>
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl -s "127.0.0.1:9200/_cat/indices?v"
 yellow open   nginx_es-2022.05.27     RPDzQQbARqWXNzaCvxsI2w   1   1         33            0     32.6kb         32.6kb
 检查ES内容，发现ES已自动创建索引nginx_es-2022.05.27并且已经有Nginx日志内容
 curl -XGET '127.0.0.1:9200/nginx_es-2022.05.27/_doc/_search/?pretty'</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_导入nginx日志到elasticsearch">14.2.2. 导入Nginx日志到Elasticsearch</h4>
+<div class="paragraph">
+<p><strong>准备日志文件</strong></p>
+</div>
+<div class="paragraph">
+<p>日志文件存放路径: <code>~/es_log/nginx_logs</code></p>
+</div>
+<div class="listingblock">
+<div class="title">配置文件</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">mkdir -p ~/es_log
+
+cat &lt;&lt; EOF &gt; ~/es_log/logstash.conf
+input{
+  file {
+    path =&gt; "${HOME}/es_log/nginx_logs/access.log*"
+    type =&gt; "nginx_access"
+    start_position =&gt; "beginning"
+    sincedb_path =&gt; "/dev/null"
+    stat_interval =&gt; "1 second"
+  }
+}
+filter{
+        grok{
+                match =&gt; { "message" =&gt; "%{IPORHOST:host_ip} %{NUMBER:server_port} %{IPORHOST:remote_ip} - %{DATA:remote_user} \[%{HTTPDATE:time_local}\] \"%{WORD:request_method} %{DATA:url} HTTP/%{NUMBER:http_version}\" %{NUMBER:status} %{NUMBER:request_time} %{NUMBER:body_bytes_sent} \"%{DATA:http_referrer}\" \"%{DATA:http_user_agent}\"" }
+        }
+}
+output {
+        elasticsearch {
+                hosts =&gt; ["0.0.0.0:9200"]
+                index =&gt; "nginx_es_log-%{+YYYY.MM.dd}"
+        }
+        #file  {
+        #    path =&gt; "/var/log/logstash.log"
+        #    codec =&gt; json
+        #}
+}
+EOF</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">导入数据到ES：</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">/usr/share/logstash/bin/logstash -f ~/es_log/logstash.conf</code></pre>
 </div>
 </div>
 <div style="page-break-after: always;"></div>
