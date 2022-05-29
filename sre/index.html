@@ -803,6 +803,18 @@ p { margin-bottom: 1.25rem; }
 <li><a href="#_MySQL_chapter">10. MySQL</a>
 <ul class="sectlevel2">
 <li><a href="#_安装_3">10.1. 安装</a></li>
+<li><a href="#_常用命令">10.2. 常用命令</a>
+<ul class="sectlevel3">
+<li><a href="#_创建用户开放指定host登录">10.2.1. 创建用户、开放指定HOST登录</a></li>
+<li><a href="#_用户授权">10.2.2. 用户授权</a></li>
+<li><a href="#_备份与还原">10.2.3. 备份与还原</a></li>
+</ul>
+</li>
+<li><a href="#_mysql集群">10.3. MySQL集群</a>
+<ul class="sectlevel3">
+<li><a href="#_主从备份">10.3.1. 主从备份</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li><a href="#_Redis_chapter">11. Redis</a></li>
@@ -1711,7 +1723,109 @@ mysql -uroot -pgeek mysql -e 'delete from user where Password="";'
 mysql -uroot -pgeek -e 'flush privileges;'</code></pre>
 </div>
 </div>
+</div>
+<div class="sect2">
+<h3 id="_常用命令">10.2. 常用命令</h3>
+<div class="sect3">
+<h4 id="_创建用户开放指定host登录">10.2.1. 创建用户、开放指定HOST登录</h4>
+<div class="listingblock">
+<div class="title">创建用户</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"># 创建任意host可登陆账户
+CREATE USER yss@'%' IDENTIFIED BY '123456' ;
+
+# 创建指定host可登陆账户
+CREATE USER yss@'10.0.0.2/%' IDENTIFIED BY '123456' ;</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">修改密码</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"># 用户为自己更改密码
+SET PASSWORD=PASSWORD('456789');
+
+# Root用户为其他用户改密码
+SET PASSWORD FOR yss@'%'=PASSWORD('456789');</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_用户授权">10.2.2. 用户授权</h4>
+<div class="listingblock">
+<div class="title">查看当前系统有哪些用户</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">SELECT user FROM mysql.user;</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">查看指定用户的权限</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">SHOW GRANTS FOR user_name@'%';</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">用户授权</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"># 给已存在用户授权
+GRANT ALL ON db_name.table_name TO yss@'%';
+
+# 创建用户并授权
+GRANT ALL ON db_name.table_name TO yss@'%' IDENTIFIED BY '123456';</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">取消用户授权</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">REVOKE [SELECT,DELETE,UPDATE,DROP...] ON db_name.table_name FROM yss@'%';</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_备份与还原">10.2.3. 备份与还原</h4>
+<div class="listingblock">
+<div class="title">备份</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">mysqldump -uusername -p'password' --add-drop-table db_name &gt; db_name_dump.sql</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">还原</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">mysql -uusername -p'password' db_name &lt; db_name_dump.sql</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="ulist">
+<ul>
+<li>
+<p>备份多个库: --databases 库1,库2</p>
+</li>
+<li>
+<p>备份所有库: --all-databases</p>
+</li>
+<li>
+<p>备份多个表: 库名 表1 表2</p>
+</li>
+</ul>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_mysql集群">10.3. MySQL集群</h3>
+<div class="sect3">
+<h4 id="_主从备份">10.3.1. 主从备份</h4>
 <div style="page-break-after: always;"></div>
+</div>
 </div>
 </div>
 </div>
