@@ -1824,6 +1824,72 @@ GRANT ALL ON db_name.table_name TO yss@'%' IDENTIFIED BY '123456';</code></pre>
 <h3 id="_mysql集群">10.3. MySQL集群</h3>
 <div class="sect3">
 <h4 id="_主从备份">10.3.1. 主从备份</h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">主节点</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">10.0.2.20</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">从节点</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">10.0.2.30</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p><strong>主节点配置</strong></p>
+</div>
+<div class="listingblock">
+<div class="title">修改 <code>my.cnf</code> 文件</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">vim /etc/my.cnf
+[mysqld]
+#记录操作日志
+log-bin=mysql-bin
+#不同步mysql系统数据库
+binlog_ignore_db = mysql
+#数据库集群的节点id
+server-id=20</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">修改系统配置</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"># 重启数据库服务，使配置文件生效
+systemctl restart mariadb
+# 在主节点创建一个user用户连接节点mysql2，并赋予从节点同步主节点数据库权限
+mysql -uroot -pgeek -e 'grant replication slave on *.* to user@"10.0.2.30" identified by "geek";flush privileges;'</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>从节点配置</strong></p>
+</div>
+<div class="listingblock">
+<div class="title">修改 <code>my.cnf</code> 文件</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">vim /etc/my.cnf
+[mysqld]
+#记录操作日志
+log-bin=mysql-bin
+#不同步mysql系统数据库
+replicate-ignore-db=mysql
+#数据库集群的节点id
+server-id=30</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">修改系统配置</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">#重启数据库服务，使配置文件生效
+systemctl restart mariadb
+#配置从节点连接主节点的信息，并开启从节点服务
+mysql -uroot -pgeek -e 'change master to master_host="10.0.2.20",master_user="user",master_password="geek";start slave;flush privileges;'</code></pre>
+</div>
+</div>
 <div style="page-break-after: always;"></div>
 </div>
 </div>
