@@ -813,6 +813,7 @@ p { margin-bottom: 1.25rem; }
 <li><a href="#_mysql集群">10.3. MySQL集群</a>
 <ul class="sectlevel3">
 <li><a href="#_主从备份">10.3.1. 主从备份</a></li>
+<li><a href="#_主主模式">10.3.2. 主主模式</a></li>
 </ul>
 </li>
 </ul>
@@ -1822,8 +1823,6 @@ GRANT ALL ON db_name.table_name TO yss@'%' IDENTIFIED BY '123456';</code></pre>
 </div>
 <div class="sect2">
 <h3 id="_mysql集群">10.3. MySQL集群</h3>
-<div class="sect3">
-<h4 id="_主从备份">10.3.1. 主从备份</h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 50%;">
@@ -1840,6 +1839,8 @@ GRANT ALL ON db_name.table_name TO yss@'%' IDENTIFIED BY '123456';</code></pre>
 </tr>
 </tbody>
 </table>
+<div class="sect3">
+<h4 id="_主从备份">10.3.1. 主从备份</h4>
 <div class="paragraph">
 <p><strong>主节点配置</strong></p>
 </div>
@@ -1851,7 +1852,7 @@ GRANT ALL ON db_name.table_name TO yss@'%' IDENTIFIED BY '123456';</code></pre>
 #记录操作日志
 log-bin=mysql-bin
 #不同步mysql系统数据库
-binlog_ignore_db = mysql
+binlog-ignore-db = mysql
 #数据库集群的节点id
 server-id=20</code></pre>
 </div>
@@ -1861,8 +1862,8 @@ server-id=20</code></pre>
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"># 重启数据库服务，使配置文件生效
 systemctl restart mariadb
-# 在主节点创建一个user用户连接节点mysql2，并赋予从节点同步主节点数据库权限
-mysql -uroot -pgeek -e 'grant replication slave on *.* to user@"10.0.2.30" identified by "geek";flush privileges;'</code></pre>
+# 在主节点创建一个slave用户连接节点mysql2，并赋予从节点同步主节点数据库权限
+mysql -uroot -pgeek -e 'grant replication slave on *.* to slave@"10.0.2.30" identified by "geek";flush privileges;'</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1881,13 +1882,120 @@ replicate-ignore-db=mysql
 server-id=30</code></pre>
 </div>
 </div>
-<div class="listingblock">
+<div class="paragraph">
 <div class="title">修改系统配置</div>
+<p>在主节点使用 <code>show master stauts;</code> 查询</p>
+</div>
+<div class="paragraph">
+<p><code>master_log_file</code> 和 <code>master_log_pos</code></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">#重启数据库服务，使配置文件生效
+systemctl restart mariadb
+
+#配置从节点连接主节点的信息，并开启从节点服务
+mysql -uroot -pgeek -e 'change master to master_host="10.0.2.20",master_user="slave",master_password="geek",master_log_file="xxxx",master_log_pos=xxxx;start slave;flush privileges;'</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<div class="title">验证从节点服务是否开启</div>
+<p>在从节点服务器执行命令: <code>mysql -uroot -pgeek -e 'show slave status\G'`</code>,如果 <code>Slave_IO_Running</code> 和 <code>Slave_SQL_Running</code> 的状态都为YES，则节点服务开启成功</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">[root@ylighgh ~]# mysql -uroot -pgeek -e'show slave status\G'
+*************************** 1. row ***************************
+            ...
+             Slave_IO_Running: Yes
+            Slave_SQL_Running: Yes
+            ...</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_主主模式">10.3.2. 主主模式</h4>
+<div class="paragraph">
+<p><strong>主节点配置</strong></p>
+</div>
+<div class="listingblock">
+<div class="title">修改 <code>my.cnf</code> 文件</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">vim /etc/my.cnf
+[mysqld]
+#记录操作日志
+log-bin=mysql-bin
+#不同步mysql,information_scheme系统数据库
+binlog-ignore-db=mysql
+binlog-ignore-db=information_scheme
+#数据库集群的节点id
+server-id=20</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<div class="title">修改系统配置</div>
+<p>使用 <code>show master stauts;</code> 查询信息</p>
+</div>
+<div class="paragraph">
+<p>修改 <code>master_log_file</code> 和 <code>master_log_pos</code></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"># 重启数据库服务，使配置文件生效
+systemctl restart mariadb
+# 在主节点创建一个slave用户连接节点mysql2，并赋予从节点同步主节点数据库权限
+mysql -uroot -pgeek -e 'grant replication slave on *.* to slave@"10.0.2.30" identified by "geek";flush privileges;'
+
+mysql -uroot -pgeek -e 'change master to master_host="10.0.2.30",master_user="slave",master_password="geek",master_log_file="xxxx",master_log_pos=xxxx;start slave;flush privileges;'</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>从节点配置</strong></p>
+</div>
+<div class="listingblock">
+<div class="title">修改 <code>my.cnf</code> 文件</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">vim /etc/my.cnf
+[mysqld]
+#记录操作日志
+log-bin=mysql-bin
+#不同步mysql,information_scheme系统数据库
+binlog-ignore-db=mysql
+binlog-ignore-db=information_scheme
+#数据库集群的节点id
+server-id=30</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<div class="title">修改系统配置</div>
+<p>使用 <code>show master stauts;</code> 查询信息</p>
+</div>
+<div class="paragraph">
+<p>修改 <code>master_log_file</code> 和 <code>master_log_pos</code></p>
+</div>
+<div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">#重启数据库服务，使配置文件生效
 systemctl restart mariadb
 #配置从节点连接主节点的信息，并开启从节点服务
-mysql -uroot -pgeek -e 'change master to master_host="10.0.2.20",master_user="user",master_password="geek";start slave;flush privileges;'</code></pre>
+mysql -uroot -pgeek -e 'grant replication slave on *.* to slave@"10.0.2.20" identified by "geek";flush privileges;'
+
+
+mysql -uroot -pgeek -e 'change master to master_host="10.0.2.20",master_user="slave",master_password="geek",master_log_file="xxxx",master_log_pos=xxxx;start slave;flush privileges;'</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<div class="title">验证主从节点服务是否开启</div>
+<p>在主从节点服务器执行命令: <code>mysql -uroot -pgeek -e 'show slave status\G'`</code>,如果 <code>Slave_IO_Running</code> 和 <code>Slave_SQL_Running</code> 的状态都为YES，则节点服务开启成功</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">[root@ylighgh ~]# mysql -uroot -pgeek -e'show slave status\G'
+*************************** 1. row ***************************
+            ...
+             Slave_IO_Running: Yes
+            Slave_SQL_Running: Yes
+            ...</code></pre>
 </div>
 </div>
 <div style="page-break-after: always;"></div>
