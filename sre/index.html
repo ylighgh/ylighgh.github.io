@@ -813,7 +813,8 @@ p { margin-bottom: 1.25rem; }
 <li><a href="#_mysql集群">10.3. MySQL集群</a>
 <ul class="sectlevel3">
 <li><a href="#_主从备份">10.3.1. 主从备份</a></li>
-<li><a href="#_主主模式">10.3.2. 主主模式</a></li>
+<li><a href="#_主主备份">10.3.2. 主主备份</a></li>
+<li><a href="#_多主一从">10.3.3. 多主一从</a></li>
 </ul>
 </li>
 </ul>
@@ -1874,11 +1875,8 @@ mysql -uroot -pgeek -e 'grant replication slave on *.* to slave@"10.0.2.30" iden
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">vim /etc/my.cnf
 [mysqld]
-#记录操作日志
 log-bin=mysql-bin
-#不同步mysql系统数据库
 replicate-ignore-db=mysql
-#数据库集群的节点id
 server-id=30</code></pre>
 </div>
 </div>
@@ -1891,10 +1889,8 @@ server-id=30</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">#重启数据库服务，使配置文件生效
-systemctl restart mariadb
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">systemctl restart mariadb
 
-#配置从节点连接主节点的信息，并开启从节点服务
 mysql -uroot -pgeek -e 'change master to master_host="10.0.2.20",master_user="slave",master_password="geek",master_log_file="xxxx",master_log_pos=xxxx;start slave;flush privileges;'</code></pre>
 </div>
 </div>
@@ -1914,7 +1910,7 @@ mysql -uroot -pgeek -e 'change master to master_host="10.0.2.20",master_user="sl
 </div>
 </div>
 <div class="sect3">
-<h4 id="_主主模式">10.3.2. 主主模式</h4>
+<h4 id="_主主备份">10.3.2. 主主备份</h4>
 <div class="paragraph">
 <p><strong>主节点配置</strong></p>
 </div>
@@ -1923,12 +1919,9 @@ mysql -uroot -pgeek -e 'change master to master_host="10.0.2.20",master_user="sl
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">vim /etc/my.cnf
 [mysqld]
-#记录操作日志
 log-bin=mysql-bin
-#不同步mysql,information_scheme系统数据库
 binlog-ignore-db=mysql
 binlog-ignore-db=information_scheme
-#数据库集群的节点id
 server-id=20</code></pre>
 </div>
 </div>
@@ -1941,9 +1934,7 @@ server-id=20</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"># 重启数据库服务，使配置文件生效
-systemctl restart mariadb
-# 在主节点创建一个slave用户连接节点mysql2，并赋予从节点同步主节点数据库权限
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">systemctl restart mariadb
 mysql -uroot -pgeek -e 'grant replication slave on *.* to slave@"10.0.2.30" identified by "geek";flush privileges;'
 
 mysql -uroot -pgeek -e 'change master to master_host="10.0.2.30",master_user="slave",master_password="geek",master_log_file="xxxx",master_log_pos=xxxx;start slave;flush privileges;'</code></pre>
@@ -1957,12 +1948,9 @@ mysql -uroot -pgeek -e 'change master to master_host="10.0.2.30",master_user="sl
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">vim /etc/my.cnf
 [mysqld]
-#记录操作日志
 log-bin=mysql-bin
-#不同步mysql,information_scheme系统数据库
 binlog-ignore-db=mysql
 binlog-ignore-db=information_scheme
-#数据库集群的节点id
 server-id=30</code></pre>
 </div>
 </div>
@@ -1975,9 +1963,7 @@ server-id=30</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">#重启数据库服务，使配置文件生效
-systemctl restart mariadb
-#配置从节点连接主节点的信息，并开启从节点服务
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">systemctl restart mariadb
 mysql -uroot -pgeek -e 'grant replication slave on *.* to slave@"10.0.2.20" identified by "geek";flush privileges;'
 
 
@@ -1996,6 +1982,159 @@ mysql -uroot -pgeek -e 'change master to master_host="10.0.2.20",master_user="sl
              Slave_IO_Running: Yes
             Slave_SQL_Running: Yes
             ...</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_多主一从">10.3.3. 多主一从</h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">主节点1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">10.0.2.20</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">主节点2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">10.0.2.30</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">从节点</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">10.0.2.40</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p><strong>主节点1配置</strong></p>
+</div>
+<div class="listingblock">
+<div class="title">修改 <code>my.cnf</code> 文件</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">vim /etc/my.cnf
+[mysqld]
+log-bin=mysql-bin
+binlog-ignore-db=mysql
+binlog-ignore-db=information_scheme
+server-id=20</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">重启MySQL</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">systemctl restart mariadb</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">修改系统配置</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">mysql -uroot -pgeek -e 'grant replication slave on *.* to slave@"10.0.2.40" identified by "geek";flush privileges;'</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>主节点2配置</strong></p>
+</div>
+<div class="listingblock">
+<div class="title">修改 <code>my.cnf</code> 文件</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">vim /etc/my.cnf
+[mysqld]
+log-bin=mysql-bin
+binlog-ignore-db=mysql
+binlog-ignore-db=information_scheme
+server-id=30</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">重启MySQL</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">systemctl restart mariadb</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">修改系统配置</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">mysql -uroot -pgeek -e 'grant replication slave on *.* to slave@"10.0.2.40" identified by "geek";flush privileges;'</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>从节点配置</strong></p>
+</div>
+<div class="listingblock">
+<div class="title">修改 <code>my.cnf</code> 文件</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">vim /etc/my.cnf
+[mysqld_multi]
+mysqld=/usr/bin/mysqld_safe
+mysqladmin=/usr/bin/mysqladmin
+log=/tmp/multi.log
+
+[mysqld20]
+port=3307
+datadir=/var/lib/mysqla/
+pid-file=/var/lib/mysqla/mysqld.pid
+socket=/var/lib/mysqla/mysql.sock
+user=mysql
+server-id=40
+
+[mysqld30]
+port=3308
+datadir=/var/lib/mysqlb/
+pid-file=/var/lib/mysqlb/mysqld.pid
+socket=/var/lib/mysqlb/mysql.sock
+user=mysql
+server-id=40</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<div class="title">初始化数据库,生成目录</div>
+<p><code>mysqla</code> <code>mysqlb</code></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">mysql_install_db --datadir=/var/lib/mysqla --user=mysql
+mysql_install_db --datadir=/var/lib/mysqlb --user=mysql
+
+chown -R mysql:mysql /var/lib/mysqla
+chown -R mysql:mysql /var/lib/mysqlb</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">启动MySQL</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">mysqld_multi --defaults-file=/etc/my.cnf start 20
+mysqld_multi --defaults-file=/etc/my.cnf start 30</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">查看状态</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">[root@slave2-2022 ~]# ss -antpl|grep mysql
+LISTEN     0      50           *:3306                     *:*                   users:(("mysqld",pid=6964,fd=14))
+LISTEN     0      50           *:3307                     *:*                   users:(("mysqld",pid=7925,fd=14))</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<div class="title">修改从节点配置</div>
+<p><strong>3308</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">mysql -uroot -P 3307 -S /var/lib/mysqla/mysql.sock
+
+change master to master_user='slave',master_password='geek',master_host='10.0.2.20',master_log_file='mysql-bin.000014',master_log_pos=1312;start slave;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>3307</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>mysql -uroot -P 3308 -S /var/lib/mysqlb/mysql.sock
+
+change master to master_user='slave',master_password='geek',master_host='10.0.2.30',master_log_file='mysql-bin.000011',master_log_pos=629;start slave;</pre>
 </div>
 </div>
 <div style="page-break-after: always;"></div>
