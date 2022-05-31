@@ -769,6 +769,7 @@ p { margin-bottom: 1.25rem; }
 <li><a href="#_无密钥登陆">1.2.1. 无密钥登陆</a></li>
 </ul>
 </li>
+<li><a href="#_时间同步">1.3. 时间同步</a></li>
 </ul>
 </li>
 <li><a href="#_Python_chapter">2. CentOS</a>
@@ -819,7 +820,26 @@ p { margin-bottom: 1.25rem; }
 </li>
 </ul>
 </li>
-<li><a href="#_Redis_chapter">11. Redis</a></li>
+<li><a href="#_Redis_chapter">11. Redis</a>
+<ul class="sectlevel2">
+<li><a href="#_安装配置">11.1. 安装配置</a></li>
+<li><a href="#_常用命令_2">11.2. 常用命令</a>
+<ul class="sectlevel3">
+<li><a href="#_键key">11.2.1. 键(Key)</a></li>
+<li><a href="#_字符串string">11.2.2. 字符串(String)</a></li>
+<li><a href="#_哈希表hash">11.2.3. 哈希表(Hash)</a></li>
+<li><a href="#_列表list">11.2.4. 列表(List)</a></li>
+<li><a href="#_集合set">11.2.5. 集合(Set)</a></li>
+</ul>
+</li>
+<li><a href="#_高级应用">11.3. 高级应用</a>
+<ul class="sectlevel3">
+<li><a href="#_密码防护">11.3.1. 密码防护</a></li>
+<li><a href="#_主从备份_2">11.3.2. 主从备份</a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li><a href="#_Rsync_chapter">12. Rsync</a>
 <ul class="sectlevel2">
 <li><a href="#_数据传输">12.1. 数据传输</a></li>
@@ -992,8 +1012,41 @@ EOF
 chmod 400 ~/.ssh/config</code></pre>
 </div>
 </div>
-<div style="page-break-after: always;"></div>
 </div>
+</div>
+<div class="sect2">
+<h3 id="_时间同步">1.3. 时间同步</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">#设置硬件时钟调整为与本地时钟一致
+timedatectl set-local-rtc 1
+#设置时区为上海
+timedatectl set-timezone Asia/Shanghai
+
+#安装ntpdate
+yum -y install ntpdate
+#同步时间
+ntpdate -u  cn.ntp.org.cn
+#同步完成后,date命令查看时间是否正确
+date</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>同步时间后可能部分服务器过一段时间又会出现偏差，因此最好设置crontab来定时同步时间，方法如下</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">#安装crontab
+yum -y install crontab
+#创建crontab任务
+crontab -e
+#添加定时任务
+*/20 * * * * /usr/sbin/ntpdate cn.ntp.org.cn &gt; /dev/null 2&gt;&amp;1
+#重启crontab
+service crond reload</code></pre>
+</div>
+</div>
+<div style="page-break-after: always;"></div>
 </div>
 </div>
 </div>
@@ -2145,7 +2198,242 @@ change master to master_user='slave',master_password='geek',master_host='10.0.2.
 <div class="sect1">
 <h2 id="_Redis_chapter">11. Redis</h2>
 <div class="sectionbody">
+<div class="sect2">
+<h3 id="_安装配置">11.1. 安装配置</h3>
+<div class="listingblock">
+<div class="title">安装</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">yum -y install redis</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">启动</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">systemctl start redis</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">设置开机自启</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">systemctl enable redis</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">查看redis状态</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">[root@master-2022 system]# systemctl status redis
+● redis.service - Redis persistent key-value database
+   Loaded: loaded (/usr/lib/systemd/system/redis.service; disabled; vendor preset: disabled)
+  Drop-In: /etc/systemd/system/redis.service.d
+           └─limit.conf
+   Active: active (running) since Mon 2022-05-30 05:31:28 CST; 1s ago
+  Process: 22952 ExecStop=/usr/libexec/redis-shutdown (code=exited, status=0/SUCCESS)
+ Main PID: 22982 (redis-server)
+   CGroup: /system.slice/redis.service
+           └─22982 /usr/bin/redis-server 127.0.0.1:6379
+
+May 30 05:31:28 master-2022 systemd[1]: Starting Redis persistent key-val....
+May 30 05:31:28 master-2022 systemd[1]: Started Redis persistent key-valu....
+Hint: Some lines were ellipsized, use -l to show in full.
+[root@master-2022 system]# ss -antpl|grep redis
+LISTEN     0      128    127.0.0.1:6379                     *:*                   users:(("redis-server",pid=22982,fd=4))</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_常用命令_2">11.2. 常用命令</h3>
+<div class="sect3">
+<h4 id="_键key">11.2.1. 键(Key)</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"># 设置key值
+set name yss
+
+# 获取key对应的value值
+get name
+
+# 删除一个已经创建的key
+del name
+
+# 设置key值,如果已经存在则返回0
+setnx name yss
+
+# 判断key是否存在,存在返回1,不存在返回0
+exists name
+
+# 为给定 key 设置过期时间，以秒计
+expire name
+
+# 查找所有符合给定模式( pattern)的 key
+keys rts*
+
+# 删除一个或多个键
+del area_info_a area_info_b
+
+# 删除模糊匹配的键
+redis-cli --scan --pattern users:* | xargs redis-cli unlink</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_字符串string">11.2.2. 字符串(String)</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"># 同时设置一个或多个 key-value 对
+mset key1 value1 [key2 value2]
+
+# 获取所有(一个或多个)给定 key 的值
+mget key1 [key2]
+
+# 将 key 中储存的数字值增一
+incr key
+# 将 key 中储存的数字值减一
+decr key
+
+# 将 key 所储存的值加上给定的增量值（increment）
+incrby key increment
+# key 所储存的值减去给定的减量值（decrement）
+decrby key decrement</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_哈希表hash">11.2.3. 哈希表(Hash)</h4>
+<div class="listingblock">
+<div class="title">增加字段或设置字段</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"># 向哈希表中增加字段或设置字段值
+hset area_info name "四川"
+
+# 向哈希表中增加多个字段或设置多个字段值
+hmset area_info name "四川" level 2</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">获取字段</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"># 获取哈希表中指定键的单个字段和值
+hget area_info name
+
+# 获取所有给定字段的值
+hmget area_info name level
+
+# 获取哈希表中指定键的所有字段和值
+hgetall area_info</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">字段是否存在</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"># 查看哈希表的指定字段是否存在
+hexists area_info name</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">删除字段</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"># 删除一个或多个哈希表字段
+hdel area_info name level</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_列表list">11.2.4. 列表(List)</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"># 将一个或多个值插入到列表头部
+lpush key_list value1 value2
+lpush key_list value3
+
+# 获取列表长度
+llen key_list
+
+
+LRANGE runoobkey 0 10
+
+# 移出并获取列表的第一个元素
+lpop key_list</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_集合set">11.2.5. 集合(Set)</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"># 添加一个或多个元素到集合中
+sadd key member [members...]
+
+# 获取集合里面所有的元素
+smembers key
+
+# 从指定集合中删除指定元素
+srem key member [members]
+
+# 从指定集合中删除随意删除一个元素并返回
+spop key
+
+# 统计集合中元素的个数
+scard key
+
+# 返回指定的差集
+sdiff key [key...]
+
+# 返回指定集合的交集
+sinter key [key...]
+
+# 获取指定集合的并集
+sunion key [key...]</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_高级应用">11.3. 高级应用</h3>
+<div class="sect3">
+<h4 id="_密码防护">11.3.1. 密码防护</h4>
+<div class="listingblock">
+<div class="title">修改密码</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">sed -i '480s/#//' /etc/redis.conf
+sed -i '480s/foobared/geek/' /etc/redis.conf
+
+# 修改密码之后重启redis
+systemctl restart redis
+
+# 登陆
+redis-cil -a PASSWORD --row
+或
+auth PASSWORD</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_主从备份_2">11.3.2. 主从备份</h4>
+<div class="paragraph">
+<p><strong>主服务器设置</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">sed -i '61s/^/# /' /etc/redis.conf
+
+systemctl restart redis</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>从服务器设置</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">sed -i '265aslaveof 10.0.2.20 6379' /etc/redis.conf
+
+sed -i '273amasterauth geek' /etc/redis.conf
+
+systemctl restart redis</code></pre>
+</div>
+</div>
 <div style="page-break-after: always;"></div>
+</div>
+</div>
 </div>
 </div>
 <div class="sect1">
