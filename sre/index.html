@@ -805,18 +805,19 @@ p { margin-bottom: 1.25rem; }
 <li><a href="#_nginx反代gitlab">8.2. Nginx反代GitLab</a>
 <ul class="sectlevel3">
 <li><a href="#_gitlab设置">8.2.1. GitLab设置</a></li>
-<li><a href="#_设置http_clone相关参数">8.2.2. 设置HTTP Clone相关参数</a></li>
-<li><a href="#_nginx_server配置">8.2.3. Nginx Server配置</a></li>
+<li><a href="#_nginx_server配置">8.2.2. Nginx Server配置</a></li>
+<li><a href="#_设置http_clone相关参数">8.2.3. 设置HTTP Clone相关参数</a></li>
 <li><a href="#_最后">8.2.4. 最后</a></li>
 </ul>
 </li>
+<li><a href="#_常用命令">8.3. 常用命令</a></li>
 </ul>
 </li>
 <li><a href="#_Git_chapter">9. Git</a></li>
 <li><a href="#_MySQL_chapter">10. MySQL</a>
 <ul class="sectlevel2">
 <li><a href="#_安装_4">10.1. 安装</a></li>
-<li><a href="#_常用命令">10.2. 常用命令</a>
+<li><a href="#_常用命令_2">10.2. 常用命令</a>
 <ul class="sectlevel3">
 <li><a href="#_创建用户开放指定host登录">10.2.1. 创建用户、开放指定HOST登录</a></li>
 <li><a href="#_用户授权">10.2.2. 用户授权</a></li>
@@ -835,7 +836,7 @@ p { margin-bottom: 1.25rem; }
 <li><a href="#_Redis_chapter">11. Redis</a>
 <ul class="sectlevel2">
 <li><a href="#_安装配置">11.1. 安装配置</a></li>
-<li><a href="#_常用命令_2">11.2. 常用命令</a>
+<li><a href="#_常用命令_3">11.2. 常用命令</a>
 <ul class="sectlevel3">
 <li><a href="#_键key">11.2.1. 键(Key)</a></li>
 <li><a href="#_字符串string">11.2.2. 字符串(String)</a></li>
@@ -1706,15 +1707,29 @@ EXTERNAL_URL="http://192.168.43.65:8000"  yum install -y gitlab-ce</code></pre>
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"># 禁用默认配置
 sed -i 's/^external_url /#external_url /g' /etc/gitlab/gitlab.rb
 
-
 cat &lt;&lt; EOF &gt;&gt; /etc/gitlab/gitlab.rb
-# 本地暴露端口
-external_url 'http://192.168.43.65:8000/'
-
 # Git SSH Clone相关参数
 gitlab_rails['gitlab_ssh_host'] = 'git.xxx.com'
-EOF
 
+# 禁用自动签发免费HTTPS证书
+# letsencrypt['enable'] = false
+
+# 禁用签发证书后，需要显式启用Nginx服务
+nginx['enable'] = true
+# 禁用Nginx的HTTPS配置
+nginx['redirect_http_to_https'] = false
+nginx['listen_https'] = false
+
+# Nginx端口监听配置
+nginx['listen_addresses'] = ['127.0.0.1']
+nginx['listen_port'] = 8000
+
+git_data_dirs({
+    "default" =&gt; {
+        "path" =&gt; "/data/gitlab_data"
+    }
+})
+EOF
 
 # 重新生成配置并重启
 gitlab-ctl reconfigure &amp;&amp; gitlab-ctl restart
@@ -1725,19 +1740,7 @@ ss -antpl|grep 8000</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_设置http_clone相关参数">8.2.2. 设置HTTP Clone相关参数</h4>
-<div class="paragraph">
-<p>用管理员帐号登录GitLab，进入以下菜单：</p>
-</div>
-<div class="paragraph">
-<p><code>Admin Area</code> &gt; <code>Settings</code> &gt; <code>General</code> &gt; <code>Visibility and access controls</code></p>
-</div>
-<div class="paragraph">
-<p>找到 <code>Custom Git clone URL for HTTP(S)</code>，根据实际情况填写，比如：<code><a href="https://git.xxx.com:2035" class="bare">https://git.xxx.com:2035</a></code></p>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_nginx_server配置">8.2.3. Nginx Server配置</h4>
+<h4 id="_nginx_server配置">8.2.2. Nginx Server配置</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">cat &lt;&lt;EOF&gt; /etc/nginx/conf.d/gitlab.conf
@@ -1781,10 +1784,10 @@ server {
 
         # 必须设置，否则新建项目后，会302跳转到http的80端口
         proxy_set_header Host git.xxx.com:2035;
-        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Real-IP \$remote_addr;
         #proxy_set_header X-Forwarded-Proto https;
 
-        proxy_pass http://0.0.0.0:8000;
+        proxy_pass http://127.0.0.1:8000;
     }
 
     location ~ ^/\.git/? {
@@ -1802,6 +1805,18 @@ EOF</code></pre>
 </div>
 </div>
 <div class="sect3">
+<h4 id="_设置http_clone相关参数">8.2.3. 设置HTTP Clone相关参数</h4>
+<div class="paragraph">
+<p>用管理员帐号登录GitLab，进入以下菜单：</p>
+</div>
+<div class="paragraph">
+<p><code>Admin Area</code> &gt; <code>Settings</code> &gt; <code>General</code> &gt; <code>Visibility and access controls</code></p>
+</div>
+<div class="paragraph">
+<p>找到 <code>Custom Git clone URL for HTTP(S)</code>，根据实际情况填写，比如：<code><a href="https://git.xxx.com:2035" class="bare">https://git.xxx.com:2035</a></code></p>
+</div>
+</div>
+<div class="sect3">
 <h4 id="_最后">8.2.4. 最后</h4>
 <div class="paragraph">
 <p>外网GitLab访问地址
@@ -1815,8 +1830,41 @@ ssh://git@git.xxx.com/用户名/项目名称.git</p>
 <p>HTTP克隆地址
 <a href="https://git.xxx.com:2035/用户名/项目名称.git" class="bare">https://git.xxx.com:2035/用户名/项目名称.git</a></p>
 </div>
-<div style="page-break-after: always;"></div>
 </div>
+</div>
+<div class="sect2">
+<h3 id="_常用命令">8.3. 常用命令</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"># 启动
+gitlab-ctl start
+
+# 重启
+gitlab-ctl restart
+
+# 停止
+gitlab-ctl start
+
+# 查看所有的logs; 按 Ctrl-C 退出
+gitlab-ctl tail
+
+# 拉取/var/log/gitlab下子目录的日志
+gitlab-ctl tail gitlab-rails
+
+# 拉取某个指定的日志文件
+gitlab-ctl tail nginx/gitlab_error.log
+
+# 更新配置文件
+gitlab-ctl reconfigure
+
+# 检查gitlab配置
+gitlab-rake gitlab:check SANITIZE=true --trace
+
+# 查看版本
+cat /opt/gitlab/embedded/service/gitlab-rails/VERSION</code></pre>
+</div>
+</div>
+<div style="page-break-after: always;"></div>
 </div>
 </div>
 </div>
@@ -1955,7 +2003,7 @@ mysql -uroot -pgeek -e 'flush privileges;'</code></pre>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_常用命令">10.2. 常用命令</h3>
+<h3 id="_常用命令_2">10.2. 常用命令</h3>
 <div class="sect3">
 <h4 id="_创建用户开放指定host登录">10.2.1. 创建用户、开放指定HOST登录</h4>
 <div class="listingblock">
@@ -2416,7 +2464,7 @@ LISTEN     0      128    127.0.0.1:6379                     *:*                 
 </div>
 </div>
 <div class="sect2">
-<h3 id="_常用命令_2">11.2. 常用命令</h3>
+<h3 id="_常用命令_3">11.2. 常用命令</h3>
 <div class="sect3">
 <h4 id="_键key">11.2.1. 键(Key)</h4>
 <div class="listingblock">
