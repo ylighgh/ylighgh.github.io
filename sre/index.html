@@ -799,11 +799,23 @@ p { margin-bottom: 1.25rem; }
 <li><a href="#_Jenkins_chapter">5. Jenkins</a></li>
 <li><a href="#_RabbitMQ_chapter">6. RabbitMQ</a></li>
 <li><a href="#_Kafka_chapter">7. Kafka</a></li>
-<li><a href="#_Gitlab_chapter">8. Gitlab</a></li>
+<li><a href="#_Gitlab_chapter">8. Gitlab</a>
+<ul class="sectlevel2">
+<li><a href="#_安装_3">8.1. 安装</a></li>
+<li><a href="#_nginx反代gitlab">8.2. Nginx反代GitLab</a>
+<ul class="sectlevel3">
+<li><a href="#_gitlab设置">8.2.1. GitLab设置</a></li>
+<li><a href="#_设置http_clone相关参数">8.2.2. 设置HTTP Clone相关参数</a></li>
+<li><a href="#_nginx_server配置">8.2.3. Nginx Server配置</a></li>
+<li><a href="#_最后">8.2.4. 最后</a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li><a href="#_Git_chapter">9. Git</a></li>
 <li><a href="#_MySQL_chapter">10. MySQL</a>
 <ul class="sectlevel2">
-<li><a href="#_安装_3">10.1. 安装</a></li>
+<li><a href="#_安装_4">10.1. 安装</a></li>
 <li><a href="#_常用命令">10.2. 常用命令</a>
 <ul class="sectlevel3">
 <li><a href="#_创建用户开放指定host登录">10.2.1. 创建用户、开放指定HOST登录</a></li>
@@ -1642,7 +1654,170 @@ zabbix网页配置:配置&#8212;&#8203;主机&#8212;&#8203;创建主机,模板--
 <div class="sect1">
 <h2 id="_Gitlab_chapter">8. Gitlab</h2>
 <div class="sectionbody">
+<div class="sect2">
+<h3 id="_安装_3">8.1. 安装</h3>
+<div class="paragraph">
+<p><strong>文档地址</strong></p>
+</div>
+<div class="paragraph">
+<p><a href="https://docs.gitlab.com/ee/install/requirements.html">官方文档</a></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl -s https://packages.gitlab.com/install/repositories/gitlab/gitlab-ce/script.rpm.sh | bash
+
+EXTERNAL_URL="http://192.168.43.65:8000"  yum install -y gitlab-ce</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+官方文档的下载地址速度比较慢,可以使用清华源下载: <a href="https://mirrors.tuna.tsinghua.edu.cn/help/gitlab-ce/">镜像地址</a>
+</td>
+</tr>
+</table>
+</div>
+<div class="listingblock">
+<div class="title">重新配置（恢复默认配置) 重启服务</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">gitlab-ctl reconfigure &amp;&amp; gitlab-ctl restart</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>安装完毕后访问: http:/192.168.43.65:8000</p>
+</div>
+<div class="paragraph">
+<p>默认登录用户 root，密码第一次访问会提示修改</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_nginx反代gitlab">8.2. Nginx反代GitLab</h3>
+<div class="paragraph">
+<p>安装GitLab之后，通过单独的Nginx反代，暴露给外网访问。由于Nginx配置和GitLab内部的访问端口不同，为保证功能正常使用，需要修改GitLab配置</p>
+</div>
+<div class="sect3">
+<h4 id="_gitlab设置">8.2.1. GitLab设置</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"># 禁用默认配置
+sed -i 's/^external_url /#external_url /g' /etc/gitlab/gitlab.rb
+
+
+cat &lt;&lt; EOF &gt;&gt; /etc/gitlab/gitlab.rb
+# 本地暴露端口
+external_url 'http://192.168.43.65:8000/'
+
+# Git SSH Clone相关参数
+gitlab_rails['gitlab_ssh_host'] = 'git.xxx.com'
+EOF
+
+
+# 重新生成配置并重启
+gitlab-ctl reconfigure &amp;&amp; gitlab-ctl restart
+
+# 确认Nginx服务状态
+ss -antpl|grep 8000</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_设置http_clone相关参数">8.2.2. 设置HTTP Clone相关参数</h4>
+<div class="paragraph">
+<p>用管理员帐号登录GitLab，进入以下菜单：</p>
+</div>
+<div class="paragraph">
+<p><code>Admin Area</code> &gt; <code>Settings</code> &gt; <code>General</code> &gt; <code>Visibility and access controls</code></p>
+</div>
+<div class="paragraph">
+<p>找到 <code>Custom Git clone URL for HTTP(S)</code>，根据实际情况填写，比如：<code><a href="https://git.xxx.com:2035" class="bare">https://git.xxx.com:2035</a></code></p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_nginx_server配置">8.2.3. Nginx Server配置</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">cat &lt;&lt;EOF&gt; /etc/nginx/conf.d/gitlab.conf
+server {
+    listen 2035 ssl http2;
+    server_name git.xxx.com;
+
+    # certs sent to the client in SERVER HELLO are concatenated in ssl_certificate
+    ssl_certificate /etc/letsencrypt/live/xxx.com/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/xxx.com/privkey.pem;
+    ssl_session_timeout 1d;
+    ssl_session_cache shared:SSL:50m;
+    ssl_session_tickets off;
+
+    # Diffie-Hellman parameter for DHE ciphersuites, recommended 2048 bits
+    ssl_dhparam /etc/letsencrypt/live/xxx.com/dhparam.pem;
+
+    # intermediate configuration. tweak to your needs.
+    ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
+    ssl_ciphers 'ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-AES128-SHA256:ECDHE-RSA-AES128-SHA256:ECDHE-ECDSA-AES128-SHA:ECDHE-RSA-AES256-SHA384:ECDHE-RSA-AES128-SHA:ECDHE-ECDSA-AES256-SHA384:ECDHE-ECDSA-AES256-SHA:ECDHE-RSA-AES256-SHA:DHE-RSA-AES128-SHA256:DHE-RSA-AES128-SHA:DHE-RSA-AES256-SHA256:DHE-RSA-AES256-SHA:ECDHE-ECDSA-DES-CBC3-SHA:ECDHE-RSA-DES-CBC3-SHA:EDH-RSA-DES-CBC3-SHA:AES128-GCM-SHA256:AES256-GCM-SHA384:AES128-SHA256:AES256-SHA256:AES128-SHA:AES256-SHA:DES-CBC3-SHA:!DSS';
+    ssl_prefer_server_ciphers on;
+
+    # HSTS (ngx_http_headers_module is required) (15768000 seconds = 6 months)
+    add_header Strict-Transport-Security max-age=15768000;
+
+    # OCSP Stapling ---
+    # fetch OCSP records from URL in ssl_certificate and cache them
+    ssl_stapling on;
+    ssl_stapling_verify on;
+
+    # 替换URL，解决README.md之类无法加载的问题
+    sub_filter 'http://git.xxx.com'  'https://git.xxx.com';
+    sub_filter_once off;
+    sub_filter_last_modified on;
+    # 替换 text/html application/json HTTP响应包中的内容
+    sub_filter_types application/json;
+
+    location / {
+        auth_basic           "Administrator’s Area";
+        auth_basic_user_file /etc/nginx/.htpasswd;
+
+        # 必须设置，否则新建项目后，会302跳转到http的80端口
+        proxy_set_header Host git.xxx.com:2035;
+        proxy_set_header X-Real-IP $remote_addr;
+        #proxy_set_header X-Forwarded-Proto https;
+
+        proxy_pass http://0.0.0.0:8000;
+    }
+
+    location ~ ^/\.git/? {
+        return 404;
+    }
+}
+EOF</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">生效Nginx配置</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">nginx -t &amp;&amp; nginx -s reload</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_最后">8.2.4. 最后</h4>
+<div class="paragraph">
+<p>外网GitLab访问地址
+<a href="https://git.xxx.com" class="bare">https://git.xxx.com</a></p>
+</div>
+<div class="paragraph">
+<p>SSH克隆地址
+ssh://git@git.xxx.com/用户名/项目名称.git</p>
+</div>
+<div class="paragraph">
+<p>HTTP克隆地址
+<a href="https://git.xxx.com:2035/用户名/项目名称.git" class="bare">https://git.xxx.com:2035/用户名/项目名称.git</a></p>
+</div>
 <div style="page-break-after: always;"></div>
+</div>
+</div>
 </div>
 </div>
 <div class="sect1">
@@ -1655,7 +1830,7 @@ zabbix网页配置:配置&#8212;&#8203;主机&#8212;&#8203;创建主机,模板--
 <h2 id="_MySQL_chapter">10. MySQL</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_安装_3">10.1. 安装</h3>
+<h3 id="_安装_4">10.1. 安装</h3>
 <div class="listingblock">
 <div class="title">安装 MySQL</div>
 <div class="content">
