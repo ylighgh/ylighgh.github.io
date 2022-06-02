@@ -796,12 +796,16 @@ p { margin-bottom: 1.25rem; }
 <li><a href="#_添加主机">4.3. 添加主机</a></li>
 </ul>
 </li>
-<li><a href="#_Jenkins_chapter">5. Jenkins</a></li>
+<li><a href="#_Jenkins_chapter">5. Jenkins</a>
+<ul class="sectlevel2">
+<li><a href="#_安装_3">5.1. 安装</a></li>
+</ul>
+</li>
 <li><a href="#_RabbitMQ_chapter">6. RabbitMQ</a></li>
 <li><a href="#_Kafka_chapter">7. Kafka</a></li>
 <li><a href="#_Gitlab_chapter">8. Gitlab</a>
 <ul class="sectlevel2">
-<li><a href="#_安装_3">8.1. 安装</a></li>
+<li><a href="#_安装_4">8.1. 安装</a></li>
 <li><a href="#_nginx反代gitlab">8.2. Nginx反代GitLab</a>
 <ul class="sectlevel3">
 <li><a href="#_gitlab设置">8.2.1. GitLab设置</a></li>
@@ -817,7 +821,7 @@ p { margin-bottom: 1.25rem; }
 <li><a href="#_Git_chapter">9. Git</a></li>
 <li><a href="#_MySQL_chapter">10. MySQL</a>
 <ul class="sectlevel2">
-<li><a href="#_安装_4">10.1. 安装</a></li>
+<li><a href="#_安装_5">10.1. 安装</a></li>
 <li><a href="#_常用命令_2">10.2. 常用命令</a>
 <ul class="sectlevel3">
 <li><a href="#_创建用户开放指定host登录">10.2.1. 创建用户、开放指定HOST登录</a></li>
@@ -1638,7 +1642,27 @@ zabbix网页配置:配置&#8212;&#8203;主机&#8212;&#8203;创建主机,模板--
 <div class="sect1">
 <h2 id="_Jenkins_chapter">5. Jenkins</h2>
 <div class="sectionbody">
+<div class="sect2">
+<h3 id="_安装_3">5.1. 安装</h3>
+<div class="paragraph">
+<p><a href="https://get.jenkins.io/war-stable/">Jenkins War包</a></p>
+</div>
+<div class="paragraph">
+<p>需要Java环境</p>
+</div>
+<div class="listingblock">
+<div class="title">安装</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"># 先用代理启动，Jenkins初始化需要安装许多外网插件，插件安装完后去掉代理，正常启动
+java -DsocksProxyHost=192.168.2.5 -DsocksProxyPort=1080 -jar jenkins.war
+
+
+# 后台启动
+nohup java -jar jenkins.war &amp;</code></pre>
+</div>
+</div>
 <div style="page-break-after: always;"></div>
+</div>
 </div>
 </div>
 <div class="sect1">
@@ -1657,7 +1681,7 @@ zabbix网页配置:配置&#8212;&#8203;主机&#8212;&#8203;创建主机,模板--
 <h2 id="_Gitlab_chapter">8. Gitlab</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_安装_3">8.1. 安装</h3>
+<h3 id="_安装_4">8.1. 安装</h3>
 <div class="paragraph">
 <p><strong>文档地址</strong></p>
 </div>
@@ -1710,7 +1734,7 @@ sed -i 's/^external_url /#external_url /g' /etc/gitlab/gitlab.rb
 
 cat &lt;&lt; EOF &gt;&gt; /etc/gitlab/gitlab.rb
 # 设置gitlab对外暴露的地址
-external_url 'https://git.xxx.com::2053'
+external_url 'https://git.xxx.com:2035'
 
 # Git SSH Clone相关参数
 gitlab_rails['gitlab_ssh_host'] = 'git.xxx.com'
@@ -1915,7 +1939,7 @@ cat /opt/gitlab/embedded/service/gitlab-rails/VERSION</code></pre>
 <h2 id="_MySQL_chapter">10. MySQL</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_安装_4">10.1. 安装</h3>
+<h3 id="_安装_5">10.1. 安装</h3>
 <div class="listingblock">
 <div class="title">安装 MySQL</div>
 <div class="content">
