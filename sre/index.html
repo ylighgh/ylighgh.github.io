@@ -1654,10 +1654,13 @@ zabbix网页配置:配置&#8212;&#8203;主机&#8212;&#8203;创建主机,模板--
 <div class="title">安装</div>
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"># 先用代理启动，Jenkins初始化需要安装许多外网插件，插件安装完后去掉代理，正常启动
-java -DsocksProxyHost=192.168.2.5 -DsocksProxyPort=1080 -jar jenkins.war
-
-
-# 后台启动
+java -DsocksProxyHost=192.168.2.5 -DsocksProxyPort=1080 -jar jenkins.war</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">启动</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"># 后台启动
 nohup java -jar jenkins.war &amp;</code></pre>
 </div>
 </div>
