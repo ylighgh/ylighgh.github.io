@@ -900,11 +900,16 @@ p { margin-bottom: 1.25rem; }
 </li>
 </ul>
 </li>
-<li><a href="#_Shell_chapter">15. Shell</a>
+<li><a href="#_Docker_chapter">15. Docker</a>
 <ul class="sectlevel2">
-<li><a href="#_nginx">15.1. Nginx</a>
+<li><a href="#_安装_6">15.1. 安装</a></li>
+</ul>
+</li>
+<li><a href="#_Shell_chapter">16. Shell</a>
+<ul class="sectlevel2">
+<li><a href="#_nginx">16.1. Nginx</a>
 <ul class="sectlevel3">
-<li><a href="#_nginxkeepalived健康检查">15.1.1. Nginx+Keepalived健康检查</a></li>
+<li><a href="#_nginxkeepalived健康检查">16.1.1. Nginx+Keepalived健康检查</a></li>
 </ul>
 </li>
 </ul>
@@ -3378,12 +3383,107 @@ EOF</code></pre>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_Shell_chapter">15. Shell</h2>
+<h2 id="_Docker_chapter">15. Docker</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_nginx">15.1. Nginx</h3>
+<h3 id="_安装_6">15.1. 安装</h3>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">官方文档</dt>
+<dd>
+<p><a href="https://docs.docker.com" class="bare">https://docs.docker.com</a></p>
+</dd>
+</dl>
+</div>
+<div class="listingblock">
+<div class="title">向脚本文件追加内容</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">cat &lt;&lt; EOF &gt; docker_install.sh
+#Uninstall old versions
+yum -y remove docker \
+                  docker-client \
+                  docker-client-latest \
+                  docker-common \
+                  docker-latest \
+                  docker-latest-logrotate \
+                  docker-logrotate \
+                  docker-engine
+
+#SET UP THE REPOSITORY
+yum -y install yum-utils
+yum-config-manager --add-repo http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo
+
+#INSTALL DOCKER ENGINE
+yum -y install docker-ce docker-ce-cli containerd.io
+systemctl enable docker
+systemctl start docker
+
+#配置镜像加速
+mkdir -p /etc/docker
+echo "{" &gt; /etc/docker/daemon.json
+echo   '  "registry-mirrors": ["https://ueeg7jo6.mirror.aliyuncs.com"]  '   &gt;&gt; /etc/docker/daemon.json
+echo "}" &gt;&gt; /etc/docker/daemon.json
+
+#重载Docker，使配置生效
+systemctl daemon-reload
+systemctl restart docker
+EOF</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">给脚本授予执行权限</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">chmod +x docker_install.sh</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">执行脚本</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">sh docker_install.sh</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<div class="title">测试</div>
+<p>执行: <code>docker run hello-world</code></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">[ylighgh@docker ~]# docker run hello-world
+
+Hello from Docker!
+This message shows that your installation appears to be working correctly.
+
+To generate this message, Docker took the following steps:
+ 1. The Docker client contacted the Docker daemon.
+ 2. The Docker daemon pulled the "hello-world" image from the Docker Hub.
+    (amd64)
+ 3. The Docker daemon created a new container from that image which runs the
+    executable that produces the output you are currently reading.
+ 4. The Docker daemon streamed that output to the Docker client, which sent it
+    to your terminal.
+
+To try something more ambitious, you can run an Ubuntu container with:
+ $ docker run -it ubuntu bash
+
+Share images, automate workflows, and more with a free Docker ID:
+ https://hub.docker.com/
+
+For more examples and ideas, visit:
+ https://docs.docker.com/get-started/</code></pre>
+</div>
+</div>
+<div style="page-break-after: always;"></div>
+<div style="page-break-after: always;"></div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_Shell_chapter">16. Shell</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_nginx">16.1. Nginx</h3>
 <div class="sect3">
-<h4 id="_nginxkeepalived健康检查">15.1.1. Nginx+Keepalived健康检查</h4>
+<h4 id="_nginxkeepalived健康检查">16.1.1. Nginx+Keepalived健康检查</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">cat &lt;&lt;EOF&gt; nginx_check.sh
@@ -3411,7 +3511,7 @@ EOF</code></pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2022-05-26 16:35:55 +0800
+Last updated 2022-06-21 22:13:59 +0800
 </div>
 </div>
 <script src="js/highlight.min.js"></script>
