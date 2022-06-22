@@ -903,6 +903,7 @@ p { margin-bottom: 1.25rem; }
 <li><a href="#_Docker_chapter">15. Docker</a>
 <ul class="sectlevel2">
 <li><a href="#_安装_6">15.1. 安装</a></li>
+<li><a href="#_基本使用">15.2. 基本使用</a></li>
 </ul>
 </li>
 <li><a href="#_Shell_chapter">16. Shell</a>
@@ -3473,6 +3474,40 @@ For more examples and ideas, visit:
 </div>
 </div>
 <div style="page-break-after: always;"></div>
+</div>
+<div class="sect2">
+<h3 id="_基本使用">15.2. 基本使用</h3>
+<div class="listingblock">
+<div class="title">创建一个应用</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">docker run</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">批量删除容器</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">docker rm -f $(docker ps -qa)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<div class="title">挂载文件</div>
+<p>需要持久化的数据: 日志 配置文件 业务数据 临时缓存数据</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"></code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">导入导出容器</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"># 导出容器
+docker export 容器ID &gt; 文件名.tar.gz
+
+# 导入容器
+cat 文件名.tar.gz |docker import - 镜像用户/镜像名:版本号</code></pre>
+</div>
+</div>
 <div style="page-break-after: always;"></div>
 </div>
 </div>
