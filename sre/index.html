@@ -828,6 +828,7 @@ p { margin-bottom: 1.25rem; }
 <li><a href="#_创建用户开放指定host登录">10.2.1. 创建用户、开放指定HOST登录</a></li>
 <li><a href="#_用户授权">10.2.2. 用户授权</a></li>
 <li><a href="#_备份与还原">10.2.3. 备份与还原</a></li>
+<li><a href="#_字符集">10.2.4. 字符集</a></li>
 </ul>
 </li>
 <li><a href="#_mysql集群">10.3. MySQL集群</a>
@@ -905,6 +906,14 @@ p { margin-bottom: 1.25rem; }
 <li><a href="#_安装_6">15.1. 安装</a></li>
 <li><a href="#_基本使用">15.2. 基本使用</a></li>
 <li><a href="#_私服镜像">15.3. 私服镜像</a></li>
+<li><a href="#_容器数据卷">15.4. 容器数据卷</a></li>
+<li><a href="#_程序启动命令汇总">15.5. 程序启动命令汇总</a>
+<ul class="sectlevel3">
+<li><a href="#_tomcat_2">15.5.1. Tomcat</a></li>
+<li><a href="#_mysql">15.5.2. MySQL</a></li>
+<li><a href="#_redis">15.5.3. Redis</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li><a href="#_Shell_chapter">16. Shell</a>
@@ -1985,9 +1994,13 @@ cat /opt/gitlab/embedded/service/gitlab-rails/VERSION</code></pre>
 <div class="title">修改 <code>my.cnf</code></div>
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">cat &lt;&lt; EOF &gt; /etc/my.cnf
+[client]
+default_character_set = utf8
 [mysqld]
 datadir=/var/lib/mysql
 socket=/var/lib/mysql/mysql.sock
+collation_server = utf8_general_ci
+character_set_server = utf8
 # Disabling symbolic-links is recommended to prevent assorted security risks
 symbolic-links=0
 # Settings user and group are ignored when systemd is used.
@@ -2005,7 +2018,7 @@ tmp_table_size = 100M
 #query_cache_limit=4M
 #query_cache_type=on
 #query_cache_size=2G
-bind-address = 127.0.0.1
+#bind-address = 127.0.0.1
 # 跳过主机名解析，比如localhost，foo.com之类，加速访问
 skip-name-resolve
 # SQL执行日志
@@ -2185,6 +2198,15 @@ GRANT ALL ON db_name.table_name TO yss@'%' IDENTIFIED BY '123456';</code></pre>
 </td>
 </tr>
 </table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_字符集">10.2.4. 字符集</h4>
+<div class="listingblock">
+<div class="title">查看本机字符集</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">show variables like 'character%';</code></pre>
+</div>
 </div>
 </div>
 </div>
@@ -3533,15 +3555,6 @@ docker update --restart=no &lt;CONTAINER ID&gt;
 docker update --restart=no tomcat</code></pre>
 </div>
 </div>
-<div class="paragraph">
-<div class="title">挂载文件</div>
-<p>需要持久化的数据: 日志 配置文件 业务数据 临时缓存数据</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"></code></pre>
-</div>
-</div>
 <div class="listingblock">
 <div class="title">导入导出容器</div>
 <div class="content">
@@ -3627,7 +3640,84 @@ hello-world                                             latest    feb5d9fea6a5  
 redis                                                   6.0.8     16ecd2772934   20 months ago   104MB</code></pre>
 </div>
 </div>
+</div>
+<div class="sect2">
+<h3 id="_容器数据卷">15.4. 容器数据卷</h3>
+<div class="paragraph">
+<div class="title">挂载文件</div>
+<p>需要持久化的数据: 日志 配置文件 业务数据 临时缓存数据</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">docker run -it --privileged=true -v /宿主机绝对路径:/容器内目录 镜像名</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">容器卷继承</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">docker run -it --privileged=true -volumes-from 容器名1 --name 容器名2 镜像名</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_程序启动命令汇总">15.5. 程序启动命令汇总</h3>
+<div class="sect3">
+<h4 id="_tomcat_2">15.5.1. Tomcat</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">docker run -d -p 8080:8080 --name mytomcat8 billygoo/tomcat8-jdk8</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_mysql">15.5.2. MySQL</h4>
+<div class="listingblock">
+<div class="title">修改默认字符</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">cat &lt;&lt;EOF&gt; /docker/mysql/conf/my.cnf
+[client]
+default_character_set = utf8
+[mysqld]
+collation_server = utf8_general_ci
+character_set_server = utf8
+EOF</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">启动</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">docker run -d -p 3306:3306 --privileged=true \
+-v /docker/mysql/log:/var/log/mysql \
+-v /docker/mysql/data:/var/lib/mysql \
+-v /docker/mysql/conf:/etc/mysql/conf.d \
+-v /etc/localtime:/etc/localtime \
+-e MYSQL_ROOT_PASSWORD=my-secret-pw \
+-d mysql:5.7</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_redis">15.5.3. Redis</h4>
+<div class="listingblock">
+<div class="title">准备配置文件</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">mkdir -p /docker/redis/
+
+wget https://raw.githubusercontent.com/antirez/redis/6.0.8/redis.conf -O /docker/redis/redis.conf</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">启动</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">docker run -p 6379:6379 --privileged=true \
+-v /docker/redis/redis.conf:/etc/redis/redis.conf \
+-v /docker/redis/data:/data \
+-v /etc/localtime:/etc/localtime \
+-d redis:6.0.8 redis-server /etc/redis/redis.conf</code></pre>
+</div>
+</div>
 <div style="page-break-after: always;"></div>
+</div>
 </div>
 </div>
 </div>
