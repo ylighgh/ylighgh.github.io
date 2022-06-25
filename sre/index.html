@@ -920,6 +920,7 @@ p { margin-bottom: 1.25rem; }
 <li><a href="#_从节点配置">15.6.2. 从节点配置</a></li>
 </ul>
 </li>
+<li><a href="#_dockerfile">15.7. DockerFile</a></li>
 </ul>
 </li>
 <li><a href="#_Shell_chapter">16. Shell</a>
@@ -3851,8 +3852,41 @@ docker exec -it mysql-slave bash
 mysql -uroot -p123456 -e 'change master to master_host="IP",master_user="slave",master_password="123456",master_port=3307,master_log_file="xxxx",master_log_pos=xxxx;start slave;flush privileges;'</code></pre>
 </div>
 </div>
-<div style="page-break-after: always;"></div>
 </div>
+</div>
+<div class="sect2">
+<h3 id="_dockerfile">15.7. DockerFile</h3>
+<div class="listingblock">
+<div class="title">构建</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">docker build -d 新镜像名字:TAG .</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">CentOS7JDK11脚本</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">FROM centos:centos7
+MAINTAINER ylighgh&lt;yssuvu@gmail.com&gt;
+
+ENV MYPATH /usr/local
+WORKDIR $MYPATH
+
+RUN yum -y update
+RUN yum -y install vim
+RUN yum -y install net-tools
+RUN mkdir /usr/local/java
+ADD jdk-11.0.15.1_linux-x64_bin.tar.gz /usr/local/java
+ENV JAVA_HOME /usr/local/java/jdk-11.0.15.1
+ENV CLASSPATH $JAVA_HOME/lib/tools.jar:$JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib
+ENV PATH $JAVA_HOME/bin:$PATH
+
+
+CMD echo $MYPATH
+CMD echo "sucess------ok"
+CMD /bin/bash</code></pre>
+</div>
+</div>
+<div style="page-break-after: always;"></div>
 </div>
 </div>
 </div>
