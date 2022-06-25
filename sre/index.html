@@ -828,7 +828,8 @@ p { margin-bottom: 1.25rem; }
 <li><a href="#_创建用户开放指定host登录">10.2.1. 创建用户、开放指定HOST登录</a></li>
 <li><a href="#_用户授权">10.2.2. 用户授权</a></li>
 <li><a href="#_备份与还原">10.2.3. 备份与还原</a></li>
-<li><a href="#_字符集">10.2.4. 字符集</a></li>
+<li><a href="#_创建数据库时指定字符集">10.2.4. 创建数据库时指定字符集</a></li>
+<li><a href="#_字符集">10.2.5. 字符集</a></li>
 </ul>
 </li>
 <li><a href="#_mysql集群">10.3. MySQL集群</a>
@@ -921,6 +922,12 @@ p { margin-bottom: 1.25rem; }
 </ul>
 </li>
 <li><a href="#_dockerfile">15.7. DockerFile</a></li>
+<li><a href="#_docker网络">15.8. Docker网络</a></li>
+<li><a href="#_compose">15.9. Compose</a>
+<ul class="sectlevel3">
+<li><a href="#_安装_7">15.9.1. 安装</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li><a href="#_Shell_chapter">16. Shell</a>
@@ -2208,7 +2215,15 @@ GRANT ALL ON db_name.table_name TO yss@'%' IDENTIFIED BY '123456';</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_字符集">10.2.4. 字符集</h4>
+<h4 id="_创建数据库时指定字符集">10.2.4. 创建数据库时指定字符集</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">CREATE DATABASE db_name DEFAULT CHARACTER SET utf8mb4 DEFAULT COLLATE utf8mb4_unicode_ci;</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_字符集">10.2.5. 字符集</h4>
 <div class="listingblock">
 <div class="title">查看本机字符集</div>
 <div class="content">
@@ -3693,7 +3708,7 @@ EOF</code></pre>
 <div class="listingblock">
 <div class="title">启动</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">docker run -d -p 3306:3306 --privileged=true \
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">docker run -p 3306:3306 --privileged=true \
 -v /docker/mysql/log:/var/log/mysql \
 -v /docker/mysql/data:/var/lib/mysql \
 -v /docker/mysql/conf:/etc/mysql/conf.d \
@@ -3886,7 +3901,60 @@ CMD echo "sucess------ok"
 CMD /bin/bash</code></pre>
 </div>
 </div>
+</div>
+<div class="sect2">
+<h3 id="_docker网络">15.8. Docker网络</h3>
+<div class="listingblock">
+<div class="title">新建桥接网络</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">docker network create my_network</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">查看网络</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">docker network ls
+
+[root@nginx ~]# docker network  ls
+NETWORK ID     NAME         DRIVER    SCOPE
+09b399066c7f   bridge       bridge    local
+e6561971bc9b   host         host      local
+ba98f0f4f1df   my_network   bridge    local
+e50b1a449286   none         null      local</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">将容器加入至网络</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">docker run -d -p 8081:8080 --network my_network --name tomcat81 billygoo/tomcat8-jdk8</code></pre>
+</div>
+</div>
 <div style="page-break-after: always;"></div>
+</div>
+<div class="sect2">
+<h3 id="_compose">15.9. Compose</h3>
+<div class="paragraph">
+<p><a href="https://docs.docker.com/compose/">官方文档</a></p>
+</div>
+<div class="sect3">
+<h4 id="_安装_7">15.9.1. 安装</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"># 下载
+curl -SL https://github.com/docker/compose/releases/download/v2.6.1/docker-compose-linux-x86_64 -o /usr/local/bin/docker-compose
+
+# 授予执行权限
+chmod +x /usr/local/bin/docker-compose
+
+# 创建软链接
+ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
+
+# 检测
+docker-compose --version</code></pre>
+</div>
+</div>
+<div style="page-break-after: always;"></div>
+</div>
 </div>
 </div>
 </div>
