@@ -800,6 +800,7 @@ p { margin-bottom: 1.25rem; }
 <li><a href="#_Jenkins_chapter">5. Jenkins</a>
 <ul class="sectlevel2">
 <li><a href="#_安装_3">5.1. 安装</a></li>
+<li><a href="#_插件">5.2. 插件</a></li>
 </ul>
 </li>
 <li><a href="#_RabbitMQ_chapter">6. RabbitMQ</a></li>
@@ -921,8 +922,8 @@ p { margin-bottom: 1.25rem; }
 <li><a href="#_程序启动命令汇总">15.5. 程序启动命令汇总</a>
 <ul class="sectlevel3">
 <li><a href="#_tomcat_2">15.5.1. Tomcat</a></li>
-<li><a href="#_mysql">15.5.2. MySQL</a></li>
-<li><a href="#_redis">15.5.3. Redis</a></li>
+<li><a href="#_redis">15.5.2. Redis</a></li>
+<li><a href="#_mysql">15.5.3. MySQL</a></li>
 </ul>
 </li>
 <li><a href="#_mysql主从">15.6. MySQL主从</a>
@@ -936,15 +937,21 @@ p { margin-bottom: 1.25rem; }
 <li><a href="#_compose">15.9. Compose</a>
 <ul class="sectlevel3">
 <li><a href="#_安装_7">15.9.1. 安装</a></li>
+<li><a href="#_jenkins">15.9.2. Jenkins</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li><a href="#_Shell_chapter">16. Shell</a>
+<li><a href="#_Maven_chapter">16. Maven</a>
 <ul class="sectlevel2">
-<li><a href="#_nginx">16.1. Nginx</a>
+<li><a href="#_安装_8">16.1. 安装</a></li>
+</ul>
+</li>
+<li><a href="#_Shell_chapter">17. Shell</a>
+<ul class="sectlevel2">
+<li><a href="#_nginx">17.1. Nginx</a>
 <ul class="sectlevel3">
-<li><a href="#_nginxkeepalived健康检查">16.1.1. Nginx+Keepalived健康检查</a></li>
+<li><a href="#_nginxkeepalived健康检查">17.1.1. Nginx+Keepalived健康检查</a></li>
 </ul>
 </li>
 </ul>
@@ -1723,6 +1730,15 @@ java -DsocksProxyHost=192.168.2.5 -DsocksProxyPort=1080 -jar jenkins.war</code><
 nohup java -jar jenkins.war &amp;</code></pre>
 </div>
 </div>
+</div>
+<div class="sect2">
+<h3 id="_插件">5.2. 插件</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">1. git parameter
+2. publish over ssh</code></pre>
+</div>
+</div>
 <div style="page-break-after: always;"></div>
 </div>
 </div>
@@ -1777,6 +1793,9 @@ EXTERNAL_URL="http://192.168.43.65:8000"  yum install -y gitlab-ce</code></pre>
 </div>
 <div class="paragraph">
 <p>安装完毕后访问: http:/192.168.43.65:8000</p>
+</div>
+<div class="paragraph">
+<p><code>cat /etc/gitlab/initial_root_password</code></p>
 </div>
 <div class="paragraph">
 <p>默认登录用户 root，密码第一次访问会提示修改</p>
@@ -3797,7 +3816,28 @@ redis                                                   6.0.8     16ecd2772934  
 </div>
 </div>
 <div class="sect3">
-<h4 id="_mysql">15.5.2. MySQL</h4>
+<h4 id="_redis">15.5.2. Redis</h4>
+<div class="listingblock">
+<div class="title">准备配置文件</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">mkdir -p /docker/redis/
+
+wget https://raw.githubusercontent.com/antirez/redis/6.0.8/redis.conf -O /docker/redis/redis.conf</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">启动</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">docker run -p 6379:6379 --privileged=true \
+-v /docker/redis/redis.conf:/etc/redis/redis.conf \
+-v /docker/redis/data:/data \
+-v /etc/localtime:/etc/localtime \
+-d redis:6.0.8 redis-server /etc/redis/redis.conf</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_mysql">15.5.3. MySQL</h4>
 <div class="listingblock">
 <div class="title">修改默认字符</div>
 <div class="content">
@@ -3820,27 +3860,6 @@ EOF</code></pre>
 -v /etc/localtime:/etc/localtime \
 -e MYSQL_ROOT_PASSWORD=my-secret-pw \
 -d mysql:5.7</code></pre>
-</div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_redis">15.5.3. Redis</h4>
-<div class="listingblock">
-<div class="title">准备配置文件</div>
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">mkdir -p /docker/redis/
-
-wget https://raw.githubusercontent.com/antirez/redis/6.0.8/redis.conf -O /docker/redis/redis.conf</code></pre>
-</div>
-</div>
-<div class="listingblock">
-<div class="title">启动</div>
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">docker run -p 6379:6379 --privileged=true \
--v /docker/redis/redis.conf:/etc/redis/redis.conf \
--v /docker/redis/data:/data \
--v /etc/localtime:/etc/localtime \
--d redis:6.0.8 redis-server /etc/redis/redis.conf</code></pre>
 </div>
 </div>
 </div>
@@ -4058,18 +4077,107 @@ ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
 docker-compose --version</code></pre>
 </div>
 </div>
+</div>
+<div class="sect3">
+<h4 id="_jenkins">15.9.2. Jenkins</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">mkdir -p /usr/local/docker/jenkins_docker/data
+chmod -R 777 /usr/local/docker/jenkins_docker/data
+
+cat &lt;&lt;EOF&gt; /usr/local/docker/jenkins_docker/docker-compose
+version: "3.1"
+services:
+   jenkins:
+       image: jenkins/jenkins:2.319.1-lts
+       container_name: jenkins
+       ports:
+          - 8080:8080
+          - 50000:50000
+       volumes:
+          - ./data:/var/jenkins_home/
+EOF
+
+cd /usr/local/docker/jenkins_docker &amp;&amp; docker-compose up -d</code></pre>
+</div>
+</div>
 <div style="page-break-after: always;"></div>
 </div>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_Shell_chapter">16. Shell</h2>
+<h2 id="_Maven_chapter">16. Maven</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_nginx">16.1. Nginx</h3>
+<h3 id="_安装_8">16.1. 安装</h3>
+<div class="paragraph">
+<p><a href="https://maven.apache.org/download.cgi">下载地址</a></p>
+</div>
+<div class="listingblock">
+<div class="title">下载</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">wget -C https://dlcdn.apache.org/maven/maven-3/3.8.6/binaries/apache-maven-3.8.6-bin.tar.gz</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">解压</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">tar xf apache-maven-3.8.6-bin.tar.gz -C /usr/local
+
+mv /usr/local/apache-maven-3.8.6 /usr/local/maven</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">配置环境变量</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">#添加环境变量
+ln -s /usr/local/maven/bin/mvn /usr/local/bin/
+
+#查看版本
+mvn -v</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">修改setting.xml</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">&lt;mirror&gt;
+    &lt;id&gt;aliyun&lt;/id&gt;
+    &lt;name&gt;Aliyun Central&lt;/name&gt;
+    &lt;url&gt;http://maven.aliyun.com/nexus/content/groups/public/&lt;/url&gt;
+    &lt;mirrorOf&gt;central&lt;/mirrorOf&gt;
+&lt;/mirror&gt;
+
+&lt;profile&gt;
+    &lt;id&gt;jdk18&lt;/id&gt;
+    &lt;activation&gt;
+        &lt;activeByDefault&gt;true&lt;/activeByDefault&gt;
+        &lt;jdk&gt;1.8&lt;/jdk&gt;
+    &lt;/activation&gt;
+    &lt;properties&gt;
+        &lt;maven.compiler.source&gt;1.8&lt;/maven.compiler.source&gt;
+        &lt;maven.compiler.target&gt;1.8&lt;/maven.compiler.target&gt;
+        &lt;maven.compiler.compilerVersion&gt;1.8&lt;/maven.compiler.compilerVersion&gt;
+    &lt;/properties&gt;
+&lt;/profile&gt;
+
+
+&lt;activeProfiles&gt;
+    &lt;activeProfile&gt;jdk8&lt;/activeProfile&gt;
+&lt;/activeProfiles&gt;</code></pre>
+</div>
+</div>
+<div style="page-break-after: always;"></div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_Shell_chapter">17. Shell</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_nginx">17.1. Nginx</h3>
 <div class="sect3">
-<h4 id="_nginxkeepalived健康检查">16.1.1. Nginx+Keepalived健康检查</h4>
+<h4 id="_nginxkeepalived健康检查">17.1.1. Nginx+Keepalived健康检查</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">cat &lt;&lt;EOF&gt; nginx_check.sh
@@ -4097,7 +4205,7 @@ EOF</code></pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2022-06-29 14:18:02 +0800
+Last updated 2022-06-29 21:26:31 +0800
 </div>
 </div>
 <script src="js/highlight.min.js"></script>
