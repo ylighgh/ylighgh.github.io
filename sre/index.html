@@ -1751,25 +1751,23 @@ nohup java -jar jenkins.war &amp;</code></pre>
 </div>
 <div class="sect2">
 <h3 id="_pipeline">5.3. PipeLine</h3>
-<div class="paragraph">
-<p>pipeline{
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">// 所有脚本命令都放在pipeline
+pipeline{
     // 指定任务构建在哪个集群执行
-    agent any</p>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>// 声明全局变量
-environment{
-    Harbor_User = 'admin'
-    Harbor_PassWord = 'Nuttertools123..'
-    Harbor_Addr = '192.168.0.150:80'
-    Harbor_Repo = 'repo'
-}</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>    stages {
+    agent any
+
+    // 声明全局变量
+    environment{
+        Harbor_User = 'admin'
+        Harbor_PassWord = 'Nuttertools123..'
+        Harbor_Addr = '192.168.0.150:80'
+        Harbor_Repo = 'repo'
+    }
+
+
+    stages {
         stage('拉取git仓库代码') {
             steps {
                 checkout([$class: 'GitSCM', branches: [[name: '${tag}']], extensions: [], userRemoteConfigs: [[url: 'https://git.yssuvu.xyz:2035/root/mytest.git']]])
@@ -1822,7 +1820,7 @@ environment{
             )
         }
     }
-}</pre>
+}</code></pre>
 </div>
 </div>
 <div style="page-break-after: always;"></div>
