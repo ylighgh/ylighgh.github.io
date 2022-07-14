@@ -935,16 +935,23 @@ p { margin-bottom: 1.25rem; }
 </li>
 <li><a href="#_dockerfile">15.7. DockerFile</a></li>
 <li><a href="#_docker网络">15.8. Docker网络</a></li>
+<li><a href="#_compose">15.9. Compose</a>
+<ul class="sectlevel3">
+<li><a href="#_安装_7">15.9.1. 安装</a></li>
+<li><a href="#_jenkins">15.9.2. Jenkins</a></li>
+<li><a href="#_sonarqube">15.9.3. SonarQube</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li><a href="#_Maven_chapter">16. Maven</a>
 <ul class="sectlevel2">
-<li><a href="#_安装_7">16.1. 安装</a></li>
+<li><a href="#_安装_8">16.1. 安装</a></li>
 </ul>
 </li>
 <li><a href="#_Harbor_chapter">17. Harbor</a>
 <ul class="sectlevel2">
-<li><a href="#_安装_8">17.1. 安装</a></li>
+<li><a href="#_安装_9">17.1. 安装</a></li>
 <li><a href="#_使用">17.2. 使用</a></li>
 </ul>
 </li>
@@ -4142,9 +4149,92 @@ e50b1a449286   none         null      local</code></pre>
 </div>
 </div>
 <div style="page-break-after: always;"></div>
+</div>
+<div class="sect2">
+<h3 id="_compose">15.9. Compose</h3>
 <div class="paragraph">
-<p>Unresolved directive in book/15-Docker/Docker.asc - include::sections/Compose.asc[]
-&lt;&lt;&lt;</p>
+<p><a href="https://docs.docker.com/compose/">官方文档</a></p>
+</div>
+<div class="sect3">
+<h4 id="_安装_7">15.9.1. 安装</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"># 下载
+curl -SL https://github.com/docker/compose/releases/download/v2.6.1/docker-compose-linux-x86_64 -o /usr/local/bin/docker-compose
+# 授予执行权限
+chmod +x /usr/local/bin/docker-compose
+# 创建软链接
+ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
+# 检测
+docker-compose --version</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_jenkins">15.9.2. Jenkins</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">mkdir -p /usr/local/docker/jenkins_docker/data
+chmod -R 777 /usr/local/docker/jenkins_docker/data
+cat &lt;&lt;EOF&gt; /usr/local/docker/jenkins_docker/docker-compose
+version: "3.1"
+services:
+   jenkins:
+       image: jenkins/jenkins:2.319.1-lts
+       container_name: jenkins
+       ports:
+          - 8080:8080
+          - 50000:50000
+       volumes:
+          - ./data:/var/jenkins_home/
+EOF
+cd /usr/local/docker/jenkins_docker &amp;&amp; docker-compose up -d</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_sonarqube">15.9.3. SonarQube</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">echo "vm.max_map_count=262144" &gt;&gt; /etc/sysctl.conf
+sysctl -p
+mkdir -p /usr/local/docker/sonarqube_docker
+chmod -R /usr/local/docker/sonarqube_docker
+cat &lt;&lt;EOF&gt; /usr/local/docker/sonarqube_docker/docker-compose
+version: "3.1"
+services:
+  db:
+    image: postgres
+    container_name: db
+    ports:
+      - 5432:5432
+    networks:
+      - sonarnet
+    environment:
+      POSTGRES_USER: sonar
+      POSTGRES_PASSWORD: sonar
+  sonarqube:
+    image: sonarqube:8.9.6-community
+    container_name: sonarqube
+    depends_on:
+      - db
+    ports:
+      - 9000:9000
+    networks:
+      - sonarnet
+    environment:
+      SONAR_JDBC_URL: jdbc:postgresql://db:5432/sonar
+      SONAR_JDBC_USERNAME: sonar
+      SONAR_JDBC_PASSWORD: sonar
+networks:
+  sonarnet:
+    driver: bridge
+EOF
+cd /usr/local/docker/sonarqube_docker &amp;&amp; docker-compose up -d</code></pre>
+</div>
+</div>
+<div style="page-break-after: always;"></div>
+<div style="page-break-after: always;"></div>
 </div>
 </div>
 </div>
@@ -4153,7 +4243,7 @@ e50b1a449286   none         null      local</code></pre>
 <h2 id="_Maven_chapter">16. Maven</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_安装_7">16.1. 安装</h3>
+<h3 id="_安装_8">16.1. 安装</h3>
 <div class="paragraph">
 <p><a href="https://maven.apache.org/download.cgi">下载地址</a></p>
 </div>
@@ -4218,7 +4308,7 @@ mvn -v</code></pre>
 <h2 id="_Harbor_chapter">17. Harbor</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_安装_8">17.1. 安装</h3>
+<h3 id="_安装_9">17.1. 安装</h3>
 <div class="paragraph">
 <p><a href="https://github.com/goharbor/harbor/releases">下载地址</a></p>
 </div>
