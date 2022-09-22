@@ -961,14 +961,48 @@ p { margin-bottom: 1.25rem; }
 <li><a href="#_文件存储服务">18.2. 文件存储服务</a></li>
 </ul>
 </li>
-<li><a href="#_Shell_chapter">19. Shell</a>
+<li><a href="#_Libvirt_chapter">19. Libvirt</a>
 <ul class="sectlevel2">
-<li><a href="#_nginx">19.1. Nginx</a>
+<li><a href="#_安装配置_2">19.1. 安装配置</a>
 <ul class="sectlevel3">
-<li><a href="#_nginxkeepalived健康检查">19.1.1. Nginx+Keepalived健康检查</a></li>
+<li><a href="#_安装kvm环境">19.1.1. 安装kvm环境</a></li>
 </ul>
 </li>
-<li><a href="#_cicd">19.2. CI/CD</a></li>
+<li><a href="#_安装虚拟机">19.2. 安装虚拟机</a>
+<ul class="sectlevel3">
+<li><a href="#_准备镜像文件">19.2.1. 准备镜像文件</a></li>
+<li><a href="#_增加虚拟机">19.2.2. 增加虚拟机</a></li>
+</ul>
+</li>
+<li><a href="#_常用命令_4">19.3. 常用命令</a>
+<ul class="sectlevel3">
+<li><a href="#_增加硬盘">19.3.1. 增加硬盘</a></li>
+</ul>
+</li>
+<li><a href="#_镜像文件扩容">19.4. 镜像文件扩容</a>
+<ul class="sectlevel3">
+<li><a href="#_增加镜像文件大小">19.4.1. 增加镜像文件大小</a></li>
+<li><a href="#_重建分区">19.4.2. 重建分区</a></li>
+<li><a href="#_重建文件系统">19.4.3. 重建文件系统</a></li>
+</ul>
+</li>
+<li><a href="#_添加分区设备映射">19.5. 添加分区设备映射</a></li>
+<li><a href="#_ext234">19.6. Ext2/3/4</a>
+<ul class="sectlevel3">
+<li><a href="#_删除分区设备映射">19.6.1. 删除分区设备映射</a></li>
+<li><a href="#_验证">19.6.2. 验证</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#_Shell_chapter">20. Shell</a>
+<ul class="sectlevel2">
+<li><a href="#_nginx">20.1. Nginx</a>
+<ul class="sectlevel3">
+<li><a href="#_nginxkeepalived健康检查">20.1.1. Nginx+Keepalived健康检查</a></li>
+</ul>
+</li>
+<li><a href="#_cicd">20.2. CI/CD</a></li>
 </ul>
 </li>
 </ul>
@@ -4631,20 +4665,432 @@ tmpfs                                          1000M   52K 1000M   1% /var/lib/c
 <dt class="hdlist1">TIP</dt>
 <dd>
 <p>secret 在 /etc/ceph/ceph.client.admin.keyring</p>
+</dd>
+</dl>
+</div>
 <div style="page-break-after: always;"></div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_Libvirt_chapter">19. Libvirt</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_安装配置_2">19.1. 安装配置</h3>
+<div class="sect3">
+<h4 id="_安装kvm环境">19.1.1. 安装kvm环境</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"># Archlinux
+sudo pacman -S virt-manager qemu-system-x86 vde2 ebtables dnsmasq bridge-utils openbsd-netcat qemu-base</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"># lsmod | grep kvm
+
+kvm_intel       138567  0
+kvm             441119  1 kvm_intel</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">systemctl enable --now libvirtd
+
+# 设置端口转发
+echo "net.ipv4.ip_forward = 1" &gt;&gt; /etc/sysctl.conf
+sysctl -p</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">验证</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ ip a
+4: virbr0: &lt;NO-CARRIER,BROADCAST,MULTICAST,UP&gt; mtu 1500 qdisc noqueue state DOWN group default qlen 1000
+    link/ether 52:54:00:d6:75:36 brd ff:ff:ff:ff:ff:ff
+    inet 192.168.122.1/24 brd 192.168.122.255 scope global virbr0
+       valid_lft forever preferred_lft forever</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_安装虚拟机">19.2. 安装虚拟机</h3>
+<div class="sect3">
+<h4 id="_准备镜像文件">19.2.1. 准备镜像文件</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">qemu-img create -f qcow2 /home/ylighgh/libvirt/images/ubuntu-22.04.img 10G</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_增加虚拟机">19.2.2. 增加虚拟机</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">virt-install \
+--name ubuntu-22.04 \
+--ram 4096 \
+--disk path=/home/ylighgh/libvirt/images/ubuntu-22.04.img,size=10 \
+--vcpus 2 \
+--os-type linux \
+--os-variant ubuntu22.04 \
+--network bridge=virbr0 \
+--console pty,target_type=serial \
+--cdrom=/home/ylighgh/Downloads/ubuntu-22.04.1-live-server-amd64.iso \
+--graphics vnc,password=123123,port=15424,listen=0.0.0.0
+
+# 从已经存在的镜像文件(tpl_win2k12r2.img)创建虚拟机
+virt-install \
+--name tpl_win2k12r2 \
+--ram 4048 \
+--disk path=/data/libvirt/images/tpl_win2k12r2.img \
+--vcpus 4 \
+--os-type windows \
+--os-variant win2k12r2 \
+--network bridge=virbr0 \
+--console pty,target_type=serial \
+--import \
+--graphics vnc,password=aC8W5It9nOyrXchH,port=-1,listen=0.0.0.0</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_常用命令_4">19.3. 常用命令</h3>
+<div class="sect3">
+<h4 id="_增加硬盘">19.3.1. 增加硬盘</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"># 准备磁盘文件
+qemu-img create -f qcow2 web-add.qcow2 2G
+
+# 临时添加
+virsh attach-disk web /opt/web-add.qcow2 vdb --subdriver qcow2　　　　　　
+
+# 永久添加
+virsh attach-disk web /opt/web-add.qcow2 vdb --subdriver qcow2  --config
+
+# 分离磁盘
+virsh detach-disk web vdb</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_镜像文件扩容">19.4. 镜像文件扩容</h3>
+<div class="sect3">
+<h4 id="_增加镜像文件大小">19.4.1. 增加镜像文件大小</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"># 增加2G
+qemu-img resize /home/ylighgh/workspace/libvirt/images/qemu-add.qcow2 +2G</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">确认容量</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">qemu-img info qemu-add.qcow2
+
+$ qemu-img info qemu-add.qcow2
+image: qemu-add.qcow2
+file format: qcow2
+virtual size: 4 GiB (4294967296 bytes)
+disk size: 2.2 MiB
+cluster_size: 65536
+Format specific information:
+    compat: 1.1
+    compression type: zlib
+    lazy refcounts: false
+    refcount bits: 16
+    corrupt: false
+    extended l2: false</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_重建分区">19.4.2. 重建分区</h4>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">TIP</dt>
+<dd>
+<p>如果没有分区，跳过此步</p>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>查看分区</p>
+</li>
+</ol>
+</div>
+</dd>
+</dl>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">parted -s /dev/vdc unit s pr</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">输出</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">ylighgh@kvm:~$ sudo parted -s /dev/vdc unit s pr
+Model: Virtio Block Device (virtblk)
+Disk /dev/vdc: 8388608s
+Sector size (logical/physical): 512B/512B
+Partition Table: msdos
+Disk Flags:
+
+Number  Start  End       Size      Type     File system  Flags
+ 1      2048s  4194303s  4192256s  primary  ext4
+
+其中8388608s为扇区总大小</code></pre>
+</div>
+</div>
+<div class="olist arabic">
+<ol class="arabic" start="2">
+<li>
+<p>添加分区设备映射</p>
+</li>
+</ol>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kpartx -a /dev/vdc</code></pre>
+</div>
+</div>
+<div class="olist arabic">
+<ol class="arabic" start="3">
+<li>
+<p>获取分区设备映射文件名</p>
+</li>
+</ol>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">ls /dev/mapper/vdc*
+
+ylighgh@kvm:~$ sudo ls /dev/mapper/vdc*
+/dev/mapper/vdc1</code></pre>
+</div>
+</div>
+<div class="olist arabic">
+<ol class="arabic" start="4">
+<li>
+<p>检查文件 Ext 文件系统</p>
+</li>
+</ol>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>e2fsck -fy /dev/mapper/vdc1</pre>
+</div>
+</div>
+<div class="olist arabic">
+<ol class="arabic" start="5">
+<li>
+<p>转换 Ext3/4 为 Ext2</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>移除 Ext3/4 日志后，相当于 Ext2。</p>
+</div>
+<div class="paragraph">
+<p>ext3 &#8594; ext2, ext3 - journal = ext2</p>
+</div>
+<div class="paragraph">
+<p>ext4 &#8594; (ext2 + ext4 features), ext4 - journal = ext2 + ext4 features</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">tune2fs -O ^has_journal /dev/mapper/vdc1</code></pre>
+</div>
+</div>
+<div class="olist arabic">
+<ol class="arabic" start="6">
+<li>
+<p>删除分区设备映射</p>
+</li>
+</ol>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>kpartx -d /dev/vdc</pre>
+</div>
+</div>
+<div class="olist arabic">
+<ol class="arabic" start="7">
+<li>
+<p>删除待扩容分区</p>
+</li>
+</ol>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">parted -s /dev/vdc rm 1</code></pre>
+</div>
+</div>
+<div class="olist arabic">
+<ol class="arabic" start="8">
+<li>
+<p>重建分区</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>镜像尾部保留一小部分空间，扇区总数量 - 3000 = 8385608</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">parted -s /dev/vdc unit s mkpart primary ext4 2048 8385608s</code></pre>
+</div>
+</div>
+<div class="olist arabic">
+<ol class="arabic" start="9">
+<li>
+<p>确认分区</p>
+</li>
+</ol>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">parted -s /dev/vdc unit s pr</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">输出：</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console"># parted -s /dev/vdc unit s pr
+Model: Virtio Block Device (virtblk)
+Disk /dev/vdc: 8388608s
+Sector size (logical/physical): 512B/512B
+Partition Table: msdos
+Disk Flags:
+
+Number  Start  End       Size      Type     File system  Flags
+ 1      2048s  8385608s  8383561s  primary  ext2</code></pre>
+</div>
+</div>
+<div class="olist arabic">
+<ol class="arabic" start="10">
+<li>
+<p>设置启动分区</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>如果处理的分区之前是启动分区，扩容后必须重新设置启动参数</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">parted -s /dev/vdc set 1 boot on</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_重建文件系统">19.4.3. 重建文件系统</h4>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">TIP</dt>
+<dd>
+<p>如果没有文件系统，跳过此步</p>
 </dd>
 </dl>
 </div>
 </div>
 </div>
+<div class="sect2">
+<h3 id="_添加分区设备映射">19.5. 添加分区设备映射</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kpartx -a /dev/vdc</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_ext234">19.6. Ext2/3/4</h3>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>调整 Ext 文件系统大小</p>
+</li>
+</ol>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">resize2fs -f /dev/mapper/vdc1</code></pre>
+</div>
+</div>
+<div class="olist arabic">
+<ol class="arabic" start="2">
+<li>
+<p>增加 Ext3 日志到文件系统</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>Ext2 + journal = ext3</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">tune2fs -j /dev/mapper/vdc1</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>或者</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">tune2fs -O has_journal /dev/mapper/vdc1</code></pre>
+</div>
+</div>
+<div class="olist arabic">
+<ol class="arabic" start="3">
+<li>
+<p>检查文件 Ext 文件系统</p>
+</li>
+</ol>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">e2fsck -fy /dev/mapper/vdc1</code></pre>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_删除分区设备映射">19.6.1. 删除分区设备映射</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kpartx -d /dev/vdc</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_验证">19.6.2. 验证</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"># parted -s /dev/vdc unit s pr
+Model: Virtio Block Device (virtblk)
+Disk /dev/vdc: 8388608s
+Sector size (logical/physical): 512B/512B
+Partition Table: msdos
+Disk Flags:
+
+Number  Start  End       Size      Type     File system  Flags
+ 1      2048s  8385608s  8383561s  primary  ext4</code></pre>
+</div>
+</div>
+<div style="page-break-after: always;"></div>
+</div>
+</div>
+</div>
 </div>
 <div class="sect1">
-<h2 id="_Shell_chapter">19. Shell</h2>
+<h2 id="_Shell_chapter">20. Shell</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_nginx">19.1. Nginx</h3>
+<h3 id="_nginx">20.1. Nginx</h3>
 <div class="sect3">
-<h4 id="_nginxkeepalived健康检查">19.1.1. Nginx+Keepalived健康检查</h4>
+<h4 id="_nginxkeepalived健康检查">20.1.1. Nginx+Keepalived健康检查</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">cat &lt;&lt;EOF&gt; nginx_check.sh
@@ -4667,7 +5113,7 @@ EOF</code></pre>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_cicd">19.2. CI/CD</h3>
+<h3 id="_cicd">20.2. CI/CD</h3>
 <div class="olist arabic">
 <div class="title">Harbor客户机拉取镜像脚本</div>
 <ol class="arabic">
@@ -4731,7 +5177,7 @@ fi</code></pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2022-09-06 16:45:21 +0800
+Last updated 2022-09-22 20:30:53 +0800
 </div>
 </div>
 <script src="js/highlight.min.js"></script>
