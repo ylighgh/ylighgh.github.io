@@ -984,13 +984,10 @@ p { margin-bottom: 1.25rem; }
 <li><a href="#_增加镜像文件大小">19.4.1. 增加镜像文件大小</a></li>
 <li><a href="#_重建分区">19.4.2. 重建分区</a></li>
 <li><a href="#_重建文件系统">19.4.3. 重建文件系统</a></li>
-</ul>
-</li>
-<li><a href="#_添加分区设备映射">19.5. 添加分区设备映射</a></li>
-<li><a href="#_ext234">19.6. Ext2/3/4</a>
-<ul class="sectlevel3">
-<li><a href="#_删除分区设备映射">19.6.1. 删除分区设备映射</a></li>
-<li><a href="#_验证">19.6.2. 验证</a></li>
+<li><a href="#_添加分区设备映射">19.4.4. 添加分区设备映射</a></li>
+<li><a href="#_ext234">19.4.5. Ext2/3/4</a></li>
+<li><a href="#_删除分区设备映射">19.4.6. 删除分区设备映射</a></li>
+<li><a href="#_验证">19.4.7. 验证</a></li>
 </ul>
 </li>
 </ul>
@@ -4998,17 +4995,16 @@ Number  Start  End       Size      Type     File system  Flags
 </dl>
 </div>
 </div>
-</div>
-<div class="sect2">
-<h3 id="_添加分区设备映射">19.5. 添加分区设备映射</h3>
+<div class="sect3">
+<h4 id="_添加分区设备映射">19.4.4. 添加分区设备映射</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kpartx -a /dev/vdc</code></pre>
 </div>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_ext234">19.6. Ext2/3/4</h3>
+<div class="sect3">
+<h4 id="_ext234">19.4.5. Ext2/3/4</h4>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
@@ -5056,8 +5052,9 @@ Number  Start  End       Size      Type     File system  Flags
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">e2fsck -fy /dev/mapper/vdc1</code></pre>
 </div>
 </div>
+</div>
 <div class="sect3">
-<h4 id="_删除分区设备映射">19.6.1. 删除分区设备映射</h4>
+<h4 id="_删除分区设备映射">19.4.6. 删除分区设备映射</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kpartx -d /dev/vdc</code></pre>
@@ -5065,7 +5062,7 @@ Number  Start  End       Size      Type     File system  Flags
 </div>
 </div>
 <div class="sect3">
-<h4 id="_验证">19.6.2. 验证</h4>
+<h4 id="_验证">19.4.7. 验证</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"># parted -s /dev/vdc unit s pr
