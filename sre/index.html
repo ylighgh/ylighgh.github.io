@@ -983,16 +983,6 @@ p { margin-bottom: 1.25rem; }
 <li><a href="#_bfs文件系统快照">19.5. BFS文件系统快照</a></li>
 </ul>
 </li>
-<li><a href="#_Shell_chapter">20. Shell</a>
-<ul class="sectlevel2">
-<li><a href="#_nginx">20.1. Nginx</a>
-<ul class="sectlevel3">
-<li><a href="#_nginxkeepalived健康检查">20.1.1. Nginx+Keepalived健康检查</a></li>
-</ul>
-</li>
-<li><a href="#_cicd">20.2. CI/CD</a></li>
-</ul>
-</li>
 </ul>
 </div>
 </div>
@@ -5096,103 +5086,16 @@ od -Ad -tx4 bfs.img | more</code></pre>
 </div>
 </div>
 <div style="page-break-after: always;"></div>
+<div class="paragraph">
+<p>#include::book/Shell/Shell.asc[]</p>
 </div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_Shell_chapter">20. Shell</h2>
-<div class="sectionbody">
-<div class="sect2">
-<h3 id="_nginx">20.1. Nginx</h3>
-<div class="sect3">
-<h4 id="_nginxkeepalived健康检查">20.1.1. Nginx+Keepalived健康检查</h4>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">cat &lt;&lt;EOF&gt; nginx_check.sh
-#!/bin/bash
-if [ "$(ps -ef | grep "nginx: master process"| grep -v grep )" == "" ]
-then
-    #以上作用：如果进程没有nginx，则启动
-    systemctl start nginx
-    #间隔时间
-    sleep 5
-if [ "$(ps -ef | grep "nginx: master process"| grep -v grep )" == "" ]
-then
-    #以上作用：如果进程没有nginx，则停止keepalived
-    killall keepalived
-fi
-fi
-EOF</code></pre>
-</div>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_cicd">20.2. CI/CD</h3>
-<div class="olist arabic">
-<div class="title">Harbor客户机拉取镜像脚本</div>
-<ol class="arabic">
-<li>
-<p>告知目标服务器拉取哪个镜像</p>
-</li>
-<li>
-<p>判断当前服务器是否正在运行容器,如果运行需要删除</p>
-</li>
-<li>
-<p>如果目标服务器已经存在当前镜像,需要删除</p>
-</li>
-<li>
-<p>目标服务器拉取harbor上的镜像</p>
-</li>
-<li>
-<p>将拉取下拉的镜像运行成容器</p>
-</li>
-</ol>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">#!/bin/bash
-horbar_addr=$1
-horbar_repo=$2
-project=$3
-version=$4
-port=$5
-imageName=$horbar_addr/$horbar_repo/$project:$version
-repositoryName=$horbar_addr/$horbar_repo/$project
-containerId=`docker ps -a |grep $project|awk '{print $1}'`
-imageId=`docker images|grep $repositoryName|grep $version|awk '{print $3}'`
-
-if [ "$containerId" != "" ]
-then
-    `docker rm -f $containerId`
-fi
-
-if [ "$imageId" != "" ]
-then
-    `docker rmi $imageId`
-    `echo y|docker image prune`
-fi
-
-echo ""|docker login -u admin -p Nuttertools123.. $horbar_addr &amp;&amp; docker pull $imageName
-
-docker run -d -p $port:8080 --name $project $imageName
-
-if [ $? == 0 ]
-then
-    echo "SUCCESS!!"
-else
-    echo "FAILED!!"
-fi</code></pre>
-</div>
-</div>
-<div style="page-break-after: always;"></div>
 </div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2022-09-22 20:30:53 +0800
+Last updated 2022-09-23 15:31:16 +0800
 </div>
 </div>
 <script src="js/highlight.min.js"></script>
