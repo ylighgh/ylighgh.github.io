@@ -979,17 +979,7 @@ p { margin-bottom: 1.25rem; }
 <li><a href="#_增加硬盘">19.3.1. 增加硬盘</a></li>
 </ul>
 </li>
-<li><a href="#_镜像文件扩容">19.4. 镜像文件扩容</a>
-<ul class="sectlevel3">
-<li><a href="#_增加镜像文件大小">19.4.1. 增加镜像文件大小</a></li>
-<li><a href="#_重建分区">19.4.2. 重建分区</a></li>
-<li><a href="#_重建文件系统">19.4.3. 重建文件系统</a></li>
-<li><a href="#_添加分区设备映射">19.4.4. 添加分区设备映射</a></li>
-<li><a href="#_ext234">19.4.5. Ext2/3/4</a></li>
-<li><a href="#_删除分区设备映射">19.4.6. 删除分区设备映射</a></li>
-<li><a href="#_验证">19.4.7. 验证</a></li>
-</ul>
-</li>
+<li><a href="#_镜像文件扩容">19.4. 镜像文件扩容</a></li>
 <li><a href="#_bfs文件系统快照">19.5. BFS文件系统快照</a></li>
 </ul>
 </li>
@@ -4777,16 +4767,17 @@ virsh detach-disk web vdb</code></pre>
 </div>
 <div class="sect2">
 <h3 id="_镜像文件扩容">19.4. 镜像文件扩容</h3>
-<div class="sect3">
-<h4 id="_增加镜像文件大小">19.4.1. 增加镜像文件大小</h4>
 <div class="listingblock">
+<div class="title">增加镜像文件大小</div>
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"># 增加2G
 qemu-img resize /home/ylighgh/workspace/libvirt/images/qemu-add.qcow2 +2G</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p><strong>确认容量</strong></p>
+</div>
 <div class="listingblock">
-<div class="title">确认容量</div>
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">qemu-img info qemu-add.qcow2
 
@@ -4805,10 +4796,8 @@ Format specific information:
     extended l2: false</code></pre>
 </div>
 </div>
-</div>
-<div class="sect3">
-<h4 id="_重建分区">19.4.2. 重建分区</h4>
 <div class="dlist">
+<div class="title">重建分区</div>
 <dl>
 <dt class="hdlist1">TIP</dt>
 <dd>
@@ -4828,8 +4817,10 @@ Format specific information:
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">parted -s /dev/vdc unit s pr</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p><strong>输出</strong></p>
+</div>
 <div class="listingblock">
-<div class="title">输出</div>
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">ylighgh@kvm:~$ sudo parted -s /dev/vdc unit s pr
 Model: Virtio Block Device (virtblk)
@@ -4880,7 +4871,7 @@ ylighgh@kvm:~$ sudo ls /dev/mapper/vdc*
 </div>
 <div class="listingblock">
 <div class="content">
-<pre>e2fsck -fy /dev/mapper/vdc1</pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">e2fsck -fy /dev/mapper/vdc1</code></pre>
 </div>
 </div>
 <div class="olist arabic">
@@ -4913,7 +4904,7 @@ ylighgh@kvm:~$ sudo ls /dev/mapper/vdc*
 </div>
 <div class="listingblock">
 <div class="content">
-<pre>kpartx -d /dev/vdc</pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kpartx -d /dev/vdc</code></pre>
 </div>
 </div>
 <div class="olist arabic">
@@ -4984,10 +4975,8 @@ Number  Start  End       Size      Type     File system  Flags
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">parted -s /dev/vdc set 1 boot on</code></pre>
 </div>
 </div>
-</div>
-<div class="sect3">
-<h4 id="_重建文件系统">19.4.3. 重建文件系统</h4>
 <div class="dlist">
+<div class="title">重建文件系统</div>
 <dl>
 <dt class="hdlist1">TIP</dt>
 <dd>
@@ -4995,18 +4984,14 @@ Number  Start  End       Size      Type     File system  Flags
 </dd>
 </dl>
 </div>
-</div>
-<div class="sect3">
-<h4 id="_添加分区设备映射">19.4.4. 添加分区设备映射</h4>
 <div class="listingblock">
+<div class="title">添加分区设备映射</div>
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kpartx -a /dev/vdc</code></pre>
 </div>
 </div>
-</div>
-<div class="sect3">
-<h4 id="_ext234">19.4.5. Ext2/3/4</h4>
 <div class="olist arabic">
+<div class="title">Ext2/3/4</div>
 <ol class="arabic">
 <li>
 <p>调整 Ext 文件系统大小</p>
@@ -5053,18 +5038,14 @@ Number  Start  End       Size      Type     File system  Flags
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">e2fsck -fy /dev/mapper/vdc1</code></pre>
 </div>
 </div>
-</div>
-<div class="sect3">
-<h4 id="_删除分区设备映射">19.4.6. 删除分区设备映射</h4>
 <div class="listingblock">
+<div class="title">删除分区设备映射</div>
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kpartx -d /dev/vdc</code></pre>
 </div>
 </div>
-</div>
-<div class="sect3">
-<h4 id="_验证">19.4.7. 验证</h4>
 <div class="listingblock">
+<div class="title">验证</div>
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"># parted -s /dev/vdc unit s pr
 Model: Virtio Block Device (virtblk)
@@ -5075,7 +5056,6 @@ Disk Flags:
 
 Number  Start  End       Size      Type     File system  Flags
  1      2048s  8385608s  8383561s  primary  ext4</code></pre>
-</div>
 </div>
 </div>
 </div>
