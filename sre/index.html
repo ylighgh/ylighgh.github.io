@@ -990,6 +990,7 @@ p { margin-bottom: 1.25rem; }
 <li><a href="#_验证">19.4.7. 验证</a></li>
 </ul>
 </li>
+<li><a href="#_bfs文件系统快照">19.5. BFS文件系统快照</a></li>
 </ul>
 </li>
 <li><a href="#_Shell_chapter">20. Shell</a>
@@ -5076,8 +5077,45 @@ Number  Start  End       Size      Type     File system  Flags
  1      2048s  8385608s  8383561s  primary  ext4</code></pre>
 </div>
 </div>
-<div style="page-break-after: always;"></div>
 </div>
+</div>
+<div class="sect2">
+<h3 id="_bfs文件系统快照">19.5. BFS文件系统快照</h3>
+<div class="paragraph">
+<p>基于BFS的Kvm虚拟机磁盘快照</p>
+</div>
+<div class="listingblock">
+<div class="title">分区</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">fdisk /dev/vdb</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">写入文件系统</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">mkfs.bfs /dev/vdb1</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">创建BFS image</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">dd if=/dev/vdb1 of=bfs.img bs=512</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">验证</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"># The first 4 bytes should be 0x1badface.
+od -Ad -tx4 bfs.img | more</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">导出到本地重新挂载磁盘</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">virsh attach-disk ubuntu-22.04 /home/ylighgh/workspace/libvirt/images/bfs.img vde --subdriver raw</code></pre>
+</div>
+</div>
+<div style="page-break-after: always;"></div>
 </div>
 </div>
 </div>
