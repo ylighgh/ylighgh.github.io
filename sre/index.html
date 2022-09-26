@@ -5076,26 +5076,24 @@ Number  Start  End       Size      Type     File system  Flags
 <div class="title">验证</div>
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"># The first 4 bytes should be 0x1badface.
+# Magic number (0x1BADFACE)
 od -Ad -tx4 bfs.img | more</code></pre>
 </div>
 </div>
 <div class="listingblock">
 <div class="title">导出到本地重新挂载磁盘</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">virsh attach-disk ubuntu-22.04 /home/ylighgh/workspace/libvirt/images/bfs.img vde --subdriver raw</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">virsh attach-disk ubuntu-22.04 /home/ylighgh/workspace/libvirt/images/bfs.img vdd --subdriver raw</code></pre>
 </div>
 </div>
 <div style="page-break-after: always;"></div>
-<div class="paragraph">
-<p>#include::book/Shell/Shell.asc[]</p>
-</div>
 </div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2022-09-23 15:31:16 +0800
+Last updated 2022-09-26 10:30:23 +0800
 </div>
 </div>
 <script src="js/highlight.min.js"></script>
