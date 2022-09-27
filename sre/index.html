@@ -977,6 +977,7 @@ p { margin-bottom: 1.25rem; }
 <li><a href="#_常用命令_4">19.3. 常用命令</a>
 <ul class="sectlevel3">
 <li><a href="#_增加硬盘">19.3.1. 增加硬盘</a></li>
+<li><a href="#_快照">19.3.2. 快照</a></li>
 </ul>
 </li>
 <li><a href="#_镜像文件扩容">19.4. 镜像文件扩容</a></li>
@@ -4754,6 +4755,37 @@ virsh detach-disk web vdb</code></pre>
 </div>
 </div>
 </div>
+<div class="sect3">
+<h4 id="_快照">19.3.2. 快照</h4>
+<div class="listingblock">
+<div class="title">创建快照</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">sudo virsh snapshot-create-as \
+--domain [VM_Name] \
+--name [Snapshot_Name] \
+--description "first snapshot" \
+--atomic</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">查看快照</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">virsh snapshot-list --domain [VM_Name]</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">删除快照</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">virsh snapshot-delete --domain [VM_Name] [Snapshot_Name]</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">还原快照</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">virsh snapshot-revert --domain [VM_Name] --snapshotname [SnapShot_Name]</code></pre>
+</div>
+</div>
+</div>
 </div>
 <div class="sect2">
 <h3 id="_镜像文件扩容">19.4. 镜像文件扩容</h3>
@@ -5094,7 +5126,7 @@ btrfs subvolume snapshot -r /data/web/xxx.com /data/.snapshot/xxx.com-new
 btrfs send -p /data/.snapshot/xxx.com /data/.snapshot/xxx.com-new | btrfs receive /data/.bak
 btrfs subvolume delete /data/.snapshot/xxx.com
 mv /data/.snapshot/xxx.com-new /data/.snapshot/xxx.com
-mv /data/.bak/xxx.com-new /data/.bak/xxx.com-$(date +%Y-%m-%d_%H:%M:%S)</code></pre>
+mv /data/.bak/xxx.com-new /data/.bak/xxx.com_$(date +%Y-%m-%d_%H:%M:%S)</code></pre>
 </div>
 </div>
 <div class="listingblock">
