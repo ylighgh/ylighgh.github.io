@@ -4836,7 +4836,7 @@ Format specific information:
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">parted -s /dev/vdc unit s pr</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">parted -s /dev/vdb unit s pr</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -4844,9 +4844,9 @@ Format specific information:
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">ylighgh@kvm:~$ sudo parted -s /dev/vdc unit s pr
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">ylighgh@kvm:~$ sudo parted -s /dev/vdb unit s pr
 Model: Virtio Block Device (virtblk)
-Disk /dev/vdc: 8388608s
+Disk /dev/vdb: 8388608s
 Sector size (logical/physical): 512B/512B
 Partition Table: msdos
 Disk Flags:
@@ -4866,7 +4866,7 @@ Number  Start  End       Size      Type     File system  Flags
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kpartx -a /dev/vdc</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kpartx -a /dev/vdb</code></pre>
 </div>
 </div>
 <div class="olist arabic">
@@ -4878,10 +4878,10 @@ Number  Start  End       Size      Type     File system  Flags
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">ls /dev/mapper/vdc*
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">ls /dev/mapper/vdb*
 
-ylighgh@kvm:~$ sudo ls /dev/mapper/vdc*
-/dev/mapper/vdc1</code></pre>
+ylighgh@kvm:~$ sudo ls /dev/mapper/vdb*
+/dev/mapper/vdb1</code></pre>
 </div>
 </div>
 <div class="olist arabic">
@@ -4893,7 +4893,7 @@ ylighgh@kvm:~$ sudo ls /dev/mapper/vdc*
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">e2fsck -fy /dev/mapper/vdc1</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">e2fsck -fy /dev/mapper/vdb1</code></pre>
 </div>
 </div>
 <div class="olist arabic">
@@ -4914,7 +4914,7 @@ ylighgh@kvm:~$ sudo ls /dev/mapper/vdc*
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">tune2fs -O ^has_journal /dev/mapper/vdc1</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">tune2fs -O ^has_journal /dev/mapper/vdb1</code></pre>
 </div>
 </div>
 <div class="olist arabic">
@@ -4926,7 +4926,7 @@ ylighgh@kvm:~$ sudo ls /dev/mapper/vdc*
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kpartx -d /dev/vdc</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kpartx -d /dev/vdb</code></pre>
 </div>
 </div>
 <div class="olist arabic">
@@ -4938,7 +4938,7 @@ ylighgh@kvm:~$ sudo ls /dev/mapper/vdc*
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">parted -s /dev/vdc rm 1</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">parted -s /dev/vdb rm 1</code></pre>
 </div>
 </div>
 <div class="olist arabic">
@@ -4953,7 +4953,7 @@ ylighgh@kvm:~$ sudo ls /dev/mapper/vdc*
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">parted -s /dev/vdc unit s mkpart primary ext4 2048 8385608s</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">parted -s /dev/vdb unit s mkpart primary ext4 2048 8385608s</code></pre>
 </div>
 </div>
 <div class="olist arabic">
@@ -4965,15 +4965,15 @@ ylighgh@kvm:~$ sudo ls /dev/mapper/vdc*
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">parted -s /dev/vdc unit s pr</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">parted -s /dev/vdb unit s pr</code></pre>
 </div>
 </div>
 <div class="listingblock">
 <div class="title">输出：</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console"># parted -s /dev/vdc unit s pr
+<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console"># parted -s /dev/vdb unit s pr
 Model: Virtio Block Device (virtblk)
-Disk /dev/vdc: 8388608s
+Disk /dev/vdb: 8388608s
 Sector size (logical/physical): 512B/512B
 Partition Table: msdos
 Disk Flags:
@@ -4994,7 +4994,7 @@ Number  Start  End       Size      Type     File system  Flags
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">parted -s /dev/vdc set 1 boot on</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">parted -s /dev/vdb set 1 boot on</code></pre>
 </div>
 </div>
 <div class="dlist">
@@ -5009,7 +5009,7 @@ Number  Start  End       Size      Type     File system  Flags
 <div class="listingblock">
 <div class="title">添加分区设备映射</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kpartx -a /dev/vdc</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kpartx -a /dev/vdb</code></pre>
 </div>
 </div>
 <div class="olist arabic">
@@ -5022,7 +5022,7 @@ Number  Start  End       Size      Type     File system  Flags
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">resize2fs -f /dev/mapper/vdc1</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">resize2fs -f /dev/mapper/vdb1</code></pre>
 </div>
 </div>
 <div class="olist arabic">
@@ -5037,7 +5037,7 @@ Number  Start  End       Size      Type     File system  Flags
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">tune2fs -j /dev/mapper/vdc1</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">tune2fs -j /dev/mapper/vdb1</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -5045,7 +5045,7 @@ Number  Start  End       Size      Type     File system  Flags
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">tune2fs -O has_journal /dev/mapper/vdc1</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">tune2fs -O has_journal /dev/mapper/vdb1</code></pre>
 </div>
 </div>
 <div class="olist arabic">
@@ -5057,21 +5057,21 @@ Number  Start  End       Size      Type     File system  Flags
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">e2fsck -fy /dev/mapper/vdc1</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">e2fsck -fy /dev/mapper/vdb1</code></pre>
 </div>
 </div>
 <div class="listingblock">
 <div class="title">删除分区设备映射</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kpartx -d /dev/vdc</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kpartx -d /dev/vdb</code></pre>
 </div>
 </div>
 <div class="listingblock">
 <div class="title">验证</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"># parted -s /dev/vdc unit s pr
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"># parted -s /dev/vdb unit s pr
 Model: Virtio Block Device (virtblk)
-Disk /dev/vdc: 8388608s
+Disk /dev/vdb: 8388608s
 Sector size (logical/physical): 512B/512B
 Partition Table: msdos
 Disk Flags:
