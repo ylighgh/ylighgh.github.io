@@ -981,7 +981,12 @@ p { margin-bottom: 1.25rem; }
 </ul>
 </li>
 <li><a href="#_镜像文件扩容">19.4. 镜像文件扩容</a></li>
-<li><a href="#_btrfs文件系统快照">19.5. BtrFS文件系统快照</a></li>
+</ul>
+</li>
+<li><a href="#_Btrfs_chapter">20. Btrfs</a>
+<ul class="sectlevel2">
+<li><a href="#_基本使用_2">20.1. 基本使用</a></li>
+<li><a href="#_增量备份">20.2. 增量备份</a></li>
 </ul>
 </li>
 </ul>
@@ -5080,75 +5085,117 @@ Number  Start  End       Size      Type     File system  Flags
  1      2048s  8385608s  8383561s  primary  ext4</code></pre>
 </div>
 </div>
+<div style="page-break-after: always;"></div>
 </div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_Btrfs_chapter">20. Btrfs</h2>
+<div class="sectionbody">
 <div class="sect2">
-<h3 id="_btrfs文件系统快照">19.5. BtrFS文件系统快照</h3>
-<div class="paragraph">
-<p>基于BtrFS的Kvm虚拟机磁盘快照</p>
-</div>
-<div class="listingblock">
-<div class="title">分区</div>
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">fdisk /dev/vdb</code></pre>
-</div>
-</div>
+<h3 id="_基本使用_2">20.1. 基本使用</h3>
 <div class="listingblock">
 <div class="title">写入文件系统</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">mkfs.btrfs /dev/vdb1</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">mkfs.btrfs /path/to/device</code></pre>
 </div>
 </div>
 <div class="listingblock">
-<div class="title">挂载文件系统</div>
+<div class="title">挂载</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">mount -t btrfs /dev/vdb1 /data</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">mount /dev/vdc1 /backup/</code></pre>
 </div>
 </div>
 <div class="listingblock">
-<div class="title">文件快照</div>
+<div class="title">查看大小</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">mkdir -p /data/web /data/.snapshot /data/.bak
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">btrfs filesystem df /backup
 
-# 创建子卷
-btrfs subvolume create /data/web/xxx.com
-
-# 创建基点快照
-btrfs subvolume snapshot -r /data/web/xxx.com /data/.snapshot/xxx.com
-
-# 更新数据
-echo "v1" &gt; /data/web/xxx.com/version
-
-# 查看目录结构
-tree -a /data
-
-# 增量备份
-btrfs subvolume snapshot -r /data/web/xxx.com /data/.snapshot/xxx.com-new
-btrfs send -p /data/.snapshot/xxx.com /data/.snapshot/xxx.com-new | btrfs receive /data/.bak
-btrfs subvolume delete /data/.snapshot/xxx.com
-mv /data/.snapshot/xxx.com-new /data/.snapshot/xxx.com
-mv /data/.bak/xxx.com-new /data/.bak/xxx.com_$(date +%Y-%m-%d_%H:%M:%S)</code></pre>
+suse:~ # btrfs filesystem df /backup
+Data, single: total=7.91GiB, used=6.67GiB
+System, DUP: total=32.00MiB, used=16.00KiB
+Metadata, DUP: total=512.00MiB, used=67.83MiB
+GlobalReserve, single: total=13.25MiB, used=0.00B</code></pre>
 </div>
 </div>
 <div class="listingblock">
-<div class="title">snapper文件快照</div>
+<div class="title">转化</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">apt install snapper
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"># 将ext4转换为btrfs
+btrfs-convert /path/to/device
 
-btrfs subvolume create /data/web/yyy.com
+# 将btrfs回退至之前的文件系统
+btrfs-convert -r /path/to/device</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">创建子卷</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">btrfs subvolume create xxx</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">查看子卷信息</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">btrfs subvolume show xxx</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">创建子卷快照</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">btrfs subvolume snapshot -r xxx xxx-bak</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_增量备份">20.2. 增量备份</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>/data (source side)</p>
+</li>
+<li>
+<p>/backup/data (target side)</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="title">初始化</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"># 测试文件
+dd if=/dev/zero of=/data/test bs=1G count=1
 
-snapper --config yyy.com create-config -f btrfs /data/web/yyy.com
+btrfs sub snap -r /data /data/bkp_data
+sync
 
-snapper -c yyy.com list
+btrfs send /data/bkp_data | btrfs receive /backup</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">增量备份</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"># 测试文件
+touch /data/test2
 
-snapper -c yyy.com status
+btrfs subvolume snapshot -r /data /data/bkp_data-2
+sync
 
-snapper -c yyy.com create -t pre -p -d "Before create five files" -u "important=no"
-
-touch /data/web/yyy.com/{1..5}.txt
-
-snapper -c yyy.com create -t post --pre-num 1 -p -d "After create five files" -u "important=no"
-
-snapper -c yyy.com undochange 1..2</code></pre>
+btrfs send -p /data/bkp_data /data/bkp_data-2 | btrfs receive /backup</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">最后</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">btrfs sub del /data/bkp_data
+mv /data/bkp_data-2 /data/bkp_data
+btrfs sub del /backup/bkp_data
+mv /backup/bkp_data-2 /backup/bkp_data</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">发送到远程目录</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">btrfs send /data/bkp_data | ssh root@ubuntu 'btrfs receive /backup'</code></pre>
 </div>
 </div>
 <div style="page-break-after: always;"></div>
@@ -5158,7 +5205,7 @@ snapper -c yyy.com undochange 1..2</code></pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2022-09-26 10:30:23 +0800
+Last updated 2022-10-08 15:49:51 +0800
 </div>
 </div>
 <script src="js/highlight.min.js"></script>
