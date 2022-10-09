@@ -4750,7 +4750,7 @@ virt-install \
 qemu-img create -f qcow2 web-add.qcow2 2G
 
 # 临时添加
-virsh attach-disk web /opt/web-add.qcow2 vdb --subdriver qcow2　　　　　　
+virsh attach-disk web /opt/web-add.qcow2 vdb --subdriver qcow2
 
 # 永久添加
 virsh attach-disk web /opt/web-add.qcow2 vdb --subdriver qcow2  --config
