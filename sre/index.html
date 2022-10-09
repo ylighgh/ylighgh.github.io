@@ -1105,7 +1105,7 @@ ssh-keygen -N "" -f ~/.ssh/yss -C xxxx@xxx.com</code></pre>
 chmod 755 ~/.ssh/config
 cat &lt;&lt; EOF &gt;&gt; ~/.ssh/config
 Host IP
-    IdentityFile ~/.ssh/mk
+    IdentityFile ~/.ssh/yss
 EOF
 
 chmod 400 ~/.ssh/config</code></pre>
@@ -5103,19 +5103,50 @@ Number  Start  End       Size      Type     File system  Flags
 <div class="listingblock">
 <div class="title">挂载</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">mount /dev/vdc1 /backup/</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">mount /dev/vdc1 /backup/
+
+# 指定选项挂载(man 5 btrfs)
+mount -o option1,option2 /dev/vdc1 /backup/
+
+# 将多个硬盘合并成一个文件系统
+mount -L mydata /dev/vdd /dev/vde</code></pre>
 </div>
 </div>
 <div class="listingblock">
 <div class="title">查看大小</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">btrfs filesystem df /backup
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">btrfs filesystem show /mydata
 
-suse:~ # btrfs filesystem df /backup
-Data, single: total=7.91GiB, used=6.67GiB
-System, DUP: total=32.00MiB, used=16.00KiB
-Metadata, DUP: total=512.00MiB, used=67.83MiB
-GlobalReserve, single: total=13.25MiB, used=0.00B</code></pre>
+suse:~ # btrfs filesystem show /mydata/
+Label: 'mydata'  uuid: f38e8548-402c-42be-8f1e-4bcd4d275cf5
+        Total devices 2 FS bytes used 192.00KiB
+        devid    1 size 2.00GiB used 272.00MiB path /dev/vdd
+        devid    2 size 2.00GiB used 264.00MiB path /dev/vde</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">扩缩容</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">btrfs filesystem resize 2:[-|+|max]1G /mydata/</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">suse:~ # btrfs filesystem resize 2:-1G /mydata/
+Resize device id 2 (/dev/vde) from 2.00GiB to 1.00GiB
+suse:~ # btrfs filesystem show /mydata/
+Label: 'mydata'  uuid: f38e8548-402c-42be-8f1e-4bcd4d275cf5
+        Total devices 2 FS bytes used 192.00KiB
+        devid    1 size 2.00GiB used 272.00MiB path /dev/vdd
+        devid    2 size 1.00GiB used 264.00MiB path /dev/vde</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">添加/删除磁盘至btrfs</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">btrfs device add /dev/vdf /mydata
+
+btrfs device delete /dev/vdf /mydata</code></pre>
 </div>
 </div>
 <div class="listingblock">
