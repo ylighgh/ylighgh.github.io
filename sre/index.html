@@ -877,6 +877,7 @@ p { margin-bottom: 1.25rem; }
 <ul class="sectlevel2">
 <li><a href="#_数据传输">12.1. 数据传输</a></li>
 <li><a href="#_实时同步">12.2. 实时同步</a></li>
+<li><a href="#_客户端服务器模式">12.3. 客户端服务器模式</a></li>
 </ul>
 </li>
 <li><a href="#_Java_chapter">13. Java</a>
@@ -3104,6 +3105,75 @@ EOF
 chmod +x rsync.sh</code></pre>
 </div>
 </div>
+</div>
+<div class="sect2">
+<h3 id="_客户端服务器模式">12.3. 客户端服务器模式</h3>
+<div class="listingblock">
+<div class="title">客户端</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">cat &lt;&lt;EOF&gt; /etc/rsync.conf
+port = 52050
+pid file = /var/log/rsync/rsyncd.pid
+lock file = /var/log/rsync/rsync.lock
+log file = /var/log/rsync/rsyncd.log
+use chroot = false
+strict modes = false
+hosts allow = 127.0.0.1,192.168.122.225
+ignore errors = true
+read only = true
+list = yes
+max connections = 10
+auth users = whoareyou
+secrets file = /var/log/rsync/rsyncd.pass
+uid = root
+gid = root
+
+[delete]
+path = /tmp/.snapshots/create_and_delete-snap/
+EOF
+
+cat &lt;&lt;EOF&gt; /var/log/rsync/rsyncd.pass
+whoareyou:123456
+EOF
+
+# 开启
+rsync --daemon
+
+# 验证
+suse:~ # ss -antpl|grep 52050
+LISTEN 0      5            0.0.0.0:52050      0.0.0.0:*    users:(("rsync",pid=14431,fd=5))
+LISTEN 0      5               [::]:52050         [::]:*    users:(("rsync",pid=14431,fd=6))</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">客户端</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">cat &lt;&lt;EOF&gt; ~/workspace/shell/rsync.sh
+#! /bin/bash
+echo &gt;&gt; /var/log/rsync.log
+echo 同步开始于  `date +%F%t%T` &gt;&gt; /var/log/rsync.log
+
+log_file=/var/log/rsync_download.log
+time=`date +%F%t%T`
+
+cmd="rsync -abvcz --port=52050 --progress --delete --backup-dir=/www/master_bak/conf/change/`date +%Y%m%d` --password-file=/var/log/rsync/rsync.pass --log-file=${log_file} whoareyou@rsync_server::delete /www/master_bak/conf/source/"
+echo ${time} $cmd&gt;&gt;/var/log/rsync.log  2&gt;&amp;1
+$cmd
+
+
+echo 同步结束于  `date +%F%t%T`&gt;&gt;/var/log/rsync.log
+
+echo &gt;&gt; /var/log/rsync.log
+echo &gt;&gt; /var/log/rsync.log
+echo &gt;&gt; /var/log/rsync.log
+echo &gt;&gt; /var/log/rsync.log
+EOF
+
+cat &lt;&lt;EOF&gt; /var/log/rsync/rsync.pass
+123456
+EOF</code></pre>
+</div>
+</div>
 <div style="page-break-after: always;"></div>
 </div>
 </div>
@@ -4759,6 +4829,12 @@ virsh attach-disk web /opt/web-add.qcow2 vdb --subdriver qcow2  --config
 virsh detach-disk web vdb</code></pre>
 </div>
 </div>
+<div class="listingblock">
+<div class="title">查看磁盘信息</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">virsh domblklist [VM_Name]</code></pre>
+</div>
+</div>
 </div>
 <div class="sect3">
 <h4 id="_快照">19.3.2. 快照</h4>
@@ -5175,6 +5251,12 @@ btrfs-convert -r /path/to/device</code></pre>
 <div class="title">创建子卷快照</div>
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">btrfs subvolume snapshot -r xxx xxx-bak</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">挂载子卷</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">mount -o [subvol=xxx|subvolid=xxx] /dev/vdd /mnt/logs</code></pre>
 </div>
 </div>
 </div>
