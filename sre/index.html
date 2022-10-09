@@ -5165,8 +5165,7 @@ btrfs-convert -r /path/to/device</code></pre>
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"># 测试文件
 dd if=/dev/zero of=/data/test bs=1G count=1
 
-btrfs sub snap -r /data /data/bkp_data
-sync
+btrfs sub snap -r /data /data/bkp_data &amp;&amp; sync
 
 btrfs send /data/bkp_data | btrfs receive /backup</code></pre>
 </div>
@@ -5177,8 +5176,7 @@ btrfs send /data/bkp_data | btrfs receive /backup</code></pre>
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"># 测试文件
 touch /data/test2
 
-btrfs subvolume snapshot -r /data /data/bkp_data-2
-sync
+btrfs subvolume snapshot -r /data /data/bkp_data-2 &amp;&amp; sync
 
 btrfs send -p /data/bkp_data /data/bkp_data-2 | btrfs receive /backup</code></pre>
 </div>
