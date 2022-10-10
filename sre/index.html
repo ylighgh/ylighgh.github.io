@@ -5173,7 +5173,10 @@ Number  Start  End       Size      Type     File system  Flags
 <div class="listingblock">
 <div class="title">写入文件系统</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">mkfs.btrfs /path/to/device</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">mkfs.btrfs /path/to/device
+
+# 将多个硬盘合并成一个文件系统
+mkfs.btrfs -L mydata /dev/vdd /dev/vde</code></pre>
 </div>
 </div>
 <div class="listingblock">
@@ -5182,10 +5185,7 @@ Number  Start  End       Size      Type     File system  Flags
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">mount /dev/vdc1 /backup/
 
 # 指定选项挂载(man 5 btrfs)
-mount -o option1,option2 /dev/vdc1 /backup/
-
-# 将多个硬盘合并成一个文件系统
-mount -L mydata /dev/vdd /dev/vde</code></pre>
+mount -o option1,option2 /dev/vdc1 /backup/</code></pre>
 </div>
 </div>
 <div class="listingblock">
