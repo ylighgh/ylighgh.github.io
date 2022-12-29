@@ -926,7 +926,12 @@ p { margin-bottom: 1.25rem; }
 </ul>
 </li>
 <li><a href="#_Inotify_chapter">15. Inotify (待处理)</a></li>
-<li><a href="#_Iptables_chapter">16. Iptables</a></li>
+<li><a href="#_Iptables_chapter">16. Iptables</a>
+<ul class="sectlevel2">
+<li><a href="#_安装_9">16.1. 安装</a></li>
+<li><a href="#_基本使用_2">16.2. 基本使用</a></li>
+</ul>
+</li>
 <li><a href="#_Tcpdump_chapter">17. Tcpdump</a></li>
 <li><a href="#_ElasticSearch_chapter">18. ElasticStack</a>
 <ul class="sectlevel2">
@@ -947,13 +952,13 @@ p { margin-bottom: 1.25rem; }
 </li>
 <li><a href="#_Ceph_chapter">19. Ceph</a>
 <ul class="sectlevel2">
-<li><a href="#_安装_9">19.1. 安装</a></li>
+<li><a href="#_安装_10">19.1. 安装</a></li>
 <li><a href="#_文件存储服务">19.2. 文件存储服务</a></li>
 </ul>
 </li>
 <li><a href="#_Btrfs_chapter">20. Btrfs</a>
 <ul class="sectlevel2">
-<li><a href="#_基本使用_2">20.1. 基本使用</a></li>
+<li><a href="#_基本使用_3">20.1. 基本使用</a></li>
 <li><a href="#_增量备份">20.2. 增量备份</a></li>
 </ul>
 </li>
@@ -1002,7 +1007,7 @@ p { margin-bottom: 1.25rem; }
 <li><a href="#_LetsE_chapter">25. Let&#8217;s Encrypt</a></li>
 <li><a href="#_Tomcat_chapter">26. Tomcat</a>
 <ul class="sectlevel2">
-<li><a href="#_安装_10">26.1. 安装</a>
+<li><a href="#_安装_11">26.1. 安装</a>
 <ul class="sectlevel3">
 <li><a href="#_源码包安装_3">26.1.1. 源码包安装</a></li>
 </ul>
@@ -4061,10 +4066,73 @@ zabbix网页配置:配置&#8212;&#8203;主机&#8212;&#8203;创建主机,模板--
 <div class="sect1">
 <h2 id="_Iptables_chapter">16. Iptables</h2>
 <div class="sectionbody">
+<div class="sect2">
+<h3 id="_安装_9">16.1. 安装</h3>
+<div class="listingblock">
+<div class="title">安装</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">yum install -y iptables-services
+
+# 停止firewalld
+systemctl  stop  firewalld
+# 禁用firewalld
+systemctl mask firewalld.service
+# iptables 开机自起
+systemctl enable iptables.service
+# 删除所有的链条和规则
+iptables -F
+
+iptables-save &gt;/etc/sysconfig/iptables</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_基本使用_2">16.2. 基本使用</h3>
 <div class="paragraph">
-<p>Unresolved directive in book/17-Iptables/Iptables.asc - include::sctions/安装.asc[]
-Unresolved directive in book/17-Iptables/Iptables.asc - include::sctions/基本使用.asc[]
-&lt;&lt;&lt;</p>
+<p><a href="https://wangchujiang.com/linux-command/c/iptables.html">参考链接</a></p>
+</div>
+<div class="listingblock">
+<div class="title">禁用ICMP包</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">iptable -A INPUT -p icmp -j DROP</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">查看防火墙规则</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">iptable -L -n --line-numbers</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>[root@aliyun ~]# iptables -L -n --line-numbers
+Chain INPUT (policy ACCEPT)
+num  target     prot opt source               destination
+1    DROP       icmp --  0.0.0.0/0            0.0.0.0/0
+
+Chain FORWARD (policy ACCEPT)
+num  target     prot opt source               destination
+
+Chain OUTPUT (policy ACCEPT)
+num  target     prot opt source               destination</pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">删除规则</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">iptables -D INPUT 1</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">保存防火墙规则</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"># 任何改动之前先备份
+cp /etc/sysconfig/iptables /etc/sysconfig/iptables.bak
+iptables-save &gt; /etc/sysconfig/iptables
+cat /etc/sysconfig/iptables</code></pre>
+</div>
+</div>
+<div style="page-break-after: always;"></div>
 </div>
 </div>
 </div>
@@ -4383,7 +4451,7 @@ EOF</code></pre>
 <h2 id="_Ceph_chapter">19. Ceph</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_安装_9">19.1. 安装</h3>
+<h3 id="_安装_10">19.1. 安装</h3>
 <div class="listingblock">
 <div class="title">添加依赖</div>
 <div class="content">
@@ -4632,7 +4700,7 @@ tmpfs                                          1000M   52K 1000M   1% /var/lib/c
 <h2 id="_Btrfs_chapter">20. Btrfs</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_基本使用_2">20.1. 基本使用</h3>
+<h3 id="_基本使用_3">20.1. 基本使用</h3>
 <div class="listingblock">
 <div class="title">写入文件系统</div>
 <div class="content">
@@ -5339,7 +5407,7 @@ Tomcat test</code></pre>
 <h2 id="_Tomcat_chapter">26. Tomcat</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_安装_10">26.1. 安装</h3>
+<h3 id="_安装_11">26.1. 安装</h3>
 <div class="sect3">
 <h4 id="_源码包安装_3">26.1.1. 源码包安装</h4>
 <div class="listingblock">
