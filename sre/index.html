@@ -971,12 +971,12 @@ p { margin-bottom: 1.25rem; }
 </li>
 <li><a href="#_ssh">21.2. SSH</a>
 <ul class="sectlevel3">
-<li><a href="#_无密钥登陆">21.2.1. 无密钥登陆</a></li>
+<li><a href="#_无密钥登陆client">21.2.1. 无密钥登陆(Client)</a></li>
+<li><a href="#_无密钥登陆server">21.2.2. 无密钥登陆(Server)</a></li>
 </ul>
 </li>
 <li><a href="#_时间同步">21.3. 时间同步</a></li>
 <li><a href="#_proxychains">21.4. Proxychains</a></li>
-<li><a href="#_systemctl">21.5. Systemctl</a></li>
 </ul>
 </li>
 <li><a href="#_Python_chapter">22. CentOS</a>
@@ -1691,8 +1691,8 @@ virt-install \
 <h4 id="_删除虚拟机">6.3.1. 删除虚拟机</h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">virsh destroy [VM_Name]
-virsh undefine [VM_Name]</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">virsh destroy foo
+virsh undefine foo</code></pre>
 </div>
 </div>
 </div>
@@ -1704,19 +1704,19 @@ virsh undefine [VM_Name]</code></pre>
 qemu-img create -f qcow2 web-add.qcow2 2G
 
 # 临时添加
-virsh attach-disk web /opt/web-add.qcow2 vdb --subdriver qcow2
+virsh attach-disk foo /opt/web-add.qcow2 vdb --subdriver qcow2
 
 # 永久添加
-virsh attach-disk web /opt/web-add.qcow2 vdb --subdriver qcow2  --config
+virsh attach-disk foo /opt/web-add.qcow2 vdb --subdriver qcow2  --config
 
 # 分离磁盘
-virsh detach-disk web vdb</code></pre>
+virsh detach-disk foo vdb</code></pre>
 </div>
 </div>
 <div class="listingblock">
 <div class="title">查看磁盘信息</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">virsh domblklist [VM_Name]</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">virsh domblklist foo</code></pre>
 </div>
 </div>
 </div>
@@ -1726,8 +1726,8 @@ virsh detach-disk web vdb</code></pre>
 <div class="title">创建快照</div>
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">sudo virsh snapshot-create-as \
---domain [VM_Name] \
---name [Snapshot_Name] \
+--domain foo \
+--name foo_snapshot \
 --description "first snapshot" \
 --atomic</code></pre>
 </div>
@@ -1735,19 +1735,25 @@ virsh detach-disk web vdb</code></pre>
 <div class="listingblock">
 <div class="title">查看快照</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">virsh snapshot-list --domain [VM_Name]</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">virsh snapshot-list --domain foo</code></pre>
 </div>
 </div>
 <div class="listingblock">
 <div class="title">删除快照</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">virsh snapshot-delete --domain [VM_Name] [Snapshot_Name]</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">virsh snapshot-delete --domain foo foo_snapshot</code></pre>
 </div>
 </div>
 <div class="listingblock">
 <div class="title">还原快照</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">virsh snapshot-revert --domain [VM_Name] --snapshotname [SnapShot_Name]</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">virsh snapshot-revert --domain foo --snapshotname foo_snapshot</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">开机自启</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"></code></pre>
 </div>
 </div>
 </div>
@@ -4930,7 +4936,7 @@ mv /backup/bkp_data-2 /backup/bkp_data</code></pre>
 <div class="sect2">
 <h3 id="_ssh">21.2. SSH</h3>
 <div class="sect3">
-<h4 id="_无密钥登陆">21.2.1. 无密钥登陆</h4>
+<h4 id="_无密钥登陆client">21.2.1. 无密钥登陆(Client)</h4>
 <div class="listingblock">
 <div class="title">生成密钥对</div>
 <div class="content">
@@ -4955,6 +4961,48 @@ chmod 755 ~/.ssh/config
 cat &lt;&lt; EOF &gt;&gt; ~/.ssh/config
 Host IP
     IdentityFile ~/.ssh/yss
+EOF
+
+chmod 400 ~/.ssh/config</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_无密钥登陆server">21.2.2. 无密钥登陆(Server)</h4>
+<div class="listingblock">
+<div class="title">生成密钥对</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">ssh-keygen -N "" -f ~/.ssh/foo -C foo</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>会在 <code>~/.ssh/</code> 目录下生成两个文件</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>私钥文件 <code>foo</code></p>
+</li>
+<li>
+<p>公钥文件 <code>foo.pub</code></p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="title">将公钥内容添加到authorized_keys文件中</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">cat ~/.ssh/foo.pub &gt;&gt; ~/.ssh/authorized_keys</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">客户机配置</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">touch ~/.ssh/config
+
+chmod 755 ~/.ssh/config
+cat &lt;&lt; EOF &gt;&gt; ~/.ssh/config
+Host IP
+    IdentityFile ~/.ssh/foo
 EOF
 
 chmod 400 ~/.ssh/config</code></pre>
@@ -5012,9 +5060,6 @@ make &amp;&amp; make install &amp;&amp; make install-config
 cd .. &amp;&amp; rm -rf proxychains-ng</code></pre>
 </div>
 </div>
-</div>
-<div class="sect2">
-<h3 id="_systemctl">21.5. Systemctl</h3>
 <div style="page-break-after: always;"></div>
 </div>
 </div>
@@ -5271,7 +5316,7 @@ WakeSystem：如果系统休眠，是否自动唤醒系统</pre>
 </div>
 </div>
 <div class="paragraph">
-<p>OnCalendark具体时间对应关系</p>
+<p>OnCalendar详细说明</p>
 </div>
 <div class="admonitionblock tip">
 <table>
