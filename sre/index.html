@@ -1022,6 +1022,17 @@ p { margin-bottom: 1.25rem; }
 <li><a href="#_使用_3">26.2. 使用</a></li>
 </ul>
 </li>
+<li><a href="#_PureFTPd_chapter">27. PureFTPd</a>
+<ul class="sectlevel2">
+<li><a href="#_安装_12">27.1. 安装</a>
+<ul class="sectlevel3">
+<li><a href="#_centos">27.1.1. CentOS</a></li>
+<li><a href="#_ubuntu">27.1.2. Ubuntu</a></li>
+</ul>
+</li>
+<li><a href="#_使用_4">27.2. 使用</a></li>
+</ul>
+</li>
 </ul>
 </div>
 </div>
@@ -1057,7 +1068,7 @@ p { margin-bottom: 1.25rem; }
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="images/diag-c43f58bf08ee30dd0afc5c7f7a25ab23.png" alt="Diagram" width="867" height="236">
+<img src="images/diag-c43f58bf08ee30dd0afc5c7f7a25ab23.png" alt="Diagram" width="840" height="230">
 </div>
 </div>
 </div>
@@ -1074,7 +1085,7 @@ p { margin-bottom: 1.25rem; }
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="images/diag-c03c8db8ff981a9af37ef26f88c36849.png" alt="Diagram" width="400" height="141">
+<img src="images/diag-c03c8db8ff981a9af37ef26f88c36849.png" alt="Diagram" width="380" height="137">
 </div>
 </div>
 </div>
@@ -1088,7 +1099,7 @@ p { margin-bottom: 1.25rem; }
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="images/diag-e89c61ca051ab8b7256c4d8f7a9ef5dc.png" alt="Diagram" width="263" height="141">
+<img src="images/diag-e89c61ca051ab8b7256c4d8f7a9ef5dc.png" alt="Diagram" width="249" height="137">
 </div>
 </div>
 </div>
@@ -1102,7 +1113,7 @@ p { margin-bottom: 1.25rem; }
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="images/diag-ee7964dd0387c38fa1d1815ba4a0d730.png" alt="Diagram" width="199" height="141">
+<img src="images/diag-ee7964dd0387c38fa1d1815ba4a0d730.png" alt="Diagram" width="191" height="137">
 </div>
 </div>
 </div>
@@ -1119,7 +1130,7 @@ p { margin-bottom: 1.25rem; }
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="images/diag-c6a0a44d0b6ed6c34d1a36cd1ff9b89e.png" alt="Diagram" width="362" height="141">
+<img src="images/diag-c6a0a44d0b6ed6c34d1a36cd1ff9b89e.png" alt="Diagram" width="344" height="137">
 </div>
 </div>
 </div>
@@ -1127,7 +1138,7 @@ p { margin-bottom: 1.25rem; }
 <h3 id="_系统管理">系统管理</h3>
 <div class="imageblock">
 <div class="content">
-<img src="images/diag-643a7139d6ffc50009266936f8807ed3.png" alt="Diagram" width="116" height="141">
+<img src="images/diag-643a7139d6ffc50009266936f8807ed3.png" alt="Diagram" width="116" height="138">
 </div>
 </div>
 <div style="page-break-after: always;"></div>
@@ -5899,10 +5910,286 @@ Tomcat test</code></pre>
 </div>
 </div>
 </div>
+<div class="sect1">
+<h2 id="_PureFTPd_chapter">27. PureFTPd</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_安装_12">27.1. 安装</h3>
+<div class="sect3">
+<h4 id="_centos">27.1.1. CentOS</h4>
+<div class="listingblock">
+<div class="title">安装</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">yum install -y epel-release
+
+yum install -y pure-ftpd</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">配置</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">cat &lt;&lt; EOF &gt; /etc/pure-ftpd/pure-ftpd.conf
+AllowAnonymousFXP no
+AllowUserFXP no
+AnonymousCanCreateDirs no
+AnonymousCantUpload yes
+AnonymousOnly no
+AntiWarez yes
+AutoRename no
+BrokenClientsCompatibility yes
+ChrootEveryone yes
+CreateHomeDir no
+CustomerProof no
+Daemonize yes
+DisplayDotFiles yes
+DontResolve yes
+IPV4Only yes
+LimitRecursion 10000 8
+MaxClientsNumber 200
+MaxClientsPerIP 8
+MaxDiskUsage 99
+MaxIdleTime 15
+MaxLoad 4
+MinUID 45
+PureDB /etc/pure-ftpd/pureftpd.pdb
+NoAnonymous yes
+NoChmod no
+ProhibitDotFilesRead no
+ProhibitDotFilesWrite no
+SyslogFacility ftp
+Umask 077:077
+VerboseLog no
+PassivePortRange 52000 52050
+#加密通信
+#0代表明文，默认值
+#2代表控制链接加密但数据链接不加密
+#3代表所有链接都加密
+TLS 0
+EOF
+
+systemctl start pure-ftpd
+systemctl enable pure-ftpd
+
+
+mkdir -p /var/ftp
+
+groupadd ftpgroup
+
+useradd ftpuser -d /var/ftp -G ftpgroup -s /bin/false</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">新增FTP用户</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">yum install -y pwgen</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">生成FTP随机密码</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">ftp_password=`pwgen -s 20`
+echo $ftp_password&gt; pw.txt
+echo $ftp_password&gt;&gt; pw.txt
+cat pw.txt
+
+pure-pw useradd ftptest -u ftpuser -g ftpgroup -d /var/ftp -m &lt; pw.txt
+rm -f pw.txt
+pure-pw mkdb
+pure-pw show admin</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">日志配置</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">vim /etc/rsyslog.conf
+
+*.info;mail.none;authpriv.none;cron.none;ftp.none  /var/log/messages
+# Pure-FTPd日志
+ftp.*                              -/var/log/pureftpd/pureftpd.log
+
+
+
+mkdir -p /var/log/pureftpd/ &amp;&amp; touch /var/log/pureftpd/pureftpd.log
+
+systemctl restart rsyslog.service</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">日志轮替</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">echo &lt;&lt;EOF&gt; /etc/logrotate.d/pureftpd
+/var/log/pureftpd/pureftpd.log {
+        monthly
+        missingok
+        create
+        compress
+        dateext
+	    rotate 1
+	    create 640 root root
+        sharedscripts
+        postrotate
+        /bin/kill -HUP $(/bin/cat /var/run/syslogd.pid 2&gt;/dev/null) &amp;&gt;/dev/null
+        endscript
+}
+EOF</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_ubuntu">27.1.2. Ubuntu</h4>
+<div class="listingblock">
+<div class="title">安装</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">apt-get install pure-ftpd</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">配置</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">mkdir -p /var/ftp
+
+groupadd ftpgroup
+
+useradd ftpuser -d /var/ftp -G ftpgroup -s /bin/false
+
+pure-pw useradd ftptest -u ftpuser -g ftpgroup -d /var/ftp
+
+pure-pw mkdb
+
+cd /etc/pure-ftpd/auth &amp;&amp; ln -s /etc/pure-ftpd/conf/PureDB puredb
+
+echo yes &gt; /etc/pure-ftpd/conf/Daemonize
+echo yes &gt; /etc/pure-ftpd/conf/NoAnonymous
+echo yes &gt; /etc/pure-ftpd/conf/ChrootEveryone
+echo yes &gt; /etc/pure-ftpd/conf/IPV4Only
+echo yes &gt; /etc/pure-ftpd/conf/ProhibitDotFilesWrite
+echo yes &gt; /etc/pure-ftpd/conf/BrokenClientsCompatibility
+echo 50 &gt; /etc/pure-ftpd/conf/MaxClientsNumber
+echo 5 &gt; /etc/pure-ftpd/conf/MaxClientsPerIP
+echo no &gt; /etc/pure-ftpd/conf/VerboseLog
+echo yes &gt; /etc/pure-ftpd/conf/DisplayDotFiles
+echo yes &gt; /etc/pure-ftpd/conf/NoChmod
+echo no &gt; /etc/pure-ftpd/conf/AnonymousOnly
+echo no &gt; /etc/pure-ftpd/conf/PAMAuthentication
+echo no &gt; /etc/pure-ftpd/conf/UnixAuthentication
+echo /etc/pure-ftpd/pureftpd.pdb &gt; /etc/pure-ftpd/conf/PureDB
+echo yes &gt; /etc/pure-ftpd/conf/DontResolve
+echo 15 &gt; /etc/pure-ftpd/conf/MaxIdleTime
+echo 2000 8 &gt; /etc/pure-ftpd/conf/LimitRecursion
+echo yes &gt; /etc/pure-ftpd/conf/AntiWarez
+echo no &gt; /etc/pure-ftpd/conf/AnonymousCanCreateDirs
+echo 4 &gt; /etc/pure-ftpd/conf/MaxLoad
+echo no &gt; /etc/pure-ftpd/conf/AllowUserFXP
+echo no &gt; /etc/pure-ftpd/conf/AllowAnonymousFXP
+echo no &gt; /etc/pure-ftpd/conf/AutoRename
+echo yes &gt; /etc/pure-ftpd/conf/AnonymousCantUpload
+echo yes &gt; /etc/pure-ftpd/conf/NoChmod
+echo 80 &gt; /etc/pure-ftpd/conf/MaxDiskUsage
+echo yes &gt; /etc/pure-ftpd/conf/CustomerProof
+echo 0 &gt; /etc/pure-ftpd/conf/TLS
+echo 45 &gt; /etc/pure-ftpd/conf/MinUID
+
+systemctl start pure-ftpd
+systemctl enable pure-ftpd</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">日志配置</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">vim /etc/rsyslog.d/50-default.conf
+
+auth,authpriv.*                 /var/log/auth.log
+*.*;auth,authpriv.none;ftp.none         -/var/log/syslog
+#cron.*                         /var/log/cron.log
+#daemon.*                       -/var/log/daemon.log
+kern.*                          -/var/log/kern.log
+#lpr.*                          -/var/log/lpr.log
+mail.*                          -/var/log/mail.log
+#user.*                         -/var/log/user.log
+ftp.*                           -/var/log/pureftpd/pureftpd.log
+
+
+mkdir -p /var/log/pureftpd/ &amp;&amp; touch /var/log/pureftpd/pureftpd.log
+
+systemctl restart rsyslog.service</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">日志轮替</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">echo &lt;&lt;EOF&gt; /etc/logrotate.d/pureftpd
+/var/log/pureftpd/pureftpd.log {
+	su syslog adm
+        monthly
+        missingok
+        create
+        compress
+        dateext
+	    rotate 1
+	    create 640 syslog adm
+        sharedscripts
+        postrotate
+        /bin/kill -HUP $(/bin/cat /var/run/rsyslogd.pid 2&gt;/dev/null) &amp;&gt;/dev/null
+        endscript
+}
+EOF</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_使用_4">27.2. 使用</h3>
+<div class="listingblock">
+<div class="title">JavaWeb环境测试</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"># 创建网站根目录
+mkdir -p /data/wwwroot/default
+echo 'Tomcat test' &gt; /data/wwwroot/default/index.jsp
+chown -R www.www /data/wwwroot</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">配置nginx配置文件</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">cat &lt;&lt; EOF &gt; /etc/nginx/conf.d/tomcat.conf
+upstream nameserver {
+    server 10.0.2.20:8080;
+}
+server{
+    listen       9980 default_server;
+    server_name  tomcat.master.com;
+    location / {
+    proxy_pass http://nameserver;
+    proxy_set_header Host \$host;
+    }
+}
+EOF
+
+# 重启nginx
+nginx -t &amp;&amp; nginx -s reload</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">测试</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">[root@master-2022 bin]# curl 127.0.0.1:9980
+HTTP/1.1 200
+Set-Cookie: JSESSIONID=68ABB16FBD9C3E8C65A2C89668EDEF74; Path=/; HttpOnly
+Content-Type: text/html;charset=ISO-8859-1
+Content-Length: 12
+Date: Wed, 25 May 2022 13:03:21 GMT
+
+Tomcat test</code></pre>
+</div>
+</div>
+<div style="page-break-after: always;"></div>
+</div>
+</div>
+</div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2022-12-28 10:20:15 +0800
+Last updated 2023-03-07 11:04:35 +0800
 </div>
 </div>
 <script src="js/highlight.min.js"></script>
