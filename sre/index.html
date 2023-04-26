@@ -5437,11 +5437,11 @@ systemctl disable firewalld
 systemctl mask firewalld
 
 # 创建swap分区
-dd if=/dev/zero of=/var/swapfile count=16 bs=1G
-chmod 600 /var/swapfile
-mkswap /var/swapfile
-swapon /var/swapfile
-echo "/var/swapfile swap swap defaults 0 0" &gt;&gt; /etc/fstab</code></pre>
+dd if=/dev/zero of=/var/.swapfile count=16 bs=1G
+chmod 600 /var/.swapfile
+mkswap /var/.swapfile
+swapon /var/.swapfile
+echo "/var/.swapfile swap swap defaults 0 0" &gt;&gt; /etc/fstab</code></pre>
 </div>
 </div>
 <div style="page-break-after: always;"></div>
