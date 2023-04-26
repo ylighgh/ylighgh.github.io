@@ -990,6 +990,7 @@ p { margin-bottom: 1.25rem; }
 <li><a href="#_使用_2">22.3.3. 使用</a></li>
 </ul>
 </li>
+<li><a href="#_centos9初始化">22.4. CentOS9初始化</a></li>
 </ul>
 </li>
 <li><a href="#_Java_chapter">23. Java</a>
@@ -5387,8 +5388,63 @@ systemctl enable checkin.timer
 systemctl restart checkin.timer</code></pre>
 </div>
 </div>
-<div style="page-break-after: always;"></div>
 </div>
+</div>
+<div class="sect2">
+<h3 id="_centos9初始化">22.4. CentOS9初始化</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">dnf install -y iproute rsync epel-release vim-enhanced wget curl
+
+dnf install -y dnf-plugins-core
+dnf config-manager --set-enabled crb
+
+
+#禁用SELINUX，必须重启才能生效
+echo SELINUX=disabled &gt; /etc/selinux/config
+echo SELINUXTYPE=targeted &gt;&gt; /etc/selinux/config
+
+#最大可以打开的文件
+echo "*               soft   nofile            65535" &gt;&gt; /etc/security/limits.conf
+echo "*               hard   nofile            65535" &gt;&gt; /etc/security/limits.conf
+
+# ssh登录时，登录ip被会反向解析为域名，导致ssh登录缓慢
+sed -i "s/#UseDNS yes/UseDNS no/" /etc/ssh/sshd_config
+sed -i "s/GSSAPIAuthentication yes/GSSAPIAuthentication no/" /etc/ssh/sshd_config
+sed -i "s/GSSAPICleanupCredentials yes/GSSAPICleanupCredentials no/" /etc/ssh/sshd_config
+sed -i "s/#MaxAuthTries 6/MaxAuthTries 10/" /etc/ssh/sshd_config
+# server每隔30秒发送一次请求给client，然后client响应，从而保持连接
+sed -i "s/#ClientAliveInterval 0/ClientAliveInterval 30/" /etc/ssh/sshd_config
+# server发出请求后，客户端没有响应得次数达到3，就自动断开连接，正常情况下，client不会不响应
+sed -i "s/#ClientAliveCountMax 3/ClientAliveCountMax 10/" /etc/ssh/sshd_config
+
+# 支持gbk文件显示
+echo "set fencs=utf-8,gbk" &gt;&gt; /etc/vimrc
+
+# 设定系统时区
+yes|cp /usr/share/zoneinfo/Asia/Chongqing /etc/localtime
+
+# 时间同步
+dnf install -y systemd-timesyncd
+systemctl enable systemd-timesyncd
+systemctl start systemd-timesyncd
+
+# 如果是x86_64系统，排除32位包
+echo "exclude=*.i386 *.i586 *.i686" &gt;&gt; /etc/yum.conf
+
+systemctl stop firewalld
+systemctl disable firewalld
+systemctl mask firewalld
+
+# 创建swap分区
+dd if=/dev/zero of=/var/swapfile count=16 bs=1G
+chmod 600 /var/swapfile
+mkswap /var/swapfile
+swapon /var/swapfile
+echo "/var/swapfile swap swap defaults 0 0" &gt;&gt; /etc/fstab</code></pre>
+</div>
+</div>
+<div style="page-break-after: always;"></div>
 </div>
 </div>
 </div>
