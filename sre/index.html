@@ -822,6 +822,7 @@ p { margin-bottom: 1.25rem; }
 <li><a href="#_删除虚拟机">6.3.1. 删除虚拟机</a></li>
 <li><a href="#_增加硬盘">6.3.2. 增加硬盘</a></li>
 <li><a href="#_快照">6.3.3. 快照</a></li>
+<li><a href="#_删除网卡">6.3.4. 删除网卡</a></li>
 </ul>
 </li>
 <li><a href="#_镜像文件扩容">6.4. 镜像文件扩容</a></li>
@@ -991,7 +992,11 @@ p { margin-bottom: 1.25rem; }
 <li><a href="#_使用_2">22.3.3. 使用</a></li>
 </ul>
 </li>
-<li><a href="#_centos9初始化">22.4. CentOS9初始化</a></li>
+<li><a href="#_centos9初始化">22.4. CentOS9初始化</a>
+<ul class="sectlevel3">
+<li><a href="#_networkmanager">22.4.1. NetworkManager</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li><a href="#_Java_chapter">23. Java</a>
@@ -1767,6 +1772,25 @@ virsh detach-disk foo vdb</code></pre>
 <div class="title">开机自启</div>
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"></code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_删除网卡">6.3.4. 删除网卡</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"># 查看网卡
+virsh domiflist centos9
+
+[yinlei@archlinux ~]$ virsh domiflist centos9
+ 接口   类型     源       型号     MAC
+------------------------------------------------------
+ tap0   bridge   virbr0   virtio   52:54:00:98:7a:ce
+ tap1   bridge   virbr0   virtio   52:54:00:cb:80:54
+ tap2   bridge   virbr0   virtio   52:54:00:8d:87:ae
+
+ # 删除指定网卡
+virsh detach-interface centos9 bridge 52:54:00:8d:87:ae</code></pre>
 </div>
 </div>
 </div>
@@ -5474,7 +5498,34 @@ swapon /var/.swapfile
 echo "/var/.swapfile swap swap defaults 0 0" &gt;&gt; /etc/fstab</code></pre>
 </div>
 </div>
+<div class="sect3">
+<h4 id="_networkmanager">22.4.1. NetworkManager</h4>
+<div class="listingblock">
+<div class="title">设置IP地址</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">nmcli c modify enp1s0 ipv4.addresses 192.168.122.120/24 ipv4.method manual
+nmcli c modify enp1s0 ipv4.gateway 192.168.122.1
+nmcli c modify enp1s0 ipv6.method ignore
+nmcli c modify enp1s0 ipv4.dns "223.5.5.5 223.6.6.6"
+nmcli con mod enp1s0 connection.autoconnect yes</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">修改网卡名</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">nmcli con modify 'enp1s0' connection.id eno1
+nmcli con reload
+nmcli con up eno2</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">修改设备网卡名</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">nmcli connection modify eno1 connection.interface-name eno1</code></pre>
+</div>
+</div>
 <div style="page-break-after: always;"></div>
+</div>
 </div>
 </div>
 </div>
