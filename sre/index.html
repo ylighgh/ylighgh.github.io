@@ -822,7 +822,11 @@ p { margin-bottom: 1.25rem; }
 <li><a href="#_删除虚拟机">6.3.1. 删除虚拟机</a></li>
 <li><a href="#_增加硬盘">6.3.2. 增加硬盘</a></li>
 <li><a href="#_快照">6.3.3. 快照</a></li>
-<li><a href="#_删除网卡">6.3.4. 删除网卡</a></li>
+<li><a href="#_网卡">6.3.4. 网卡</a>
+<ul class="sectlevel4">
+<li><a href="#_网络_2">网络</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li><a href="#_镜像文件扩容">6.4. 镜像文件扩容</a></li>
@@ -1771,18 +1775,27 @@ virsh detach-disk foo vdb</code></pre>
 <div class="listingblock">
 <div class="title">开机自启</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"></code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">virsh autostart foo</code></pre>
 </div>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_删除网卡">6.3.4. 删除网卡</h4>
+<h4 id="_网卡">6.3.4. 网卡</h4>
 <div class="listingblock">
+<div class="title">增加网卡</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">virsh attach-interface foo --type bridge --source virbr0
+
+virsh attach-interface foo --type bridge --source virbr0 --config</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">删除网卡</div>
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"># 查看网卡
-virsh domiflist centos9
+virsh domiflist foo
 
-[yinlei@archlinux ~]$ virsh domiflist centos9
+[yinlei@archlinux ~]$ virsh domiflist foo
  接口   类型     源       型号     MAC
 ------------------------------------------------------
  tap0   bridge   virbr0   virtio   52:54:00:98:7a:ce
@@ -1790,7 +1803,19 @@ virsh domiflist centos9
  tap2   bridge   virbr0   virtio   52:54:00:8d:87:ae
 
  # 删除指定网卡
-virsh detach-interface centos9 bridge 52:54:00:8d:87:ae</code></pre>
+virsh detach-interface foo bridge 52:54:00:8d:87:ae</code></pre>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_网络_2">网络</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"># 重启网络
+virsh net-destroy default
+
+# 开启
+virsh net-strat default</code></pre>
+</div>
 </div>
 </div>
 </div>
@@ -5489,6 +5514,8 @@ systemctl mask firewalld
 
 dnf install iptables iptables-services iptables-utils -y
 
+# 解决无法高版本SSH无法连接低版本SSH问题
+update-crypto-policies --set LEGACY
 
 # 创建swap分区
 dd if=/dev/zero of=/var/.swapfile count=16 bs=1G
