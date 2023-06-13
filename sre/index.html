@@ -6232,7 +6232,23 @@ cat pw.txt
 pure-pw useradd ftptest -u ftpuser -g ftpgroup -d /var/ftp -m &lt; pw.txt
 rm -f pw.txt
 pure-pw mkdb
-pure-pw show admin</code></pre>
+pure-pw show ftptest
+
+chown -R ftptest:ftpuser /var/ftp</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">测试</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">yum install -y lftp
+
+lftp  -u ftptest,XKeJVhlCXfHdQmessy4f localhost &lt;&lt;EOF
+mkdir test
+ls
+rmdir test
+ls
+quit
+EOF</code></pre>
 </div>
 </div>
 <div class="listingblock">
