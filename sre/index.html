@@ -1630,7 +1630,7 @@ git rm -r --cached target</code></pre>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"># Archlinux
-sudo pacman -S virt-manager qemu-system-x86 vde2 ebtables dnsmasq bridge-utils openbsd-netcat qemu-base</code></pre>
+sudo pacman -S virt-manager qemu-system-x86 vde2 ebtables dnsmasq bridge-utils openbsd-netcat qemu-base virt-viewer</code></pre>
 </div>
 </div>
 <div class="listingblock">
@@ -1643,11 +1643,19 @@ kvm             441119  1 kvm_intel</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">systemctl enable --now libvirtd
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">sudo systemctl enable --now libvirtd
 
 # 设置端口转发
-echo "net.ipv4.ip_forward = 1" &gt;&gt; /etc/sysctl.conf
-sysctl -p</code></pre>
+sudo echo "net.ipv4.ip_forward = 1" &gt;&gt; /etc/sysctl.conf
+sudo sysctl -p</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">配置网络</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">sudo virsh net-define /etc/libvirt/qemu/networks/default.xml
+sudo virsh net-start default
+sudo virsh net-autostart default</code></pre>
 </div>
 </div>
 <div class="listingblock">
