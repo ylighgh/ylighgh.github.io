@@ -1044,6 +1044,11 @@ p { margin-bottom: 1.25rem; }
 </li>
 </ul>
 </li>
+<li><a href="#_Buildkit_chapter">29. buildkit</a>
+<ul class="sectlevel2">
+<li><a href="#_安装_14">29.1. 安装</a></li>
+</ul>
+</li>
 </ul>
 </div>
 </div>
@@ -6499,10 +6504,74 @@ EOF</code></pre>
 </div>
 </div>
 </div>
+<div class="sect1">
+<h2 id="_Buildkit_chapter">29. buildkit</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>由于 k8s 1.24以后默认使用containerd作为容器运行环境</p>
+</div>
+<div class="paragraph">
+<p>因此需要安装buildkit配置nerdctl使用</p>
+</div>
+<div class="sect2">
+<h3 id="_安装_14">29.1. 安装</h3>
+<div class="paragraph">
+<p><a href="https://github.com/moby/buildkit/releases">下载地址</a></p>
+</div>
+<div class="listingblock">
+<div class="title">下载</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">wget -c https://github.com/moby/buildkit/releases/download/v0.12.2/buildkit-v0.12.2.linux-amd64.tar.gz</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">解压</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">tar xf buildkit-v0.12.2.linux-amd64.tar.gz -C /usr/local</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">配置systemd</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">cat &lt;&lt;EOF&gt; /etc/systemd/system/buildkit.service
+[Unit]
+Description=BuildKit
+Documentation=https://github.com/moby/buildkit
+
+[Service]
+ExecStart=/usr/local/bin/buildkitd --oci-worker=false --containerd-worker=true
+
+[Install]
+WantedBy=multi-user.target
+EOF</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">重载systemd</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">systemctl daemon-reload</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">启动buildkit</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">systemctl start buildkit</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">设为开机自动</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">systemctl enable buildkit</code></pre>
+</div>
+</div>
+<div style="page-break-after: always;"></div>
+</div>
+</div>
+</div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2023-09-04 20:24:57 +0800
+Last updated 2023-09-04 20:53:55 +0800
 </div>
 </div>
 <script src="js/highlight.min.js"></script>
