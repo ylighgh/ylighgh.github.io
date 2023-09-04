@@ -1041,6 +1041,12 @@ p { margin-bottom: 1.25rem; }
 <li><a href="#_使用_4">27.2. 使用</a></li>
 </ul>
 </li>
+<li><a href="#_Harbor_chapter">28. Harbor</a>
+<ul class="sectlevel2">
+<li><a href="#_安装_13">28.1. 安装</a></li>
+<li><a href="#_使用_5">28.2. 使用</a></li>
+</ul>
+</li>
 </ul>
 </div>
 </div>
@@ -6447,10 +6453,89 @@ Tomcat test</code></pre>
 </div>
 </div>
 </div>
+<div class="sect1">
+<h2 id="_Harbor_chapter">28. Harbor</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_安装_13">28.1. 安装</h3>
+<div class="paragraph">
+<p><a href="https://github.com/goharbor/harbor/releases">下载地址</a></p>
+</div>
+<div class="listingblock">
+<div class="title">下载</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">wget -c https://github.com/goharbor/harbor/releases/download/v2.3.4/harbor-offline-installer-v2.3.4.tgz</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">解压</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">tar xf harbor-offline-installer-v2.3.4.tgz -C /usr/local</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">修改配置</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"># 进入文件夹
+cd /usr/local/harbor
+# 备份默认配置文件
+cp -a harbor.yml.tmpl harbor.yml
+
+# 修改地址
+sed -i '5s/reg.mydomain.com/192.168.0.150/' harbor.yml
+
+# 注释https
+sed -i '13s/^/#/' harbor.yml
+sed -i '15s/^/#/' harbor.yml
+sed -i '17s/^/#/' harbor.yml
+sed -i '18s/^/#/' harbor.yml
+
+# 查看harbor默认密码
+sed -n '34,34p' harbor.yml
+
+
+# 安装
+./install.sh
+
+
+# 修改配置daemon文件
+sed -i '2s/$/,/' /etc/docker/daemon.json
+sed -i '2 a \"insecure-registries\":[\"192.168.0.150:80\"]' /etc/docker/daemon.json
+
+# 重启docker
+systemctl daemon-reload
+systemctl restart docker</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_使用_5">28.2. 使用</h3>
+<div class="listingblock">
+<div class="title">推送镜像</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"># 登陆docker仓库
+docker login -u admin -p Harbor12345 192.168.0.150:80
+
+# 修改镜像格式
+harbor地址/仓库名/镜像名:版本号
+
+docker tag 64f770dda7e1 192.168.0.150:80/repo/mytest:v2.0.0
+
+# 推送镜像
+docker push 192.168.0.150:80/repo/mytest:v2.0.0
+
+# 拉取镜像
+docker pull 192.168.0.150:80/repo/mytest:v2.0.0</code></pre>
+</div>
+</div>
+<div style="page-break-after: always;"></div>
+</div>
+</div>
+</div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2023-08-28 18:12:44 +0800
+Last updated 2023-09-04 20:24:57 +0800
 </div>
 </div>
 <script src="js/highlight.min.js"></script>
