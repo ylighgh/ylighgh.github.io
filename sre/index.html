@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="generator" content="Asciidoctor 2.0.18">
+<meta name="generator" content="Asciidoctor 2.0.20">
 <meta name="author" content="尹磊">
 <title>Site Reliability Engineering</title>
 <style>
@@ -1076,7 +1076,7 @@ p { margin-bottom: 1.25rem; }
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="images/diag-c43f58bf08ee30dd0afc5c7f7a25ab23.png" alt="Diagram" width="839" height="230">
+<img src="images/diag-plantuml-md5-c43f58bf08ee30dd0afc5c7f7a25ab23.png" alt="Diagram" width="839" height="230">
 </div>
 </div>
 </div>
@@ -1093,7 +1093,7 @@ p { margin-bottom: 1.25rem; }
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="images/diag-c03c8db8ff981a9af37ef26f88c36849.png" alt="Diagram" width="379" height="137">
+<img src="images/diag-plantuml-md5-c03c8db8ff981a9af37ef26f88c36849.png" alt="Diagram" width="379" height="137">
 </div>
 </div>
 </div>
@@ -1107,7 +1107,7 @@ p { margin-bottom: 1.25rem; }
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="images/diag-e89c61ca051ab8b7256c4d8f7a9ef5dc.png" alt="Diagram" width="249" height="137">
+<img src="images/diag-plantuml-md5-e89c61ca051ab8b7256c4d8f7a9ef5dc.png" alt="Diagram" width="249" height="137">
 </div>
 </div>
 </div>
@@ -1121,7 +1121,7 @@ p { margin-bottom: 1.25rem; }
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="images/diag-ee7964dd0387c38fa1d1815ba4a0d730.png" alt="Diagram" width="191" height="137">
+<img src="images/diag-plantuml-md5-ee7964dd0387c38fa1d1815ba4a0d730.png" alt="Diagram" width="191" height="137">
 </div>
 </div>
 </div>
@@ -1138,7 +1138,7 @@ p { margin-bottom: 1.25rem; }
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="images/diag-c6a0a44d0b6ed6c34d1a36cd1ff9b89e.png" alt="Diagram" width="344" height="137">
+<img src="images/diag-plantuml-md5-c6a0a44d0b6ed6c34d1a36cd1ff9b89e.png" alt="Diagram" width="344" height="137">
 </div>
 </div>
 </div>
@@ -1146,7 +1146,7 @@ p { margin-bottom: 1.25rem; }
 <h3 id="_系统管理">系统管理</h3>
 <div class="imageblock">
 <div class="content">
-<img src="images/diag-643a7139d6ffc50009266936f8807ed3.png" alt="Diagram" width="116" height="138">
+<img src="images/diag-plantuml-md5-643a7139d6ffc50009266936f8807ed3.png" alt="Diagram" width="116" height="138">
 </div>
 </div>
 <div style="page-break-after: always;"></div>
@@ -2186,20 +2186,20 @@ systemctl start docker
 
 #配置镜像加速
 mkdir -p /etc/docker
-cat &lt;&lt; EOF &gt; /etc/docker/daemon.json
+cat &lt;&lt; EOFF &gt; /etc/docker/daemon.json
 {
   "registry-mirrors": [
     "https://registry.docker-cn.com",
     "https://hub-mirror.c.163.com"
   ],
-  "graph": "/var/lib/docker",
+  "data-root": "/var/lib/docker",
   "storage-driver": "overlay2",
   "dns" : [
     "223.5.5.5",
     "223.6.6.6"
   ]
 }
-EOF
+EOFF
 
 #配置端口转发
 echo 1 &gt; /proc/sys/net/ipv4/ip_forward
@@ -6450,7 +6450,7 @@ Tomcat test</code></pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2023-03-07 11:04:35 +0800
+Last updated 2023-08-28 18:12:44 +0800
 </div>
 </div>
 <script src="js/highlight.min.js"></script>
