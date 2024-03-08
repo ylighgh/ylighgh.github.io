@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="generator" content="Asciidoctor 2.0.20">
+<meta name="generator" content="Asciidoctor 2.0.21">
 <meta name="author" content="尹磊">
 <title>Site Reliability Engineering</title>
 <style>
@@ -1047,6 +1047,12 @@ p { margin-bottom: 1.25rem; }
 <li><a href="#_Buildkit_chapter">29. buildkit</a>
 <ul class="sectlevel2">
 <li><a href="#_安装_14">29.1. 安装</a></li>
+</ul>
+</li>
+<li><a href="#_Kubectl_chapter">30. kubectl</a>
+<ul class="sectlevel2">
+<li><a href="#_安装_15">30.1. 安装</a></li>
+<li><a href="#_使用_6">30.2. 使用</a></li>
 </ul>
 </li>
 </ul>
@@ -6568,10 +6574,60 @@ EOF</code></pre>
 </div>
 </div>
 </div>
+<div class="sect1">
+<h2 id="_Kubectl_chapter">30. kubectl</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_安装_15">30.1. 安装</h3>
+<div class="listingblock">
+<div class="title">增加镜像源</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">cat &lt;&lt;EOF&gt; /etc/yum.repos.d/kubernetes.repo
+[kubernetes]
+name=Kubernetes
+baseurl=https://pkgs.k8s.io/core:/stable:/v1.29/rpm/
+enabled=1
+gpgcheck=1
+gpgkey=https://pkgs.k8s.io/core:/stable:/v1.29/rpm/repodata/repomd.xml.key
+EOF</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">安装</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">yum install -y kubectl</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_使用_6">30.2. 使用</h3>
+<div class="listingblock">
+<div class="title">获取namespaces</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kubectl get namespaces
+
+kubectl get ns</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">获取指定命名空间depolyments</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kubectl get deployments.apps -n kube-ops
+
+# 输出更详细的信息
+kubectl get deployments.apps -n kube-ops -o wide
+
+kubectl get deploy -n kube-ops -o wide</code></pre>
+</div>
+</div>
+<div style="page-break-after: always;"></div>
+</div>
+</div>
+</div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2023-09-04 20:53:55 +0800
+Last updated 2024-03-08 11:31:07 +0800
 </div>
 </div>
 <script src="js/highlight.min.js"></script>
