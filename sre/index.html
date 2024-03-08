@@ -6620,6 +6620,16 @@ kubectl get deployments.apps -n kube-ops -o wide
 kubectl get deploy -n kube-ops -o wide</code></pre>
 </div>
 </div>
+<div class="listingblock">
+<div class="title">格式化输出</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"># 只获取deployments名称
+kubectl get deployments.apps -o go-template --template='{{ range .items}}{{printf "%s\n"  .metadata.name }}{{ end }}' -n kube-ops
+
+# 获取deployments名称和副本数
+kubectl get deployments.apps -o go-template --template='{{ range .items}}{{printf "%s %d\n"  .metadata.name .spec.replicas }}{{ end }}' -n kube-ops</code></pre>
+</div>
+</div>
 <div style="page-break-after: always;"></div>
 </div>
 </div>
