@@ -6627,7 +6627,16 @@ kubectl get deploy -n kube-ops -o wide</code></pre>
 kubectl get deployments.apps -o go-template --template='{{ range .items}}{{printf "%s\n"  .metadata.name }}{{ end }}' -n kube-ops
 
 # 获取deployments名称和副本数
-kubectl get deployments.apps -o go-template --template='{{ range .items}}{{printf "%s %d\n"  .metadata.name .spec.replicas }}{{ end }}' -n kube-ops</code></pre>
+kubectl get deployments.apps -o go-template --template='{{ range .items}}{{printf "%s %d\n"  .metadata.name .spec.replicas }}{{ end }}' -n kube-ops
+
+# 获取大于指定副本数的deployments名称
+kubectl get deployments.apps -o go-template --template='{{range .items}}{{if gt .spec.replicas 0}}{{.metadata.name}} {{.spec.replicas}}{{"\n"}}{{end}}{{end}}' -n kube-ops</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">创建service</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kubectl create service nodeport test-nodeport</code></pre>
 </div>
 </div>
 <div style="page-break-after: always;"></div>
