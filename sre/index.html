@@ -6636,7 +6636,52 @@ kubectl get deployments.apps -o go-template --template='{{range .items}}{{if gt 
 <div class="listingblock">
 <div class="title">创建service</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kubectl create service nodeport test-nodeport</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"># expose将一个资源包括Pod、Service、Deployment等公开为一个新的Service
+kubectl expose deployment deployname --port=81 --type=NodePort --target-port=80 --name=service-name</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>给deployname发布一个服务，--port为服务暴露出去的端口，--type为服务类型，--target-port为服务对应后端Pod的端口，port提供了集群内部访问服务的入口，即ClusterIP:port。</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="listingblock">
+<div class="title">修改镜像</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"># 将一个deployname的image改为镜像为1.0的image
+kubectl set image deploy deployname containername=containername:1.0</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">删除资源</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kubectl delete po podname --now</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">回滚镜像</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"># 回滚到上个版本
+kubectl rollout undo deployment &lt;deployment-name&gt;
+
+# 回滚到指定版本
+kubectl rollout history deployment &lt;deployment-name&gt;
+kubectl rollout undo deployment &lt;deployment-name&gt; --to-revision=&lt;revision-number&gt;</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">扩缩容</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kubectl scale deployment deployname --replicas=newnumber</code></pre>
 </div>
 </div>
 <div style="page-break-after: always;"></div>
