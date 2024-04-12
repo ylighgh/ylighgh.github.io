@@ -6684,6 +6684,18 @@ kubectl rollout undo deployment &lt;deployment-name&gt; --to-revision=&lt;revisi
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kubectl scale deployment deployname --replicas=newnumber</code></pre>
 </div>
 </div>
+<div class="listingblock">
+<div class="title">重启应用</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kubectl rollout restart deployment deployname</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">设置环境变量</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kubectl set env deployment/hephaestus KEY=VALUE -n pro</code></pre>
+</div>
+</div>
 <div style="page-break-after: always;"></div>
 </div>
 </div>
