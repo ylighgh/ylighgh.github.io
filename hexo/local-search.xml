@@ -5,8 +5,8 @@
   
   <entry>
     <title>k8s安装</title>
-    <link href="/2024/05/28/k8s%E5%AE%89%E8%A3%85-1/"/>
-    <url>/2024/05/28/k8s%E5%AE%89%E8%A3%85-1/</url>
+    <link href="/hexo/2024/05/28/k8s%E5%AE%89%E8%A3%85-1/"/>
+    <url>/hexo/2024/05/28/k8s%E5%AE%89%E8%A3%85-1/</url>
     
     <content type="html"><![CDATA[]]></content>
     
@@ -18,8 +18,8 @@
   
   <entry>
     <title>k8s安装</title>
-    <link href="/2024/05/28/k8s%E5%AE%89%E8%A3%85/"/>
-    <url>/2024/05/28/k8s%E5%AE%89%E8%A3%85/</url>
+    <link href="/hexo/2024/05/28/k8s%E5%AE%89%E8%A3%85/"/>
+    <url>/hexo/2024/05/28/k8s%E5%AE%89%E8%A3%85/</url>
     
     <content type="html"><![CDATA[<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">def</span> <span class="hljs-title function_">main</span>():<br>    foo()<br>    <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;python&quot;</span>)<br></code></pre></td></tr></table></figure>]]></content>
     
