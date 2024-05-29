@@ -4,6 +4,81 @@
   
   
   <entry>
+    <title>Kubernetes-Service/Ingress</title>
+    <link href="/hexo/2024/05/29/Kubernetes-Service/"/>
+    <url>/hexo/2024/05/29/Kubernetes-Service/</url>
+    
+    <content type="html"><![CDATA[<h1 id="Service"><a href="#Service" class="headerlink" title="Service"></a>Service</h1><h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><p>Kubernetes 中 Service 是 将运行在一个或一组 Pod 上的网络应用程序公开为网络服务的方法。</p><h2 id="类型"><a href="#类型" class="headerlink" title="类型"></a>类型</h2><ul><li>ClusterIP</li><li>ExternalName: 返回定义的CNAME别名，可以配置为域名</li><li>NodePort: 所有node上绑定一个端口 在任意一个节点+端口号都能访问</li><li>LoadBalancer: 负载均衡器</li></ul><h1 id="Ingress"><a href="#Ingress" class="headerlink" title="Ingress"></a>Ingress</h1><h2 id="概念-1"><a href="#概念-1" class="headerlink" title="概念"></a>概念</h2><p>Ingress 是对集群中服务的外部访问进行管理的 API 对象，典型的访问方式是 HTTP。</p><p>Ingress 可以提供负载均衡、SSL 终结和基于名称的虚拟托管。</p><h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><h3 id="添加Helm仓库"><a href="#添加Helm仓库" class="headerlink" title="添加Helm仓库"></a>添加Helm仓库</h3><div class="code-wrapper"><pre><code class="hljs bash">helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx</code></pre></div><h3 id="解压"><a href="#解压" class="headerlink" title="解压"></a>解压</h3><div class="code-wrapper"><pre><code class="hljs bash">helm pull ingress-nginx/ingress-nginxtar xf ingress-nginx-4.10.1.tgz</code></pre></div><h3 id="安装-1"><a href="#安装-1" class="headerlink" title="安装"></a>安装</h3><div class="code-wrapper"><pre><code class="hljs bash"><span class="hljs-built_in">cd</span> ingress-nginxhelm install ingress-nginx --create-namespace -n ingress-nginx .</code></pre></div>]]></content>
+    
+    
+    <categories>
+      
+      <category>Kubernetes</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Kubernetes</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>Kubernetes-存储与配置</title>
+    <link href="/hexo/2024/05/29/Kubernetes-%E5%AD%98%E5%82%A8%E4%B8%8E%E9%85%8D%E7%BD%AE/"/>
+    <url>/hexo/2024/05/29/Kubernetes-%E5%AD%98%E5%82%A8%E4%B8%8E%E9%85%8D%E7%BD%AE/</url>
+    
+    <content type="html"><![CDATA[<h1 id="ConfigMap"><a href="#ConfigMap" class="headerlink" title="ConfigMap"></a>ConfigMap</h1><h2 id="创建"><a href="#创建" class="headerlink" title="创建"></a>创建</h2><div class="code-wrapper"><pre><code class="hljs bash">kubectl create configmap -h</code></pre></div><h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><ul><li><p>直接挂载</p></li><li><p>文件挂载</p></li></ul><h1 id="Secret"><a href="#Secret" class="headerlink" title="Secret"></a>Secret</h1><h2 id="使用类型"><a href="#使用类型" class="headerlink" title="使用类型"></a>使用类型</h2><ul><li>docker-registry</li><li>tls</li></ul><h1 id="SubPath"><a href="#SubPath" class="headerlink" title="SubPath"></a>SubPath</h1>]]></content>
+    
+    
+    <categories>
+      
+      <category>Kubernetes</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Kubernetes</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>Kubernetes-持久化存储</title>
+    <link href="/hexo/2024/05/29/Kubernetes-%E6%8C%81%E4%B9%85%E5%8C%96%E5%AD%98%E5%82%A8/"/>
+    <url>/hexo/2024/05/29/Kubernetes-%E6%8C%81%E4%B9%85%E5%8C%96%E5%AD%98%E5%82%A8/</url>
+    
+    <content type="html"><![CDATA[<h1 id="HostPath"><a href="#HostPath" class="headerlink" title="HostPath"></a>HostPath</h1><h1 id="EmptyDir"><a href="#EmptyDir" class="headerlink" title="EmptyDir"></a>EmptyDir</h1><h1 id="NFS"><a href="#NFS" class="headerlink" title="NFS"></a>NFS</h1><h2 id="安装NFS"><a href="#安装NFS" class="headerlink" title="安装NFS"></a>安装NFS</h2><div class="code-wrapper"><pre><code class="hljs bash">yum -y install nfs-utils</code></pre></div><h2 id="启动NFS"><a href="#启动NFS" class="headerlink" title="启动NFS"></a>启动NFS</h2><div class="code-wrapper"><pre><code class="hljs bash">systemctl start nfs-serversystemctl <span class="hljs-built_in">enable</span> nfs-server</code></pre></div><h2 id="创建共享目录"><a href="#创建共享目录" class="headerlink" title="创建共享目录"></a>创建共享目录</h2><div class="code-wrapper"><pre><code class="hljs bash"><span class="hljs-built_in">mkdir</span> -p /data/nfs/ro<span class="hljs-built_in">mkdir</span> -p /data/nfs/rw</code></pre></div><h2 id="修改配置"><a href="#修改配置" class="headerlink" title="修改配置"></a>修改配置</h2><div class="code-wrapper"><pre><code class="hljs bash"><span class="hljs-built_in">cat</span> &lt;&lt;<span class="hljs-string">EOF&gt; /etc/exports</span><span class="hljs-string">/data/nfs/rw 192.168.10.0/24(rw,no_root_squash,no_all_squash,sync,anonuid=501,anongid=501)</span><span class="hljs-string">/data/nfs/ro 192.168.10.0/24(ro,no_root_squash,no_all_squash,sync,anonuid=501,anongid=501)</span><span class="hljs-string">EOF</span>exportfs -rsystemctl restart nfs-server</code></pre></div><h2 id="挂载"><a href="#挂载" class="headerlink" title="挂载"></a>挂载</h2><div class="code-wrapper"><pre><code class="hljs bash"><span class="hljs-built_in">mkdir</span> -p /mnt/nfs/rwmount -t nfs 192.168.10.245:/data/nfs/rw /mnt/nfs/rw/</code></pre></div><h1 id="PV-PVC"><a href="#PV-PVC" class="headerlink" title="PV&#x2F;PVC"></a>PV&#x2F;PVC</h1>]]></content>
+    
+    
+    <categories>
+      
+      <category>Kubernetes</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Kubernetes</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>Kubernetes-EndPoint使用示例</title>
     <link href="/hexo/2024/05/29/Kubernetes-EndPoint%E4%BD%BF%E7%94%A8%E7%A4%BA%E4%BE%8B/"/>
     <url>/hexo/2024/05/29/Kubernetes-EndPoint%E4%BD%BF%E7%94%A8%E7%A4%BA%E4%BE%8B/</url>
