@@ -4,6 +4,25 @@
   
   
   <entry>
+    <title>K8S-endpoint</title>
+    <link href="/hexo/2024/05/29/K8S-endpoint/"/>
+    <url>/hexo/2024/05/29/K8S-endpoint/</url>
+    
+    <content type="html"><![CDATA[<h1 id="创建service"><a href="#创建service" class="headerlink" title="创建service"></a>创建service</h1><div class="code-wrapper"><pre><code class="hljs bash">kubect apply -f - &lt;&lt;<span class="hljs-string">EOF</span><span class="hljs-string">apiVersion: v1</span><span class="hljs-string">kind: Service</span><span class="hljs-string">metadata:</span><span class="hljs-string">  name: axzo-test-rds-master</span><span class="hljs-string">  namespace: test</span><span class="hljs-string">spec:</span><span class="hljs-string">  ports:</span><span class="hljs-string">  - port: 3306</span><span class="hljs-string">    protocol: TCP</span><span class="hljs-string">    targetPort: 3306</span><span class="hljs-string">  sessionAffinity: None</span><span class="hljs-string">  type: ClusterIP</span><span class="hljs-string">EOF</span></code></pre></div><h1 id="创建Endpoint"><a href="#创建Endpoint" class="headerlink" title="创建Endpoint"></a>创建Endpoint</h1><div class="code-wrapper"><pre><code class="hljs bash">kubect apply -f - &lt;&lt;<span class="hljs-string">EOF</span><span class="hljs-string">apiVersion: v1</span><span class="hljs-string">kind: Endpoints</span><span class="hljs-string">metadata:</span><span class="hljs-string">  name: axzo-test-rds-master</span><span class="hljs-string">  namespace: test</span><span class="hljs-string">subsets:</span><span class="hljs-string">- addresses:</span><span class="hljs-string">  - ip: 172.16.2.143</span><span class="hljs-string">  ports:</span><span class="hljs-string">  - port: 3306</span><span class="hljs-string">    protocol: TCP</span><span class="hljs-string">EOF</span></code></pre></div>]]></content>
+    
+    
+    
+    <tags>
+      
+      <tag>Kubernetes</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>Kubernetes安装</title>
     <link href="/hexo/2024/05/28/Kubernetes%E5%AE%89%E8%A3%85/"/>
     <url>/hexo/2024/05/28/Kubernetes%E5%AE%89%E8%A3%85/</url>
