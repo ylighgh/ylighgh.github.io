@@ -16,18 +16,20 @@
   <meta name="author" content="三石">
   <meta name="keywords" content="">
   
-    <meta name="description" content="创建servicekubect apply -f - &lt;&lt;EOF apiVersion: v1 kind: Service metadata:   name: axzo-test-rds-master   namespace: test spec:   ports:   - port: 3306     protocol: TCP     targetPort: 3306   sess">
+    <meta name="description" content="创建service kubect apply -f - &lt;&lt;EOF apiVersion: v1 kind: Service metadata:   name: axzo-test-rds-master   namespace: test spec:   ports:   - port: 3306     protocol: TCP     targetPort: 3306   ses">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Kubernetes-EndPoint使用示例">
 <meta property="og:url" content="https://ylighgh.github.io/hexo/2024/05/29/Kubernetes-EndPoint%E4%BD%BF%E7%94%A8%E7%A4%BA%E4%BE%8B/index.html">
 <meta property="og:site_name" content="运维杂记">
-<meta property="og:description" content="创建servicekubect apply -f - &lt;&lt;EOF apiVersion: v1 kind: Service metadata:   name: axzo-test-rds-master   namespace: test spec:   ports:   - port: 3306     protocol: TCP     targetPort: 3306   sess">
+<meta property="og:description" content="创建service kubect apply -f - &lt;&lt;EOF apiVersion: v1 kind: Service metadata:   name: axzo-test-rds-master   namespace: test spec:   ports:   - port: 3306     protocol: TCP     targetPort: 3306   ses">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://ylighgh.github.io/hexo/images/k8s/endpoint.png">
 <meta property="article:published_time" content="2024-05-29T05:29:39.000Z">
-<meta property="article:modified_time" content="2024-05-29T05:50:13.438Z">
+<meta property="article:modified_time" content="2024-05-29T06:20:25.771Z">
 <meta property="article:author" content="三石">
 <meta property="article:tag" content="Kubernetes">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://ylighgh.github.io/hexo/images/k8s/endpoint.png">
   
   
   
@@ -261,21 +263,6 @@
   <div class="row nomargin-x">
     <div class="side-col d-none d-lg-block col-lg-2">
       
-  <aside class="sidebar category-bar" style="margin-right: -1rem">
-    
-
-
-
-
-
-<div class="category-list">
-  
-  
-</div>
-
-
-  </aside>
-
 
     </div>
 
@@ -288,7 +275,8 @@
             
               <div class="markdown-body">
                 
-                <h1 id="创建service"><a href="#创建service" class="headerlink" title="创建service"></a>创建service</h1><div class="code-wrapper"><pre><code class="hljs bash">kubect apply -f - &lt;&lt;<span class="hljs-string">EOF</span>
+                <h1 id="创建service"><a href="#创建service" class="headerlink" title="创建service"></a>创建service</h1><p><img src="/hexo/images/k8s/endpoint.png" srcset="/hexo/img/loading.gif" lazyload></p>
+<div class="code-wrapper"><pre><code class="hljs bash">kubect apply -f - &lt;&lt;<span class="hljs-string">EOF</span>
 <span class="hljs-string">apiVersion: v1</span>
 <span class="hljs-string">kind: Service</span>
 <span class="hljs-string">metadata:</span>
@@ -322,6 +310,27 @@
             <hr/>
             <div>
               <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/hexo/categories/Kubernetes/" class="category-chain-item">Kubernetes</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
   
   
     <div class="post-meta">
