@@ -852,6 +852,8 @@ p { margin-bottom: 1.25rem; }
 <li><a href="#_sonarqube">7.9.3. SonarQube</a></li>
 </ul>
 </li>
+<li><a href="#_kafla">7.10. Kafla</a></li>
+<li><a href="#_elk">7.11. ELK</a></li>
 </ul>
 </li>
 <li><a href="#_MySQL_chapter">8. MySQL</a>
@@ -2663,8 +2665,78 @@ cd /usr/local/docker/sonarqube_docker &amp;&amp; docker-compose up -d</code></pr
 </div>
 </div>
 <div style="page-break-after: always;"></div>
-<div style="page-break-after: always;"></div>
 </div>
+</div>
+<div class="sect2">
+<h3 id="_kafla">7.10. Kafla</h3>
+<div class="listingblock">
+<div class="title">拉取镜像</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">docker pull zookeeper:latest
+docker pull wurstmeister/kafka:latest</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">启动zookeeper</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">docker run -d --name zookeeper --publish 2181:2181 --volume /etc/localtime:/etc/localtime zookeeper:latest</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">启动kafka</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">docker run -d --name kafka -p 9092:9092 -e KAFKA_BROKER_ID=0 -e KAFKA_ZOOKEEPER_CONNECT=zookeeper服务的地址:2181 -e KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kafka地址:9092 -e KAFKA_LISTENERS=PLAINTEXT://0.0.0.0:9092 wurstmeister/kafka</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">创建topic</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">bin/kafka-topics.sh --create --zookeeper 127.0.0.1:2181 --replication-factor 1 --partitions 1 --topic k8s-apisix-logs</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">列出topic</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">bin/kafka-topics.sh --list --zookeeper kafka地址:2181</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">发送消息</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">bin/kafka-console-producer.sh --broker-list kafka地址:9092 --topic test</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">消费消息</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">bin/kafka-console-consumer.sh --bootstrap-server kafka地址:9092 --topic test --from-beginning</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_elk">7.11. ELK</h3>
+<div class="listingblock">
+<div class="title">ElasticSearch</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">docker network create elastic
+docker pull docker.elastic.co/elasticsearch/elasticsearch:8.13.4
+docker run  -d --name es01 --net elastic -p 9200:9200 -p 9300:9300 -e "discovery.type=single-node" -e "xpack.security.enabled=false" -t docker.elastic.co/elasticsearch/elasticsearch:8.13.4
+
+export ELASTIC_PASSWORD="f27lQZGV0BFntOMplyc2"
+
+docker cp es01:/usr/share/elasticsearch/config/certs/http_ca.crt .
+
+curl --cacert http_ca.crt -u elastic:$ELASTIC_PASSWORD https://localhost:9200</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Kibana</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">docker pull docker.elastic.co/kibana/kibana:8.13.4
+docker run -d --name kibana --net elastic -p 5601:5601 docker.elastic.co/kibana/kibana:8.13.4</code></pre>
+</div>
+</div>
+<div style="page-break-after: always;"></div>
 </div>
 </div>
 </div>
