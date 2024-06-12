@@ -24,7 +24,7 @@
 <meta property="og:description" content="安装官方文档 curl https:&#x2F;&#x2F;raw.githubusercontent.com&#x2F;fluent&#x2F;fluent-bit&#x2F;master&#x2F;install.sh | sh  备份默认文件cp &#x2F;etc&#x2F;fluent-bit&#x2F;fluent-bit.conf &#x2F;etc&#x2F;fluent-bit&#x2F;fluent-bit.conf.default cp &#x2F;etc&#x2F;fluent-bit&#x2F;parsers.conf">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2024-06-11T06:12:17.000Z">
-<meta property="article:modified_time" content="2024-06-12T03:52:26.164Z">
+<meta property="article:modified_time" content="2024-06-12T03:56:24.684Z">
 <meta property="article:author" content="三石">
 <meta property="article:tag" content="ELK">
 <meta name="twitter:card" content="summary_large_image">
@@ -290,9 +290,9 @@
 <span class="hljs-string">@INCLUDE secure-input.conf</span>
 <span class="hljs-string">@INCLUDE secure-filter.conf</span>
 <span class="hljs-string">@INCLUDE secure-output.conf</span>
-<span class="hljs-string">@INCLUDE message-input.conf</span>
-<span class="hljs-string">@INCLUDE message-filter.conf</span>
-<span class="hljs-string">@INCLUDE message-output.conf</span>
+<span class="hljs-string">@INCLUDE messages-input.conf</span>
+<span class="hljs-string">@INCLUDE messages-filter.conf</span>
+<span class="hljs-string">@INCLUDE messages-output.conf</span>
 <span class="hljs-string">EOF</span></code></pre></div>
 
 <h2 id="采集secure日志配置"><a href="#采集secure日志配置" class="headerlink" title="采集secure日志配置"></a>采集secure日志配置</h2><div class="code-wrapper"><pre><code class="hljs bash"><span class="hljs-built_in">cat</span> &lt;&lt;<span class="hljs-string">EOF&gt;&gt; /etc/fluent-bit/parsers.conf</span>
@@ -351,41 +351,41 @@
 <span class="hljs-string">    rdkafka.request.required.acks 1</span>
 <span class="hljs-string">EOF</span></code></pre></div>
 
-<h2 id="采集message-kernel日志"><a href="#采集message-kernel日志" class="headerlink" title="采集message kernel日志"></a>采集message kernel日志</h2><div class="code-wrapper"><pre><code class="hljs bash"><span class="hljs-built_in">cat</span> &lt;&lt;<span class="hljs-string">EOF&gt;/etc/fluent-bit/message-input.conf</span>
+<h2 id="采集message-kernel日志"><a href="#采集message-kernel日志" class="headerlink" title="采集message kernel日志"></a>采集message kernel日志</h2><div class="code-wrapper"><pre><code class="hljs bash"><span class="hljs-built_in">cat</span> &lt;&lt;<span class="hljs-string">EOF&gt;/etc/fluent-bit/messages-input.conf</span>
 <span class="hljs-string">[INPUT]</span>
 <span class="hljs-string">    Name tail</span>
-<span class="hljs-string">    Path /var/log/message</span>
-<span class="hljs-string">    Tag kube-message.*</span>
-<span class="hljs-string">    DB                /var/log/flb_kube_message.db</span>
+<span class="hljs-string">    Path /var/log/messages</span>
+<span class="hljs-string">    Tag kube-messages.*</span>
+<span class="hljs-string">    DB                /var/log/flb_kube_messages.db</span>
 <span class="hljs-string">    Mem_Buf_Limit     1MB</span>
 <span class="hljs-string">    Skip_Long_Lines   On</span>
 <span class="hljs-string">    Refresh_Interval  10</span>
 <span class="hljs-string">EOF</span>
 
-<span class="hljs-built_in">cat</span> &lt;&lt;<span class="hljs-string">EOF&gt; /etc/fluent-bit/message-filter.conf</span>
+<span class="hljs-built_in">cat</span> &lt;&lt;<span class="hljs-string">EOF&gt; /etc/fluent-bit/messages-filter.conf</span>
 <span class="hljs-string">[FILTER]</span>
 <span class="hljs-string">    Name grep</span>
-<span class="hljs-string">    Match kube-message.*</span>
+<span class="hljs-string">    Match kube-messages.*</span>
 <span class="hljs-string">    Regex log /.*kernel.*/</span>
 <span class="hljs-string"></span>
 <span class="hljs-string">[FILTER]</span>
 <span class="hljs-string">    Name parser</span>
-<span class="hljs-string">    Match kube-message.*</span>
+<span class="hljs-string">    Match kube-messages.*</span>
 <span class="hljs-string">    Key_Name log</span>
 <span class="hljs-string">    Parser axzo-os-log</span>
 <span class="hljs-string"></span>
 <span class="hljs-string">[FILTER]</span>
 <span class="hljs-string">    Name modify</span>
-<span class="hljs-string">    Match kube-message.*</span>
+<span class="hljs-string">    Match kube-messages.*</span>
 <span class="hljs-string">    Add IP $IP</span>
 <span class="hljs-string">EOF</span>
 
-<span class="hljs-built_in">cat</span> &lt;&lt;<span class="hljs-string">EOF&gt;/etc/fluent-bit/message-output.conf</span>
+<span class="hljs-built_in">cat</span> &lt;&lt;<span class="hljs-string">EOF&gt;/etc/fluent-bit/messages-output.conf</span>
 <span class="hljs-string">[OUTPUT]</span>
 <span class="hljs-string">    Name           kafka</span>
-<span class="hljs-string">    Match          kube-message.*</span>
+<span class="hljs-string">    Match          kube-messages.*</span>
 <span class="hljs-string">    Brokers        192.168.1.9:9092,192.168.1.9:9091,192.168.1.9:9093</span>
-<span class="hljs-string">    Topics         os-message-logs</span>
+<span class="hljs-string">    Topics         os-messages-logs</span>
 <span class="hljs-string">    Timestamp_Key  @timestamp</span>
 <span class="hljs-string">    Timestamp_Format iso8601</span>
 <span class="hljs-string">    Retry_Limit    false</span>
@@ -446,18 +446,12 @@ systemctl status fluent-<span class="hljs-type">bit</span></code></pre></div>
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/hexo/2024/06/11/ELK-Filebeat/" title="Filebeat安装">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">Filebeat安装</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/hexo/2024/05/29/Kubernetes-Service/" title="Kubernetes-Service/Ingress">
-                        <span class="hidden-mobile">Kubernetes-Service/Ingress</span>
+                      <a href="/hexo/2024/06/11/ELK-Filebeat/" title="Filebeat安装">
+                        <span class="hidden-mobile">Filebeat安装</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
