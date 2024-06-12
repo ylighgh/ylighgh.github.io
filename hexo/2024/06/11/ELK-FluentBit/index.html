@@ -24,7 +24,7 @@
 <meta property="og:description" content="安装官方文档 curl https:&#x2F;&#x2F;raw.githubusercontent.com&#x2F;fluent&#x2F;fluent-bit&#x2F;master&#x2F;install.sh | sh  备份默认文件cp &#x2F;etc&#x2F;fluent-bit&#x2F;fluent-bit.conf &#x2F;etc&#x2F;fluent-bit&#x2F;fluent-bit.conf.default cp &#x2F;etc&#x2F;fluent-bit&#x2F;parsers.conf">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2024-06-11T06:12:17.000Z">
-<meta property="article:modified_time" content="2024-06-12T03:56:24.684Z">
+<meta property="article:modified_time" content="2024-06-12T10:05:21.065Z">
 <meta property="article:author" content="三石">
 <meta property="article:tag" content="ELK">
 <meta name="twitter:card" content="summary_large_image">
@@ -220,7 +220,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          357 字
+          363 字
         
       </span>
     
@@ -231,7 +231,7 @@
         
         
         
-          3 分钟
+          4 分钟
         
       </span>
     
@@ -279,7 +279,9 @@
 <h1 id="备份默认文件"><a href="#备份默认文件" class="headerlink" title="备份默认文件"></a>备份默认文件</h1><div class="code-wrapper"><pre><code class="hljs bash"><span class="hljs-built_in">cp</span> /etc/fluent-bit/fluent-bit.conf /etc/fluent-bit/fluent-bit.conf.default
 <span class="hljs-built_in">cp</span> /etc/fluent-bit/parsers.conf /etc/fluent-bit/fparsers.conf.default</code></pre></div>
 
-<h1 id="修改配置"><a href="#修改配置" class="headerlink" title="修改配置"></a>修改配置</h1><h2 id="修改主配置文件"><a href="#修改主配置文件" class="headerlink" title="修改主配置文件"></a>修改主配置文件</h2><div class="code-wrapper"><pre><code class="hljs bash"><span class="hljs-built_in">cat</span> &lt;&lt;<span class="hljs-string">EOF&gt;/etc/fluent-bit/fluent-bit.conf</span>
+<h1 id="修改配置"><a href="#修改配置" class="headerlink" title="修改配置"></a>修改配置</h1><h2 id="配置IP"><a href="#配置IP" class="headerlink" title="配置IP"></a>配置IP</h2><div class="code-wrapper"><pre><code class="hljs bash"><span class="hljs-built_in">export</span> IP=x.x.x.x</code></pre></div>
+
+<h2 id="修改主配置文件"><a href="#修改主配置文件" class="headerlink" title="修改主配置文件"></a>修改主配置文件</h2><div class="code-wrapper"><pre><code class="hljs bash"><span class="hljs-built_in">cat</span> &lt;&lt;<span class="hljs-string">EOF&gt;/etc/fluent-bit/fluent-bit.conf</span>
 <span class="hljs-string">[SERVICE]</span>
 <span class="hljs-string">    flush        1</span>
 <span class="hljs-string">    daemon       Off</span>
@@ -397,9 +399,9 @@
 <span class="hljs-string">    rdkafka.request.required.acks 1</span>
 <span class="hljs-string">EOF</span></code></pre></div>
 
-<h1 id="启动"><a href="#启动" class="headerlink" title="启动"></a>启动</h1><div class="code-wrapper"><pre><code class="hljs pgsql">systemctl <span class="hljs-keyword">start</span> fluent-<span class="hljs-type">bit</span>
-systemctl <span class="hljs-keyword">enable</span> fluent-<span class="hljs-type">bit</span>
-systemctl status fluent-<span class="hljs-type">bit</span></code></pre></div>
+<h1 id="启动"><a href="#启动" class="headerlink" title="启动"></a>启动</h1><div class="code-wrapper"><pre><code class="hljs bash">systemctl start fluent-bit
+systemctl <span class="hljs-built_in">enable</span> fluent-bit
+systemctl status fluent-bit</code></pre></div>
                 
               </div>
             
