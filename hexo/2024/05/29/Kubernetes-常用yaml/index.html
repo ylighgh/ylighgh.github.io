@@ -16,22 +16,22 @@
   <meta name="author" content="三石">
   <meta name="keywords" content="">
   
-    <meta name="description" content="HostPathEmptyDirNFS安装NFSyum -y install nfs-utils  启动NFSsystemctl start nfs-server systemctl enable nfs-server  创建共享目录mkdir -p &#x2F;data&#x2F;nfs&#x2F;ro mkdir -p &#x2F;data&#x2F;nfs&#x2F;rw  修改配置cat &lt;&lt;EOF&gt; &#x2F;etc&#x2F;exports &#x2F;">
+    <meta name="description" content="logstash服务kubectl apply -f - &lt;&lt;EOF kind: Deployment apiVersion: apps&#x2F;v1 metadata:   name: logstash-os   namespace: logging spec:   replicas: 1   selector:     matchLabels:       app: logstash-os">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Kubernetes-持久化存储">
-<meta property="og:url" content="https://ylighgh.github.io/hexo/2024/05/29/Kubernetes-%E6%8C%81%E4%B9%85%E5%8C%96%E5%AD%98%E5%82%A8/index.html">
+<meta property="og:title" content="Kubernetes-常用YAML">
+<meta property="og:url" content="https://ylighgh.github.io/hexo/2024/05/29/Kubernetes-%E5%B8%B8%E7%94%A8yaml/index.html">
 <meta property="og:site_name" content="运维杂记">
-<meta property="og:description" content="HostPathEmptyDirNFS安装NFSyum -y install nfs-utils  启动NFSsystemctl start nfs-server systemctl enable nfs-server  创建共享目录mkdir -p &#x2F;data&#x2F;nfs&#x2F;ro mkdir -p &#x2F;data&#x2F;nfs&#x2F;rw  修改配置cat &lt;&lt;EOF&gt; &#x2F;etc&#x2F;exports &#x2F;">
+<meta property="og:description" content="logstash服务kubectl apply -f - &lt;&lt;EOF kind: Deployment apiVersion: apps&#x2F;v1 metadata:   name: logstash-os   namespace: logging spec:   replicas: 1   selector:     matchLabels:       app: logstash-os">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2024-05-29T14:26:00.000Z">
-<meta property="article:modified_time" content="2024-06-11T03:12:22.887Z">
+<meta property="article:modified_time" content="2024-06-12T08:12:26.478Z">
 <meta property="article:author" content="三石">
 <meta property="article:tag" content="Kubernetes">
 <meta name="twitter:card" content="summary_large_image">
   
   
   
-  <title>Kubernetes-持久化存储 - 运维杂记</title>
+  <title>Kubernetes-常用YAML - 运维杂记</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -197,7 +197,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="Kubernetes-持久化存储"></span>
+            <span id="subtitle" data-typed-text="Kubernetes-常用YAML"></span>
           
         </div>
 
@@ -220,7 +220,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          85 字
+          353 字
         
       </span>
     
@@ -231,7 +231,7 @@
         
         
         
-          1 分钟
+          3 分钟
         
       </span>
     
@@ -268,31 +268,133 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">Kubernetes-持久化存储</h1>
+            <h1 id="seo-header">Kubernetes-常用YAML</h1>
             
             
               <div class="markdown-body">
                 
-                <h1 id="HostPath"><a href="#HostPath" class="headerlink" title="HostPath"></a>HostPath</h1><h1 id="EmptyDir"><a href="#EmptyDir" class="headerlink" title="EmptyDir"></a>EmptyDir</h1><h1 id="NFS"><a href="#NFS" class="headerlink" title="NFS"></a>NFS</h1><h2 id="安装NFS"><a href="#安装NFS" class="headerlink" title="安装NFS"></a>安装NFS</h2><div class="code-wrapper"><pre><code class="hljs bash">yum -y install nfs-utils</code></pre></div>
+                <h1 id="logstash"><a href="#logstash" class="headerlink" title="logstash"></a>logstash</h1><h2 id="服务"><a href="#服务" class="headerlink" title="服务"></a>服务</h2><div class="code-wrapper"><pre><code class="hljs bash">kubectl apply -f - &lt;&lt;<span class="hljs-string">EOF</span>
+<span class="hljs-string">kind: Deployment</span>
+<span class="hljs-string">apiVersion: apps/v1</span>
+<span class="hljs-string">metadata:</span>
+<span class="hljs-string">  name: logstash-os</span>
+<span class="hljs-string">  namespace: logging</span>
+<span class="hljs-string">spec:</span>
+<span class="hljs-string">  replicas: 1</span>
+<span class="hljs-string">  selector:</span>
+<span class="hljs-string">    matchLabels:</span>
+<span class="hljs-string">      app: logstash-os</span>
+<span class="hljs-string">  template:</span>
+<span class="hljs-string">    metadata:</span>
+<span class="hljs-string">      labels:</span>
+<span class="hljs-string">        app: logstash-os</span>
+<span class="hljs-string">    spec:</span>
+<span class="hljs-string">      volumes:</span>
+<span class="hljs-string">        - name: config-volume</span>
+<span class="hljs-string">          configMap:</span>
+<span class="hljs-string">            name: logstash-os-configmap</span>
+<span class="hljs-string">            items:</span>
+<span class="hljs-string">              - key: logstash.yml</span>
+<span class="hljs-string">                path: logstash.yml</span>
+<span class="hljs-string">            defaultMode: 420</span>
+<span class="hljs-string">        - name: logstash-pipeline</span>
+<span class="hljs-string">          configMap:</span>
+<span class="hljs-string">            name: logstash-os-configmap</span>
+<span class="hljs-string">            items:</span>
+<span class="hljs-string">              - key: logstash.conf</span>
+<span class="hljs-string">                path: logstash.conf</span>
+<span class="hljs-string">            defaultMode: 420</span>
+<span class="hljs-string">        - name: localtime</span>
+<span class="hljs-string">          hostPath:</span>
+<span class="hljs-string">            path: /etc/localtime</span>
+<span class="hljs-string">            type: &#x27;&#x27;</span>
+<span class="hljs-string">      containers:</span>
+<span class="hljs-string">        - name: logstash</span>
+<span class="hljs-string">          image: &#x27;harbor.axzo.cn/ops/logstash:7.14.0&#x27;</span>
+<span class="hljs-string">          resources:</span>
+<span class="hljs-string">            limits:</span>
+<span class="hljs-string">              cpu: &#x27;1&#x27;</span>
+<span class="hljs-string">              memory: 1Gi</span>
+<span class="hljs-string">            requests:</span>
+<span class="hljs-string">              cpu: 500m</span>
+<span class="hljs-string">              memory: 1Gi</span>
+<span class="hljs-string">          volumeMounts:</span>
+<span class="hljs-string">            - name: config-volume</span>
+<span class="hljs-string">              mountPath: /usr/share/logstash/config</span>
+<span class="hljs-string">            - name: logstash-pipeline</span>
+<span class="hljs-string">              mountPath: /usr/share/logstash/pipeline</span>
+<span class="hljs-string">            - name: localtime</span>
+<span class="hljs-string">              mountPath: /etc/localtime</span>
+<span class="hljs-string">          terminationMessagePath: /dev/termination-log</span>
+<span class="hljs-string">          terminationMessagePolicy: File</span>
+<span class="hljs-string">          imagePullPolicy: IfNotPresent</span>
+<span class="hljs-string">      restartPolicy: Always</span>
+<span class="hljs-string">      terminationGracePeriodSeconds: 30</span>
+<span class="hljs-string">      dnsPolicy: ClusterFirst</span>
+<span class="hljs-string">      securityContext: &#123;&#125;</span>
+<span class="hljs-string">      imagePullSecrets:</span>
+<span class="hljs-string">        - name: harbor</span>
+<span class="hljs-string">      schedulerName: default-scheduler</span>
+<span class="hljs-string">  strategy:</span>
+<span class="hljs-string">    type: RollingUpdate</span>
+<span class="hljs-string">    rollingUpdate:</span>
+<span class="hljs-string">      maxUnavailable: 25%</span>
+<span class="hljs-string">      maxSurge: 25%</span>
+<span class="hljs-string">  revisionHistoryLimit: 10</span>
+<span class="hljs-string">  progressDeadlineSeconds: 600</span>
+<span class="hljs-string">EOF</span></code></pre></div>
 
-<h2 id="启动NFS"><a href="#启动NFS" class="headerlink" title="启动NFS"></a>启动NFS</h2><div class="code-wrapper"><pre><code class="hljs bash">systemctl start nfs-server
-systemctl <span class="hljs-built_in">enable</span> nfs-server</code></pre></div>
-
-<h2 id="创建共享目录"><a href="#创建共享目录" class="headerlink" title="创建共享目录"></a>创建共享目录</h2><div class="code-wrapper"><pre><code class="hljs bash"><span class="hljs-built_in">mkdir</span> -p /data/nfs/ro
-<span class="hljs-built_in">mkdir</span> -p /data/nfs/rw</code></pre></div>
-
-<h2 id="修改配置"><a href="#修改配置" class="headerlink" title="修改配置"></a>修改配置</h2><div class="code-wrapper"><pre><code class="hljs bash"><span class="hljs-built_in">cat</span> &lt;&lt;<span class="hljs-string">EOF&gt; /etc/exports</span>
-<span class="hljs-string">/data/nfs/rw 192.168.10.0/24(rw,no_root_squash,no_all_squash,sync,anonuid=501,anongid=501)</span>
-<span class="hljs-string">/data/nfs/ro 192.168.10.0/24(ro,no_root_squash,no_all_squash,sync,anonuid=501,anongid=501)</span>
-<span class="hljs-string">EOF</span>
-
-exportfs -r
-systemctl restart nfs-server</code></pre></div>
-
-<h2 id="挂载"><a href="#挂载" class="headerlink" title="挂载"></a>挂载</h2><div class="code-wrapper"><pre><code class="hljs bash"><span class="hljs-built_in">mkdir</span> -p /mnt/nfs/rw
-mount -t nfs 192.168.10.245:/data/nfs/rw /mnt/nfs/rw/</code></pre></div>
-
-<h1 id="PV-PVC"><a href="#PV-PVC" class="headerlink" title="PV&#x2F;PVC"></a>PV&#x2F;PVC</h1>
+<h2 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h2><div class="code-wrapper"><pre><code class="hljs bash">kubectl apply -f - &lt;&lt;<span class="hljs-string">EOF</span>
+<span class="hljs-string">kind: ConfigMap</span>
+<span class="hljs-string">apiVersion: v1</span>
+<span class="hljs-string">metadata:</span>
+<span class="hljs-string">  name: logstash-os-configmap</span>
+<span class="hljs-string">  namespace: logging</span>
+<span class="hljs-string">data:</span>
+<span class="hljs-string">  logstash.conf: |</span>
+<span class="hljs-string">    input&#123;</span>
+<span class="hljs-string">      kafka&#123;</span>
+<span class="hljs-string">        bootstrap_servers =&gt; &quot;192.168.1.9:9091,192.168.1.9:9092,192.168.1.9:9093&quot;</span>
+<span class="hljs-string">        topics =&gt; &quot;k8s-apisix-logs&quot;</span>
+<span class="hljs-string">        consumer_threads =&gt; 50</span>
+<span class="hljs-string">        decorate_events =&gt; true</span>
+<span class="hljs-string">        codec =&gt; json</span>
+<span class="hljs-string">        auto_offset_reset =&gt; &quot;latest&quot;</span>
+<span class="hljs-string">     &#125;</span>
+<span class="hljs-string">    &#125;</span>
+<span class="hljs-string">    filter &#123;</span>
+<span class="hljs-string">            mutate &#123;</span>
+<span class="hljs-string">                convert =&gt; [&quot;request_length&quot;,&quot;integer&quot;]</span>
+<span class="hljs-string">                convert =&gt; [&quot;duration&quot;,&quot;float&quot;]</span>
+<span class="hljs-string">                convert =&gt; [&quot;body_bytes_sent&quot;,&quot;integer&quot;]</span>
+<span class="hljs-string">                convert =&gt; [&quot;upstream_status&quot;,&quot;integer&quot;]</span>
+<span class="hljs-string">                convert =&gt; [&quot;upstream_response_time&quot;,&quot;float&quot;]</span>
+<span class="hljs-string">                convert =&gt; [&quot;request_time&quot;,&quot;float&quot;]</span>
+<span class="hljs-string">                convert =&gt; [&quot;bytes_sent&quot;,&quot;integer&quot;]</span>
+<span class="hljs-string">                convert =&gt; [&quot;status&quot;,&quot;integer&quot;]</span>
+<span class="hljs-string">            &#125;</span>
+<span class="hljs-string">            geoip &#123;</span>
+<span class="hljs-string">                source =&gt; &quot;remote_addr&quot;</span>
+<span class="hljs-string">            &#125;</span>
+<span class="hljs-string">    &#125;</span>
+<span class="hljs-string">    output &#123;</span>
+<span class="hljs-string">      elasticsearch &#123;</span>
+<span class="hljs-string">        hosts =&gt; [&quot;192.168.1.65:9200&quot;,&quot;192.168.1.150:9200&quot;,&quot;192.168.1.32:9200&quot;,&quot;192.168.1.44:9200&quot;,&quot;192.168.1.89:9200&quot;]</span>
+<span class="hljs-string">        user =&gt; &quot;elastic&quot;</span>
+<span class="hljs-string">        password =&gt; &quot;xxx&quot;</span>
+<span class="hljs-string">        index =&gt; &quot;logstash-apisix-%&#123;+YYYY.MM.dd&#125;&quot;</span>
+<span class="hljs-string">      &#125;</span>
+<span class="hljs-string">      # DEBUG</span>
+<span class="hljs-string">       #stdout &#123; </span>
+<span class="hljs-string">        #codec  =&gt; rubydebug &#123;</span>
+<span class="hljs-string">        #metadata =&gt; true</span>
+<span class="hljs-string">      #&#125;</span>
+<span class="hljs-string">  &#125;</span>
+<span class="hljs-string">    &#125;</span>
+<span class="hljs-string">  logstash.yml: |</span>
+<span class="hljs-string">    http.host: &quot;0.0.0.0&quot;</span>
+<span class="hljs-string">    path.config: /usr/share/logstash/pipeline</span>
+<span class="hljs-string">EOF</span></code></pre></div>
                 
               </div>
             
@@ -339,9 +441,9 @@ mount -t nfs 192.168.10.245:/data/nfs/rw /mnt/nfs/rw/</code></pre></div>
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/hexo/2024/05/29/Kubernetes-%E5%B8%B8%E7%94%A8yaml/" title="Kubernetes-常用YAML">
+                      <a href="/hexo/2024/05/29/Kubernetes-Service/" title="Kubernetes-Service/Ingress">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">Kubernetes-常用YAML</span>
+                        <span class="hidden-mobile">Kubernetes-Service/Ingress</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
@@ -349,8 +451,8 @@ mount -t nfs 192.168.10.245:/data/nfs/rw /mnt/nfs/rw/</code></pre></div>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/hexo/2024/05/29/Kubernetes-EndPoint%E4%BD%BF%E7%94%A8%E7%A4%BA%E4%BE%8B/" title="Kubernetes-EndPoint使用示例">
-                        <span class="hidden-mobile">Kubernetes-EndPoint使用示例</span>
+                      <a href="/hexo/2024/05/29/Kubernetes-%E6%8C%81%E4%B9%85%E5%8C%96%E5%AD%98%E5%82%A8/" title="Kubernetes-持久化存储">
+                        <span class="hidden-mobile">Kubernetes-持久化存储</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
