@@ -16,22 +16,22 @@
   <meta name="author" content="三石">
   <meta name="keywords" content="">
   
-    <meta name="description" content="Service概念Kubernetes 中 Service 是 将运行在一个或一组 Pod 上的网络应用程序公开为网络服务的方法。 类型 ClusterIP ExternalName: 返回定义的CNAME别名，可以配置为域名 NodePort: 所有node上绑定一个端口 在任意一个节点+端口号都能访问 LoadBalancer: 负载均衡器  Ingress概念Ingress 是对集群中服务的">
+    <meta name="description" content="安装官方文档 mkdir ~&#x2F;downloads wget https:&#x2F;&#x2F;artifacts.elastic.co&#x2F;downloads&#x2F;beats&#x2F;filebeat&#x2F;filebeat-7.14.2-x86_64.rpm -O ~&#x2F;downloads&#x2F;filebeat-7.14.2-x86_64.rpm yum install -y ~&#x2F;downloads&#x2F;filebeat-7.14.2-x86_">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Kubernetes-Service&#x2F;Ingress">
-<meta property="og:url" content="https://ylighgh.github.io/hexo/2024/05/29/Kubernetes-Service/index.html">
+<meta property="og:title" content="Filebeat安装">
+<meta property="og:url" content="https://ylighgh.github.io/hexo/2024/06/11/ELK-Filebeat/index.html">
 <meta property="og:site_name" content="运维杂记">
-<meta property="og:description" content="Service概念Kubernetes 中 Service 是 将运行在一个或一组 Pod 上的网络应用程序公开为网络服务的方法。 类型 ClusterIP ExternalName: 返回定义的CNAME别名，可以配置为域名 NodePort: 所有node上绑定一个端口 在任意一个节点+端口号都能访问 LoadBalancer: 负载均衡器  Ingress概念Ingress 是对集群中服务的">
+<meta property="og:description" content="安装官方文档 mkdir ~&#x2F;downloads wget https:&#x2F;&#x2F;artifacts.elastic.co&#x2F;downloads&#x2F;beats&#x2F;filebeat&#x2F;filebeat-7.14.2-x86_64.rpm -O ~&#x2F;downloads&#x2F;filebeat-7.14.2-x86_64.rpm yum install -y ~&#x2F;downloads&#x2F;filebeat-7.14.2-x86_">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2024-05-29T14:26:00.000Z">
-<meta property="article:modified_time" content="2024-06-11T03:12:22.887Z">
+<meta property="article:published_time" content="2024-06-11T06:12:17.000Z">
+<meta property="article:modified_time" content="2024-06-11T08:44:31.477Z">
 <meta property="article:author" content="三石">
-<meta property="article:tag" content="Kubernetes">
+<meta property="article:tag" content="ELK">
 <meta name="twitter:card" content="summary_large_image">
   
   
   
-  <title>Kubernetes-Service/Ingress - 运维杂记</title>
+  <title>Filebeat安装 - 运维杂记</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -197,7 +197,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="Kubernetes-Service/Ingress"></span>
+            <span id="subtitle" data-typed-text="Filebeat安装"></span>
           
         </div>
 
@@ -208,8 +208,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2024-05-29 22:26" pubdate>
-          2024年5月29日 晚上
+        <time datetime="2024-06-11 14:12" pubdate>
+          2024年6月11日 下午
         </time>
       </span>
     
@@ -220,7 +220,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          165 字
+          47 字
         
       </span>
     
@@ -231,7 +231,7 @@
         
         
         
-          2 分钟
+          1 分钟
         
       </span>
     
@@ -268,28 +268,17 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">Kubernetes-Service/Ingress</h1>
+            <h1 id="seo-header">Filebeat安装</h1>
             
             
               <div class="markdown-body">
                 
-                <h1 id="Service"><a href="#Service" class="headerlink" title="Service"></a>Service</h1><h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><p>Kubernetes 中 Service 是 将运行在一个或一组 Pod 上的网络应用程序公开为网络服务的方法。</p>
-<h2 id="类型"><a href="#类型" class="headerlink" title="类型"></a>类型</h2><ul>
-<li>ClusterIP</li>
-<li>ExternalName: 返回定义的CNAME别名，可以配置为域名</li>
-<li>NodePort: 所有node上绑定一个端口 在任意一个节点+端口号都能访问</li>
-<li>LoadBalancer: 负载均衡器</li>
-</ul>
-<h1 id="Ingress"><a href="#Ingress" class="headerlink" title="Ingress"></a>Ingress</h1><h2 id="概念-1"><a href="#概念-1" class="headerlink" title="概念"></a>概念</h2><p>Ingress 是对集群中服务的外部访问进行管理的 API 对象，典型的访问方式是 HTTP。</p>
-<p>Ingress 可以提供负载均衡、SSL 终结和基于名称的虚拟托管。</p>
-<h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><h3 id="添加Helm仓库"><a href="#添加Helm仓库" class="headerlink" title="添加Helm仓库"></a>添加Helm仓库</h3><div class="code-wrapper"><pre><code class="hljs bash">helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx</code></pre></div>
+                <h1 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h1><p><a target="_blank" rel="noopener" href="https://www.elastic.co/guide/en/beats/filebeat/7.14/filebeat-installation-configuration.html">官方文档</a></p>
+<div class="code-wrapper"><pre><code class="hljs bash"><span class="hljs-built_in">mkdir</span> ~/downloads
+wget https://artifacts.elastic.co/downloads/beats/filebeat/filebeat-7.14.2-x86_64.rpm -O ~/downloads/filebeat-7.14.2-x86_64.rpm
+yum install -y ~/downloads/filebeat-7.14.2-x86_64.rpm</code></pre></div>
 
-<h3 id="解压"><a href="#解压" class="headerlink" title="解压"></a>解压</h3><div class="code-wrapper"><pre><code class="hljs bash">helm pull ingress-nginx/ingress-nginx
-tar xf ingress-nginx-4.10.1.tgz</code></pre></div>
-
-<h3 id="安装-1"><a href="#安装-1" class="headerlink" title="安装"></a>安装</h3><div class="code-wrapper"><pre><code class="hljs bash"><span class="hljs-built_in">cd</span> ingress-nginx
-helm install ingress-nginx --create-namespace -n ingress-nginx .</code></pre></div>
-
+<h1 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h1><div class="code-wrapper"><pre><code class="hljs bash"><span class="hljs-built_in">cp</span> /etc/filebeat/filebeat.yml /etc/filebeat/filebeat.yml.default</code></pre></div>
                 
               </div>
             
@@ -307,7 +296,7 @@ helm install ingress-nginx --create-namespace -n ingress-nginx .</code></pre></d
     
       <span class="category-chain">
         
-  <a href="/hexo/categories/Kubernetes/" class="category-chain-item">Kubernetes</a>
+  <a href="/hexo/categories/ELK/" class="category-chain-item">ELK</a>
   
   
 
@@ -322,7 +311,7 @@ helm install ingress-nginx --create-namespace -n ingress-nginx .</code></pre></d
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
-        <a href="/hexo/tags/Kubernetes/" class="print-no-link">#Kubernetes</a>
+        <a href="/hexo/tags/ELK/" class="print-no-link">#ELK</a>
       
     </div>
   
@@ -336,18 +325,12 @@ helm install ingress-nginx --create-namespace -n ingress-nginx .</code></pre></d
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/hexo/2024/06/11/ELK-FluentBit/" title="FluentBit安装">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">FluentBit安装</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/hexo/2024/05/29/Kubernetes-%E5%AD%98%E5%82%A8%E4%B8%8E%E9%85%8D%E7%BD%AE/" title="Kubernetes-存储与配置">
-                        <span class="hidden-mobile">Kubernetes-存储与配置</span>
+                      <a href="/hexo/2024/06/11/ELK-FluentBit/" title="FluentBit安装">
+                        <span class="hidden-mobile">FluentBit安装</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
