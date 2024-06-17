@@ -24,7 +24,7 @@
 <meta property="og:description" content="备份ETCDCTL_API&#x3D;3 etcdctl snapshot save snapshot.db ETCDCTL_API&#x3D;3 etcdctl  snapshot status snapshot.db -w&#x3D;table 还原将备份数据放进etcd容器kubectl -n pro-apisix cp snapshot.db pro-apisix-etcd-0:&#x2F;tmp&#x2F; kubectl -n pro">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2024-06-11T06:12:17.000Z">
-<meta property="article:modified_time" content="2024-06-17T03:49:43.010Z">
+<meta property="article:modified_time" content="2024-06-17T07:47:44.620Z">
 <meta property="article:author" content="三石">
 <meta property="article:tag" content="APISIX">
 <meta name="twitter:card" content="summary_large_image">
@@ -220,7 +220,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          359 字
+          505 字
         
       </span>
     
@@ -231,7 +231,7 @@
         
         
         
-          3 分钟
+          5 分钟
         
       </span>
     
@@ -279,6 +279,29 @@ ETCDCTL_API=3 etcdctl  snapshot status snapshot.db -w=table</code></pre></div>
 kubectl -n pro-apisix <span class="hljs-built_in">cp</span> snapshot.db pro-apisix-etcd-1:/tmp/
 kubectl -n pro-apisix <span class="hljs-built_in">cp</span> snapshot.db pro-apisix-etcd-2:/tmp/</code></pre></div>
 
+<h2 id=""><a href="#" class="headerlink" title=""></a></h2><div class="code-wrapper"><pre><code class="hljs yaml"><span class="hljs-attr">initContainers:</span>
+  <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">data-restore</span>
+    <span class="hljs-attr">image:</span> <span class="hljs-string">&#x27;harbor.axzo.cn/ops/etcd:3.5.4-debian-11-r14&#x27;</span>
+    <span class="hljs-attr">command:</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-string">/bin/bash</span>
+    <span class="hljs-attr">args:</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-string">&#x27;-c&#x27;</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-string">&#x27;rm -rf /bitnami/etcd/data/* &amp;&amp; etcdctl snapshot restore /restore-volume/20240617_030015_apisix_snapshot.db --name $(MY_POD_NAME) --data-dir=/bitnami/etcd/data --initial-cluster pro-apisix-etcd-0=http://pro-apisix-etcd-0.pro-apisix-etcd-headless.pro-apisix.svc.cluster.local:2380,pro-apisix-etcd-1=http://pro-apisix-etcd-1.pro-apisix-etcd-headless.pro-apisix.svc.cluster.local:2380,pro-apisix-etcd-2=http://pro-apisix-etcd-2.pro-apisix-etcd-headless.pro-apisix.svc.cluster.local:2380 --initial-cluster-token etcd-cluster-k8s --initial-advertise-peer-urls http://$(MY_POD_NAME).pro-apisix-etcd-headless.pro-apisix.svc.cluster.local:2380&#x27;</span>
+    <span class="hljs-attr">env:</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">MY_POD_NAME</span>
+        <span class="hljs-attr">valueFrom:</span>
+          <span class="hljs-attr">fieldRef:</span>
+            <span class="hljs-attr">apiVersion:</span> <span class="hljs-string">v1</span>
+            <span class="hljs-attr">fieldPath:</span> <span class="hljs-string">metadata.name</span>
+    <span class="hljs-attr">resources:</span> &#123;&#125;
+    <span class="hljs-attr">volumeMounts:</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">data</span>
+        <span class="hljs-attr">mountPath:</span> <span class="hljs-string">/bitnami/etcd</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">restore-volume</span>
+        <span class="hljs-attr">mountPath:</span> <span class="hljs-string">/restore-volume</span>
+    <span class="hljs-attr">terminationMessagePath:</span> <span class="hljs-string">/dev/termination-log</span>
+    <span class="hljs-attr">terminationMessagePolicy:</span> <span class="hljs-string">File</span>
+    <span class="hljs-attr">imagePullPolicy:</span> <span class="hljs-string">IfNotPresent</span></code></pre></div>
 <h2 id="pro-apisix-etcd-0"><a href="#pro-apisix-etcd-0" class="headerlink" title="pro-apisix-etcd-0"></a>pro-apisix-etcd-0</h2><div class="code-wrapper"><pre><code class="hljs bash">kubectl <span class="hljs-built_in">exec</span> -it -n pro-apisix pro-apisix-etcd-0 -- bash
 
 <span class="hljs-built_in">cd</span> /tmp
