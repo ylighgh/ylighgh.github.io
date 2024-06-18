@@ -16,22 +16,22 @@
   <meta name="author" content="三石">
   <meta name="keywords" content="">
   
-    <meta name="description" content="备份ETCDCTL_API&#x3D;3 etcdctl snapshot save snapshot.db ETCDCTL_API&#x3D;3 etcdctl  snapshot status snapshot.db -w&#x3D;table 还原将备份数据放进etcd容器kubectl -n pro-apisix cp snapshot.db pro-apisix-etcd-0:&#x2F;tmp&#x2F; kubectl -n pro">
+    <meta name="description" content="备份ETCDCTL_API&#x3D;3 etcdctl snapshot save snapshot.db ETCDCTL_API&#x3D;3 etcdctl  snapshot status snapshot.db -w&#x3D;table 还原在 containers 同级增加以下yaml 同时挂载pvc进去 initContainers:   - name: data-restore     image: &amp;#x2">
 <meta property="og:type" content="article">
-<meta property="og:title" content="APISIX-数据备份与恢复">
-<meta property="og:url" content="https://ylighgh.github.io/hexo/2024/06/11/APISIX-%E5%A4%87%E4%BB%BD%E8%BF%98%E5%8E%9F/index.html">
+<meta property="og:title" content="ETCD-数据备份与恢复">
+<meta property="og:url" content="https://ylighgh.github.io/hexo/2024/06/11/ETCD-%E5%A4%87%E4%BB%BD%E8%BF%98%E5%8E%9F/index.html">
 <meta property="og:site_name" content="运维杂记">
-<meta property="og:description" content="备份ETCDCTL_API&#x3D;3 etcdctl snapshot save snapshot.db ETCDCTL_API&#x3D;3 etcdctl  snapshot status snapshot.db -w&#x3D;table 还原将备份数据放进etcd容器kubectl -n pro-apisix cp snapshot.db pro-apisix-etcd-0:&#x2F;tmp&#x2F; kubectl -n pro">
+<meta property="og:description" content="备份ETCDCTL_API&#x3D;3 etcdctl snapshot save snapshot.db ETCDCTL_API&#x3D;3 etcdctl  snapshot status snapshot.db -w&#x3D;table 还原在 containers 同级增加以下yaml 同时挂载pvc进去 initContainers:   - name: data-restore     image: &amp;#x2">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2024-06-11T06:12:17.000Z">
-<meta property="article:modified_time" content="2024-06-17T07:47:44.620Z">
+<meta property="article:modified_time" content="2024-06-18T02:05:29.984Z">
 <meta property="article:author" content="三石">
-<meta property="article:tag" content="APISIX">
+<meta property="article:tag" content="ETCD">
 <meta name="twitter:card" content="summary_large_image">
   
   
   
-  <title>APISIX-数据备份与恢复 - 运维杂记</title>
+  <title>ETCD-数据备份与恢复 - 运维杂记</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -197,7 +197,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="APISIX-数据备份与恢复"></span>
+            <span id="subtitle" data-typed-text="ETCD-数据备份与恢复"></span>
           
         </div>
 
@@ -220,7 +220,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          505 字
+          170 字
         
       </span>
     
@@ -231,7 +231,7 @@
         
         
         
-          5 分钟
+          2 分钟
         
       </span>
     
@@ -268,18 +268,15 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">APISIX-数据备份与恢复</h1>
+            <h1 id="seo-header">ETCD-数据备份与恢复</h1>
             
             
               <div class="markdown-body">
                 
                 <h1 id="备份"><a href="#备份" class="headerlink" title="备份"></a>备份</h1><div class="code-wrapper"><pre><code class="hljs bash">ETCDCTL_API=3 etcdctl snapshot save snapshot.db
 ETCDCTL_API=3 etcdctl  snapshot status snapshot.db -w=table</code></pre></div>
-<h1 id="还原"><a href="#还原" class="headerlink" title="还原"></a>还原</h1><h2 id="将备份数据放进etcd容器"><a href="#将备份数据放进etcd容器" class="headerlink" title="将备份数据放进etcd容器"></a>将备份数据放进etcd容器</h2><div class="code-wrapper"><pre><code class="hljs bash">kubectl -n pro-apisix <span class="hljs-built_in">cp</span> snapshot.db pro-apisix-etcd-0:/tmp/
-kubectl -n pro-apisix <span class="hljs-built_in">cp</span> snapshot.db pro-apisix-etcd-1:/tmp/
-kubectl -n pro-apisix <span class="hljs-built_in">cp</span> snapshot.db pro-apisix-etcd-2:/tmp/</code></pre></div>
-
-<h2 id=""><a href="#" class="headerlink" title=""></a></h2><div class="code-wrapper"><pre><code class="hljs yaml"><span class="hljs-attr">initContainers:</span>
+<h1 id="还原"><a href="#还原" class="headerlink" title="还原"></a>还原</h1><p>在 <code>containers</code> 同级增加以下yaml 同时挂载pvc进去</p>
+<div class="code-wrapper"><pre><code class="hljs yaml"><span class="hljs-attr">initContainers:</span>
   <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">data-restore</span>
     <span class="hljs-attr">image:</span> <span class="hljs-string">&#x27;harbor.axzo.cn/ops/etcd:3.5.4-debian-11-r14&#x27;</span>
     <span class="hljs-attr">command:</span>
@@ -302,41 +299,6 @@ kubectl -n pro-apisix <span class="hljs-built_in">cp</span> snapshot.db pro-apis
     <span class="hljs-attr">terminationMessagePath:</span> <span class="hljs-string">/dev/termination-log</span>
     <span class="hljs-attr">terminationMessagePolicy:</span> <span class="hljs-string">File</span>
     <span class="hljs-attr">imagePullPolicy:</span> <span class="hljs-string">IfNotPresent</span></code></pre></div>
-<h2 id="pro-apisix-etcd-0"><a href="#pro-apisix-etcd-0" class="headerlink" title="pro-apisix-etcd-0"></a>pro-apisix-etcd-0</h2><div class="code-wrapper"><pre><code class="hljs bash">kubectl <span class="hljs-built_in">exec</span> -it -n pro-apisix pro-apisix-etcd-0 -- bash
-
-<span class="hljs-built_in">cd</span> /tmp
-
-<span class="hljs-built_in">rm</span> -rf /bitnami/etcd/data/*
-
-ETCDCTL_API=3 etcdctl snapshot restore snapshot.db \
---name pro-apisix-etcd-0 \
---data-dir=<span class="hljs-string">&quot;/bitnami/etcd/data&quot;</span> \
---initial-cluster pro-apisix-etcd-0=http://pro-apisix-etcd-0.pro-apisix-etcd-headless.pro-apisix.svc.cluster.local:2380,pro-apisix-etcd-1=http://pro-apisix-etcd-1.pro-apisix-etcd-headless.pro-apisix.svc.cluster.local:2380,pro-apisix-etcd-2=http://pro-apisix-etcd-2.pro-apisix-etcd-headless.pro-apisix.svc.cluster.local:2380 \
---initial-advertise-peer-urls http://pro-apisix-etcd-0.pro-apisix-etcd-headless.pro-apisix.svc.cluster.local:2380</code></pre></div>
-
-<h2 id="pro-apisix-etcd-1"><a href="#pro-apisix-etcd-1" class="headerlink" title="pro-apisix-etcd-1"></a>pro-apisix-etcd-1</h2><div class="code-wrapper"><pre><code class="hljs bash">kubectl <span class="hljs-built_in">exec</span> -it -n pro-apisix pro-apisix-etcd-1 -- bash
-
-<span class="hljs-built_in">cd</span> /tmp
-
-<span class="hljs-built_in">rm</span> -rf /bitnami/etcd/data/*
-
-ETCDCTL_API=3 etcdctl snapshot restore snapshot.db \
---name pro-apisix-etcd-1 \
---data-dir=<span class="hljs-string">&quot;/bitnami/etcd/data&quot;</span> \
---initial-cluster pro-apisix-etcd-0=http://pro-apisix-etcd-0.pro-apisix-etcd-headless.pro-apisix.svc.cluster.local:2380,pro-apisix-etcd-1=http://pro-apisix-etcd-1.pro-apisix-etcd-headless.pro-apisix.svc.cluster.local:2380,pro-apisix-etcd-2=http://pro-apisix-etcd-2.pro-apisix-etcd-headless.pro-apisix.svc.cluster.local:2380 \
---initial-advertise-peer-urls http://pro-apisix-etcd-1.pro-apisix-etcd-headless.pro-apisix.svc.cluster.local:2380</code></pre></div>
-
-<h2 id="pro-apisix-etcd-2"><a href="#pro-apisix-etcd-2" class="headerlink" title="pro-apisix-etcd-2"></a>pro-apisix-etcd-2</h2><div class="code-wrapper"><pre><code class="hljs bash">kubectl <span class="hljs-built_in">exec</span> -it -n pro-apisix pro-apisix-etcd-2 -- bash
-
-<span class="hljs-built_in">cd</span> /tmp
-
-<span class="hljs-built_in">rm</span> -rf /bitnami/etcd/data/*
-
-ETCDCTL_API=3 etcdctl snapshot restore snapshot.db \
---name pro-apisix-etcd-2 \
---data-dir=<span class="hljs-string">&quot;/bitnami/etcd/data&quot;</span> \
---initial-cluster pro-apisix-etcd-0=http://pro-apisix-etcd-0.pro-apisix-etcd-headless.pro-apisix.svc.cluster.local:2380,pro-apisix-etcd-1=http://pro-apisix-etcd-1.pro-apisix-etcd-headless.pro-apisix.svc.cluster.local:2380,pro-apisix-etcd-2=http://pro-apisix-etcd-2.pro-apisix-etcd-headless.pro-apisix.svc.cluster.local:2380 \
---initial-advertise-peer-urls http://pro-apisix-etcd-2.pro-apisix-etcd-headless.pro-apisix.svc.cluster.local:2380</code></pre></div>
                 
               </div>
             
@@ -354,7 +316,7 @@ ETCDCTL_API=3 etcdctl snapshot restore snapshot.db \
     
       <span class="category-chain">
         
-  <a href="/hexo/categories/APISIX/" class="category-chain-item">APISIX</a>
+  <a href="/hexo/categories/ETCD/" class="category-chain-item">ETCD</a>
   
   
 
@@ -369,7 +331,7 @@ ETCDCTL_API=3 etcdctl snapshot restore snapshot.db \
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
-        <a href="/hexo/tags/APISIX/" class="print-no-link">#APISIX</a>
+        <a href="/hexo/tags/ETCD/" class="print-no-link">#ETCD</a>
       
     </div>
   
@@ -383,12 +345,18 @@ ETCDCTL_API=3 etcdctl snapshot restore snapshot.db \
                   <article class="post-prev col-6">
                     
                     
+                      <a href="/hexo/2024/06/11/EMQX-%E5%AE%89%E8%A3%85/" title="EMQX-安装">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">EMQX-安装</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/hexo/2024/06/11/ELK-Filebeat/" title="Filebeat安装">
-                        <span class="hidden-mobile">Filebeat安装</span>
+                      <a href="/hexo/2024/06/11/Linux-%E5%B8%B8%E7%94%A8Shell%E5%91%BD%E4%BB%A4/" title="Linux-常用Shell命令">
+                        <span class="hidden-mobile">Linux-常用Shell命令</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>

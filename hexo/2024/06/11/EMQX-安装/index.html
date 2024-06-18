@@ -16,22 +16,22 @@
   <meta name="author" content="三石">
   <meta name="keywords" content="">
   
-    <meta name="description" content="logstash服务kubectl apply -f - &lt;&lt;EOF kind: Deployment apiVersion: apps&#x2F;v1 metadata:   name: logstash-os   namespace: logging spec:   replicas: 1   selector:     matchLabels:       app: logstash-os">
+    <meta name="description" content="安装官方文档 kubectl create ns pro-emqx  kubectl apply -f - &lt;&lt;EOF kind: StatefulSet apiVersion: apps&#x2F;v1 metadata:   name: emqx   namespace: pro-emqx   labels:     app.kubernetes.io&#x2F;instance: emqx">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Kubernetes-常用YAML">
-<meta property="og:url" content="https://ylighgh.github.io/hexo/2024/05/29/Kubernetes-%E5%B8%B8%E7%94%A8yaml/index.html">
+<meta property="og:title" content="EMQX-安装">
+<meta property="og:url" content="https://ylighgh.github.io/hexo/2024/06/11/EMQX-%E5%AE%89%E8%A3%85/index.html">
 <meta property="og:site_name" content="运维杂记">
-<meta property="og:description" content="logstash服务kubectl apply -f - &lt;&lt;EOF kind: Deployment apiVersion: apps&#x2F;v1 metadata:   name: logstash-os   namespace: logging spec:   replicas: 1   selector:     matchLabels:       app: logstash-os">
+<meta property="og:description" content="安装官方文档 kubectl create ns pro-emqx  kubectl apply -f - &lt;&lt;EOF kind: StatefulSet apiVersion: apps&#x2F;v1 metadata:   name: emqx   namespace: pro-emqx   labels:     app.kubernetes.io&#x2F;instance: emqx">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2024-05-29T14:26:00.000Z">
-<meta property="article:modified_time" content="2024-06-18T01:56:25.698Z">
+<meta property="article:published_time" content="2024-06-11T06:12:17.000Z">
+<meta property="article:modified_time" content="2024-06-18T01:56:58.604Z">
 <meta property="article:author" content="三石">
-<meta property="article:tag" content="Kubernetes">
+<meta property="article:tag" content="EMQX">
 <meta name="twitter:card" content="summary_large_image">
   
   
   
-  <title>Kubernetes-常用YAML - 运维杂记</title>
+  <title>EMQX-安装 - 运维杂记</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -197,7 +197,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="Kubernetes-常用YAML"></span>
+            <span id="subtitle" data-typed-text="EMQX-安装"></span>
           
         </div>
 
@@ -208,8 +208,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2024-05-29 22:26" pubdate>
-          2024年5月29日 晚上
+        <time datetime="2024-06-11 14:12" pubdate>
+          2024年6月11日 下午
         </time>
       </span>
     
@@ -220,7 +220,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          424 字
+          452 字
         
       </span>
     
@@ -268,152 +268,302 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">Kubernetes-常用YAML</h1>
+            <h1 id="seo-header">EMQX-安装</h1>
             
             
               <div class="markdown-body">
                 
-                <h1 id="logstash"><a href="#logstash" class="headerlink" title="logstash"></a>logstash</h1><h2 id="服务"><a href="#服务" class="headerlink" title="服务"></a>服务</h2><div class="code-wrapper"><pre><code class="hljs bash">kubectl apply -f - &lt;&lt;<span class="hljs-string">EOF</span>
-<span class="hljs-string">kind: Deployment</span>
+                <h1 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h1><p><a target="_blank" rel="noopener" href="https://docs.emqx.com/zh/emqx/v4.3/getting-started/install-on-k8s.html">官方文档</a></p>
+<div class="code-wrapper"><pre><code class="hljs bash">kubectl create ns pro-emqx</code></pre></div>
+
+<div class="code-wrapper"><pre><code class="hljs bash">kubectl apply -f - &lt;&lt;<span class="hljs-string">EOF</span>
+<span class="hljs-string">kind: StatefulSet</span>
 <span class="hljs-string">apiVersion: apps/v1</span>
 <span class="hljs-string">metadata:</span>
-<span class="hljs-string">  name: logstash-os</span>
-<span class="hljs-string">  namespace: logging</span>
+<span class="hljs-string">  name: emqx</span>
+<span class="hljs-string">  namespace: pro-emqx</span>
+<span class="hljs-string">  labels:</span>
+<span class="hljs-string">    app.kubernetes.io/instance: emqx</span>
+<span class="hljs-string">    app.kubernetes.io/name: emqx</span>
 <span class="hljs-string">spec:</span>
-<span class="hljs-string">  replicas: 1</span>
+<span class="hljs-string">  replicas: 3</span>
 <span class="hljs-string">  selector:</span>
 <span class="hljs-string">    matchLabels:</span>
-<span class="hljs-string">      app: logstash-os</span>
+<span class="hljs-string">      app.kubernetes.io/instance: emqx</span>
+<span class="hljs-string">      app.kubernetes.io/name: emqx</span>
 <span class="hljs-string">  template:</span>
 <span class="hljs-string">    metadata:</span>
+<span class="hljs-string">      creationTimestamp: null</span>
 <span class="hljs-string">      labels:</span>
-<span class="hljs-string">        app: logstash-os</span>
+<span class="hljs-string">        app: emqx</span>
+<span class="hljs-string">        app.kubernetes.io/instance: emqx</span>
+<span class="hljs-string">        app.kubernetes.io/name: emqx</span>
+<span class="hljs-string">        version: latest</span>
 <span class="hljs-string">    spec:</span>
 <span class="hljs-string">      volumes:</span>
-<span class="hljs-string">        - name: config-volume</span>
-<span class="hljs-string">          configMap:</span>
-<span class="hljs-string">            name: logstash-os-configmap</span>
-<span class="hljs-string">            items:</span>
-<span class="hljs-string">              - key: logstash.yml</span>
-<span class="hljs-string">                path: logstash.yml</span>
-<span class="hljs-string">            defaultMode: 420</span>
-<span class="hljs-string">        - name: logstash-pipeline</span>
-<span class="hljs-string">          configMap:</span>
-<span class="hljs-string">            name: logstash-os-configmap</span>
-<span class="hljs-string">            items:</span>
-<span class="hljs-string">              - key: logstash.conf</span>
-<span class="hljs-string">                path: logstash.conf</span>
-<span class="hljs-string">            defaultMode: 420</span>
-<span class="hljs-string">        - name: localtime</span>
+<span class="hljs-string">        - name: pro-emqx-data</span>
+<span class="hljs-string">          persistentVolumeClaim:</span>
+<span class="hljs-string">            claimName: emqx-data</span>
+<span class="hljs-string">        - name: tz-config</span>
 <span class="hljs-string">          hostPath:</span>
-<span class="hljs-string">            path: /etc/localtime</span>
+<span class="hljs-string">            path: /usr/share/zoneinfo/Asia/Shanghai</span>
 <span class="hljs-string">            type: &#x27;&#x27;</span>
+<span class="hljs-string">        - name: pro-emqx-conf</span>
+<span class="hljs-string">          persistentVolumeClaim:</span>
+<span class="hljs-string">            claimName: emqx-conf</span>
 <span class="hljs-string">      containers:</span>
-<span class="hljs-string">        - name: logstash</span>
-<span class="hljs-string">          image: &#x27;harbor.axzo.cn/ops/logstash:7.14.0&#x27;</span>
-<span class="hljs-string">          resources:</span>
-<span class="hljs-string">            limits:</span>
-<span class="hljs-string">              cpu: &#x27;1&#x27;</span>
-<span class="hljs-string">              memory: 1Gi</span>
-<span class="hljs-string">            requests:</span>
-<span class="hljs-string">              cpu: 500m</span>
-<span class="hljs-string">              memory: 1Gi</span>
+<span class="hljs-string">        - name: emqx</span>
+<span class="hljs-string">          image: &#x27;harbor.axzo.cn/axzo-k8s/emqx:4.3.10&#x27;</span>
+<span class="hljs-string">          ports:</span>
+<span class="hljs-string">            - name: mqtt</span>
+<span class="hljs-string">              containerPort: 1883</span>
+<span class="hljs-string">              protocol: TCP</span>
+<span class="hljs-string">            - name: mqttssl</span>
+<span class="hljs-string">              containerPort: 8883</span>
+<span class="hljs-string">              protocol: TCP</span>
+<span class="hljs-string">            - name: ws</span>
+<span class="hljs-string">              containerPort: 8083</span>
+<span class="hljs-string">              protocol: TCP</span>
+<span class="hljs-string">            - name: wss</span>
+<span class="hljs-string">              containerPort: 8084</span>
+<span class="hljs-string">              protocol: TCP</span>
+<span class="hljs-string">            - name: dashboard</span>
+<span class="hljs-string">              containerPort: 18083</span>
+<span class="hljs-string">              protocol: TCP</span>
+<span class="hljs-string">            - name: ekka</span>
+<span class="hljs-string">              containerPort: 4370</span>
+<span class="hljs-string">              protocol: TCP</span>
+<span class="hljs-string">            - name: mgmt</span>
+<span class="hljs-string">              containerPort: 8081</span>
+<span class="hljs-string">              protocol: TCP</span>
+<span class="hljs-string">          envFrom:</span>
+<span class="hljs-string">            - configMapRef:</span>
+<span class="hljs-string">                name: emqx-env</span>
+<span class="hljs-string">          env:</span>
+<span class="hljs-string">            - name: EMQX_CLUSTER__DISCOVERY</span>
+<span class="hljs-string">              value: k8s</span>
+<span class="hljs-string">            - name: EMQX_CLUSTER__K8S__APP_NAME</span>
+<span class="hljs-string">              value: emqx</span>
+<span class="hljs-string">            - name: EMQX_CLUSTER__K8S__NAMESPACE</span>
+<span class="hljs-string">              value: pro-emqx</span>
+<span class="hljs-string">            - name: EMQX_CLUSTER__K8S__SERVICE_NAME</span>
+<span class="hljs-string">              value: emqx-headless</span>
+<span class="hljs-string">            - name: EMQX_NAME</span>
+<span class="hljs-string">              value: emqx</span>
+<span class="hljs-string">          resources: &#123;&#125;</span>
 <span class="hljs-string">          volumeMounts:</span>
-<span class="hljs-string">            - name: config-volume</span>
-<span class="hljs-string">              mountPath: /usr/share/logstash/config</span>
-<span class="hljs-string">            - name: logstash-pipeline</span>
-<span class="hljs-string">              mountPath: /usr/share/logstash/pipeline</span>
-<span class="hljs-string">            - name: localtime</span>
+<span class="hljs-string">            - name: emqx-data</span>
+<span class="hljs-string">              mountPath: /opt/emqx/data</span>
+<span class="hljs-string">            - name: tz-config</span>
 <span class="hljs-string">              mountPath: /etc/localtime</span>
+<span class="hljs-string">            - name: emqx-conf</span>
+<span class="hljs-string">              mountPath: /opt/emqx/etc</span>
+<span class="hljs-string">          livenessProbe:</span>
+<span class="hljs-string">            httpGet:</span>
+<span class="hljs-string">              path: /status</span>
+<span class="hljs-string">              port: 8081</span>
+<span class="hljs-string">              scheme: HTTP</span>
+<span class="hljs-string">            initialDelaySeconds: 5</span>
+<span class="hljs-string">            timeoutSeconds: 2</span>
+<span class="hljs-string">            periodSeconds: 2</span>
+<span class="hljs-string">            successThreshold: 1</span>
+<span class="hljs-string">            failureThreshold: 3</span>
+<span class="hljs-string">          readinessProbe:</span>
+<span class="hljs-string">            httpGet:</span>
+<span class="hljs-string">              path: /status</span>
+<span class="hljs-string">              port: 8081</span>
+<span class="hljs-string">              scheme: HTTP</span>
+<span class="hljs-string">            initialDelaySeconds: 5</span>
+<span class="hljs-string">            timeoutSeconds: 2</span>
+<span class="hljs-string">            periodSeconds: 2</span>
+<span class="hljs-string">            successThreshold: 2</span>
+<span class="hljs-string">            failureThreshold: 3</span>
 <span class="hljs-string">          terminationMessagePath: /dev/termination-log</span>
 <span class="hljs-string">          terminationMessagePolicy: File</span>
 <span class="hljs-string">          imagePullPolicy: IfNotPresent</span>
+<span class="hljs-string">          securityContext:</span>
+<span class="hljs-string">            runAsUser: 1000</span>
+<span class="hljs-string">            runAsNonRoot: true</span>
 <span class="hljs-string">      restartPolicy: Always</span>
 <span class="hljs-string">      terminationGracePeriodSeconds: 30</span>
 <span class="hljs-string">      dnsPolicy: ClusterFirst</span>
-<span class="hljs-string">      securityContext: &#123;&#125;</span>
+<span class="hljs-string">      serviceAccountName: emqx</span>
+<span class="hljs-string">      serviceAccount: emqx</span>
+<span class="hljs-string">      securityContext:</span>
+<span class="hljs-string">        runAsUser: 1000</span>
+<span class="hljs-string">        supplementalGroups:</span>
+<span class="hljs-string">          - 1000</span>
+<span class="hljs-string">        fsGroup: 1000</span>
 <span class="hljs-string">      imagePullSecrets:</span>
 <span class="hljs-string">        - name: harbor</span>
 <span class="hljs-string">      schedulerName: default-scheduler</span>
-<span class="hljs-string">  strategy:</span>
+<span class="hljs-string">  serviceName: emqx-headless</span>
+<span class="hljs-string">  podManagementPolicy: Parallel</span>
+<span class="hljs-string">  updateStrategy:</span>
 <span class="hljs-string">    type: RollingUpdate</span>
-<span class="hljs-string">    rollingUpdate:</span>
-<span class="hljs-string">      maxUnavailable: 25%</span>
-<span class="hljs-string">      maxSurge: 25%</span>
 <span class="hljs-string">  revisionHistoryLimit: 10</span>
-<span class="hljs-string">  progressDeadlineSeconds: 600</span>
-<span class="hljs-string">EOF</span></code></pre></div>
-
-<h2 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h2><div class="code-wrapper"><pre><code class="hljs bash">kubectl apply -f - &lt;&lt;<span class="hljs-string">EOF</span>
+<span class="hljs-string">---</span>
+<span class="hljs-string">apiVersion: v1</span>
+<span class="hljs-string">kind: ServiceAccount</span>
+<span class="hljs-string">metadata:</span>
+<span class="hljs-string">  name: emqx</span>
+<span class="hljs-string">  namespace: pro-emqx</span>
+<span class="hljs-string">---</span>
 <span class="hljs-string">kind: ConfigMap</span>
 <span class="hljs-string">apiVersion: v1</span>
 <span class="hljs-string">metadata:</span>
-<span class="hljs-string">  name: logstash-os-configmap</span>
-<span class="hljs-string">  namespace: logging</span>
+<span class="hljs-string">  name: emqx-env</span>
+<span class="hljs-string">  namespace: pro-emqx</span>
+<span class="hljs-string">  labels:</span>
+<span class="hljs-string">    app.kubernetes.io/instance: emqx</span>
+<span class="hljs-string">    app.kubernetes.io/name: emqx</span>
 <span class="hljs-string">data:</span>
-<span class="hljs-string">  logstash.conf: |</span>
-<span class="hljs-string">    input&#123;</span>
-<span class="hljs-string">      kafka&#123;</span>
-<span class="hljs-string">        bootstrap_servers =&gt; &quot;192.168.1.9:9091,192.168.1.9:9092,192.168.1.9:9093&quot;</span>
-<span class="hljs-string">        topics =&gt; [&quot;os-secure-logs&quot;, &quot;os-messages-logs&quot;]</span>
-<span class="hljs-string">        consumer_threads =&gt; 1</span>
-<span class="hljs-string">        decorate_events =&gt; true</span>
-<span class="hljs-string">        codec =&gt; json</span>
-<span class="hljs-string">        auto_offset_reset =&gt; &quot;latest&quot;</span>
-<span class="hljs-string">     &#125;</span>
-<span class="hljs-string">    &#125;</span>
-<span class="hljs-string">    filter&#123;</span>
-<span class="hljs-string">      ruby &#123; </span>
-<span class="hljs-string">              code =&gt; &quot;event.set(&#x27;timestamp&#x27;, event.get(&#x27;@timestamp&#x27;).time.localtime - 8*60*60)&quot; </span>
-<span class="hljs-string">          &#125;</span>
-<span class="hljs-string">        mutate &#123;</span>
-<span class="hljs-string">            remove_field =&gt; [&quot;@version&quot;, &quot;@timestamp&quot;]</span>
-<span class="hljs-string">        &#125;</span>
-<span class="hljs-string">    &#125;</span>
-<span class="hljs-string">    output &#123;</span>
-<span class="hljs-string">      stdout &#123; </span>
-<span class="hljs-string">         codec  =&gt; rubydebug &#123;</span>
-<span class="hljs-string">           metadata =&gt; true</span>
-<span class="hljs-string">         &#125;</span>
-<span class="hljs-string">      &#125;</span>
-<span class="hljs-string">      if &quot;os-secure-logs&quot; == [@metadata][kafka][topic] &#123;</span>
-<span class="hljs-string">        elasticsearch &#123;</span>
-<span class="hljs-string">          hosts =&gt; [&quot;192.168.1.65:9200&quot;,&quot;192.168.1.150:9200&quot;,&quot;192.168.1.32:9200&quot;,&quot;192.168.1.44:9200&quot;,&quot;192.168.1.89:9200&quot;]</span>
-<span class="hljs-string">          user =&gt; &quot;elastic&quot;</span>
-<span class="hljs-string">          password =&gt; &quot;axzo@2021&quot;</span>
-<span class="hljs-string">          index =&gt; &quot;logstash-os-secure-%&#123;+YYYY.MM.dd&#125;&quot;</span>
-<span class="hljs-string">        &#125;</span>
-<span class="hljs-string">      &#125; else &#123;</span>
-<span class="hljs-string">        elasticsearch &#123;</span>
-<span class="hljs-string">          hosts =&gt; [&quot;192.168.1.65:9200&quot;,&quot;192.168.1.150:9200&quot;,&quot;192.168.1.32:9200&quot;,&quot;192.168.1.44:9200&quot;,&quot;192.168.1.89:9200&quot;]</span>
-<span class="hljs-string">          user =&gt; &quot;elastic&quot;</span>
-<span class="hljs-string">          password =&gt; &quot;axzo@2021&quot;</span>
-<span class="hljs-string">          index =&gt; &quot;logstash-os-messages-%&#123;+YYYY.MM.dd&#125;&quot;</span>
-<span class="hljs-string">        &#125;</span>
-<span class="hljs-string">      &#125;</span>
-<span class="hljs-string">    &#125;</span>
-<span class="hljs-string">  logstash.yml: |</span>
-<span class="hljs-string">    http.host: &quot;0.0.0.0&quot;</span>
-<span class="hljs-string">    path.config: /usr/share/logstash/pipeline</span>
-<span class="hljs-string">EOF</span></code></pre></div>
-
-
-<h1 id="PVC"><a href="#PVC" class="headerlink" title="PVC"></a>PVC</h1><div class="code-wrapper"><pre><code class="hljs bash">kubectl apply -f - &lt;&lt;<span class="hljs-string">EOF</span>
-<span class="hljs-string">kind: PersistentVolumeClaim</span>
-<span class="hljs-string">apiVersion: v1</span>
+<span class="hljs-string">  EMQX_CLUSTER__K8S__ADDRESS_TYPE: hostname</span>
+<span class="hljs-string">  EMQX_CLUSTER__K8S__APISERVER: &#x27;https://kubernetes.default.svc:443&#x27;</span>
+<span class="hljs-string">  EMQX_CLUSTER__K8S__SUFFIX: svc.cluster.local</span>
+<span class="hljs-string">---</span>
 <span class="hljs-string">metadata:</span>
-<span class="hljs-string">  name: pro-apisix-plugins</span>
-<span class="hljs-string">  namespace: pro-apisix</span>
-<span class="hljs-string">  annotations:</span>
-<span class="hljs-string">    volume.beta.kubernetes.io/storage-provisioner: everest-csi-provisioner</span>
+<span class="hljs-string">  name: emqx-nodeport</span>
+<span class="hljs-string">  namespace: pro-emqx</span>
 <span class="hljs-string">spec:</span>
-<span class="hljs-string">  accessModes:</span>
-<span class="hljs-string">    - ReadWriteMany</span>
+<span class="hljs-string">  ports:</span>
+<span class="hljs-string">    - name: mqtt</span>
+<span class="hljs-string">      protocol: TCP</span>
+<span class="hljs-string">      port: 1883</span>
+<span class="hljs-string">      targetPort: 1883</span>
+<span class="hljs-string">      nodePort: 30011</span>
+<span class="hljs-string">  selector:</span>
+<span class="hljs-string">    app.kubernetes.io/instance: emqx</span>
+<span class="hljs-string">    app.kubernetes.io/name: emqx</span>
+<span class="hljs-string">    workloadID_emqx: &#x27;true&#x27;</span>
+<span class="hljs-string">  type: NodePort</span>
+<span class="hljs-string">  sessionAffinity: None</span>
+<span class="hljs-string">  externalTrafficPolicy: Cluster</span>
+<span class="hljs-string">apiVersion: v1</span>
+<span class="hljs-string">kind: Service</span>
+<span class="hljs-string">---</span>
+<span class="hljs-string">metadata:</span>
+<span class="hljs-string">  name: emqx</span>
+<span class="hljs-string">  namespace: pro-emqx</span>
+<span class="hljs-string">  labels:</span>
+<span class="hljs-string">    app.kubernetes.io/instance: emqx</span>
+<span class="hljs-string">    app.kubernetes.io/name: emqx</span>
+<span class="hljs-string">spec:</span>
+<span class="hljs-string">  ports:</span>
+<span class="hljs-string">    - name: mqtt</span>
+<span class="hljs-string">      protocol: TCP</span>
+<span class="hljs-string">      port: 1883</span>
+<span class="hljs-string">      targetPort: mqtt</span>
+<span class="hljs-string">    - name: mqttssl</span>
+<span class="hljs-string">      protocol: TCP</span>
+<span class="hljs-string">      port: 8883</span>
+<span class="hljs-string">      targetPort: mqttssl</span>
+<span class="hljs-string">    - name: ws</span>
+<span class="hljs-string">      protocol: TCP</span>
+<span class="hljs-string">      port: 8083</span>
+<span class="hljs-string">      targetPort: ws</span>
+<span class="hljs-string">    - name: wss</span>
+<span class="hljs-string">      protocol: TCP</span>
+<span class="hljs-string">      port: 8084</span>
+<span class="hljs-string">      targetPort: wss</span>
+<span class="hljs-string">    - name: dashboard</span>
+<span class="hljs-string">      protocol: TCP</span>
+<span class="hljs-string">      port: 18083</span>
+<span class="hljs-string">      targetPort: dashboard</span>
+<span class="hljs-string">    - name: mgmt</span>
+<span class="hljs-string">      protocol: TCP</span>
+<span class="hljs-string">      port: 8081</span>
+<span class="hljs-string">      targetPort: mgmt</span>
+<span class="hljs-string">  selector:</span>
+<span class="hljs-string">    app.kubernetes.io/instance: emqx</span>
+<span class="hljs-string">    app.kubernetes.io/name: emqx</span>
+<span class="hljs-string">  type: ClusterIP</span>
+<span class="hljs-string">  sessionAffinity: None</span>
+<span class="hljs-string">apiVersion: v1</span>
+<span class="hljs-string">kind: Service</span>
+<span class="hljs-string">---</span>
+<span class="hljs-string">metadata:</span>
+<span class="hljs-string">  name: emqx-headless</span>
+<span class="hljs-string">  namespace: pro-emqx</span>
+<span class="hljs-string">  labels:</span>
+<span class="hljs-string">    app.kubernetes.io/instance: emqx</span>
+<span class="hljs-string">    app.kubernetes.io/name: emqx</span>
+<span class="hljs-string">spec:</span>
+<span class="hljs-string">  ports:</span>
+<span class="hljs-string">    - name: mqtt</span>
+<span class="hljs-string">      protocol: TCP</span>
+<span class="hljs-string">      port: 1883</span>
+<span class="hljs-string">      targetPort: mqtt</span>
+<span class="hljs-string">    - name: mqttssl</span>
+<span class="hljs-string">      protocol: TCP</span>
+<span class="hljs-string">      port: 8883</span>
+<span class="hljs-string">      targetPort: mqttssl</span>
+<span class="hljs-string">    - name: ws</span>
+<span class="hljs-string">      protocol: TCP</span>
+<span class="hljs-string">      port: 8083</span>
+<span class="hljs-string">      targetPort: ws</span>
+<span class="hljs-string">    - name: wss</span>
+<span class="hljs-string">      protocol: TCP</span>
+<span class="hljs-string">      port: 8084</span>
+<span class="hljs-string">      targetPort: wss</span>
+<span class="hljs-string">    - name: dashboard</span>
+<span class="hljs-string">      protocol: TCP</span>
+<span class="hljs-string">      port: 18083</span>
+<span class="hljs-string">      targetPort: dashboard</span>
+<span class="hljs-string">    - name: ekka</span>
+<span class="hljs-string">      protocol: TCP</span>
+<span class="hljs-string">      port: 4370</span>
+<span class="hljs-string">      targetPort: ekka</span>
+<span class="hljs-string">    - name: mgmt</span>
+<span class="hljs-string">      protocol: TCP</span>
+<span class="hljs-string">      port: 8081</span>
+<span class="hljs-string">      targetPort: mgmt</span>
+<span class="hljs-string">  selector:</span>
+<span class="hljs-string">    app.kubernetes.io/instance: emqx</span>
+<span class="hljs-string">    app.kubernetes.io/name: emqx</span>
+<span class="hljs-string">  clusterIP: None</span>
+<span class="hljs-string">  type: ClusterIP</span>
+<span class="hljs-string">  sessionAffinity: None</span>
+<span class="hljs-string">  publishNotReadyAddresses: true</span>
+<span class="hljs-string">apiVersion: v1</span>
+<span class="hljs-string">kind: Service</span>
+<span class="hljs-string">---</span>
+<span class="hljs-string">apiVersion: v1</span>
+<span class="hljs-string">kind: ServiceAccount</span>
+<span class="hljs-string">metadata:</span>
+<span class="hljs-string">  name: emqx</span>
+<span class="hljs-string">  namespace: pro-emqx</span>
+<span class="hljs-string">---</span>
+<span class="hljs-string">apiVersion: rbac.authorization.k8s.io/v1</span>
+<span class="hljs-string">kind: Role</span>
+<span class="hljs-string">metadata:</span>
+<span class="hljs-string">  name: emqx</span>
+<span class="hljs-string">  namespace: pro-emqx</span>
+<span class="hljs-string">rules:</span>
+<span class="hljs-string">- apiGroups:</span>
+<span class="hljs-string">  - &quot;&quot;</span>
 <span class="hljs-string">  resources:</span>
-<span class="hljs-string">    requests:</span>
-<span class="hljs-string">      storage: 2Gi</span>
-<span class="hljs-string">  storageClassName: sfsturbo-k8s-sc</span>
-<span class="hljs-string">  volumeMode: Filesystem</span>
+<span class="hljs-string">  - endpoints</span>
+<span class="hljs-string">  verbs:</span>
+<span class="hljs-string">  - get</span>
+<span class="hljs-string">  - watch</span>
+<span class="hljs-string">  - list</span>
+<span class="hljs-string">---</span>
+<span class="hljs-string">apiVersion: rbac.authorization.k8s.io/v1</span>
+<span class="hljs-string">kind: RoleBinding</span>
+<span class="hljs-string">metadata:</span>
+<span class="hljs-string">  name: emqx</span>
+<span class="hljs-string">  namespace: pro-emqx</span>
+<span class="hljs-string">roleRef:</span>
+<span class="hljs-string">  apiGroup: rbac.authorization.k8s.io</span>
+<span class="hljs-string">  kind: Role</span>
+<span class="hljs-string">  name: emqx</span>
+<span class="hljs-string">subjects:</span>
+<span class="hljs-string">- kind: ServiceAccount</span>
+<span class="hljs-string">  name: emqx</span>
+<span class="hljs-string">  namespace: pro-emqx</span>
+<span class="hljs-string">---</span>
+<span class="hljs-string"></span>
 <span class="hljs-string">EOF</span></code></pre></div>
                 
               </div>
@@ -432,7 +582,7 @@
     
       <span class="category-chain">
         
-  <a href="/hexo/categories/Kubernetes/" class="category-chain-item">Kubernetes</a>
+  <a href="/hexo/categories/EMQX/" class="category-chain-item">EMQX</a>
   
   
 
@@ -447,7 +597,7 @@
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
-        <a href="/hexo/tags/Kubernetes/" class="print-no-link">#Kubernetes</a>
+        <a href="/hexo/tags/EMQX/" class="print-no-link">#EMQX</a>
       
     </div>
   
@@ -461,9 +611,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/hexo/2024/05/29/Kubernetes-%E5%AD%98%E5%82%A8%E4%B8%8E%E9%85%8D%E7%BD%AE/" title="Kubernetes-存储与配置">
+                      <a href="/hexo/2024/06/11/EMQX-%E5%A4%87%E4%BB%BD%E8%BF%98%E5%8E%9F/" title="EMQX-备份还原">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">Kubernetes-存储与配置</span>
+                        <span class="hidden-mobile">EMQX-备份还原</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
@@ -471,8 +621,8 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/hexo/2024/05/29/Kubernetes-%E6%8C%81%E4%B9%85%E5%8C%96%E5%AD%98%E5%82%A8/" title="Kubernetes-持久化存储">
-                        <span class="hidden-mobile">Kubernetes-持久化存储</span>
+                      <a href="/hexo/2024/06/11/ETCD-%E5%A4%87%E4%BB%BD%E8%BF%98%E5%8E%9F/" title="ETCD-数据备份与恢复">
+                        <span class="hidden-mobile">ETCD-数据备份与恢复</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
