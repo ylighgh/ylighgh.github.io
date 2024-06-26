@@ -16,15 +16,15 @@
   <meta name="author" content="三石">
   <meta name="keywords" content="">
   
-    <meta name="description" content="容器日志采集基于 FluentBit + Kafka + ELK 的日志采集系统 创建namespacekubectl create ns logging  消息队列Zookeeperkubectl apply -f - &lt;&lt;EOF apiVersion: apps&#x2F;v1 kind: StatefulSet metadata:   name: zookeeper   namespace">
+    <meta name="description" content="容器日志采集基于 FluentBit + Kafka + ELK 的日志采集系统 创建namespacekubectl create ns logging  消息队列ZookeeperStatefulSetkubectl apply -f - &lt;&lt;EOF apiVersion: apps&#x2F;v1 kind: StatefulSet metadata:   name: zookeeper">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Kubernetes-日志采集">
 <meta property="og:url" content="https://ylighgh.github.io/hexo/2024/05/29/Kubernetes-%E6%97%A5%E5%BF%97%E9%87%87%E9%9B%86/index.html">
 <meta property="og:site_name" content="运维杂记">
-<meta property="og:description" content="容器日志采集基于 FluentBit + Kafka + ELK 的日志采集系统 创建namespacekubectl create ns logging  消息队列Zookeeperkubectl apply -f - &lt;&lt;EOF apiVersion: apps&#x2F;v1 kind: StatefulSet metadata:   name: zookeeper   namespace">
+<meta property="og:description" content="容器日志采集基于 FluentBit + Kafka + ELK 的日志采集系统 创建namespacekubectl create ns logging  消息队列ZookeeperStatefulSetkubectl apply -f - &lt;&lt;EOF apiVersion: apps&#x2F;v1 kind: StatefulSet metadata:   name: zookeeper">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2024-05-29T14:26:00.000Z">
-<meta property="article:modified_time" content="2024-06-26T06:53:47.962Z">
+<meta property="article:modified_time" content="2024-06-26T07:04:19.108Z">
 <meta property="article:author" content="三石">
 <meta property="article:tag" content="Kubernetes">
 <meta name="twitter:card" content="summary_large_image">
@@ -276,7 +276,7 @@
                 <h1 id="容器日志采集"><a href="#容器日志采集" class="headerlink" title="容器日志采集"></a>容器日志采集</h1><p>基于 FluentBit + Kafka + ELK 的日志采集系统</p>
 <h1 id="创建namespace"><a href="#创建namespace" class="headerlink" title="创建namespace"></a>创建namespace</h1><div class="code-wrapper"><pre><code class="hljs bash">kubectl create ns logging</code></pre></div>
 
-<h1 id="消息队列"><a href="#消息队列" class="headerlink" title="消息队列"></a>消息队列</h1><h2 id="Zookeeper"><a href="#Zookeeper" class="headerlink" title="Zookeeper"></a>Zookeeper</h2><div class="code-wrapper"><pre><code class="hljs bash">kubectl apply -f - &lt;&lt;<span class="hljs-string">EOF</span>
+<h1 id="消息队列"><a href="#消息队列" class="headerlink" title="消息队列"></a>消息队列</h1><h2 id="Zookeeper"><a href="#Zookeeper" class="headerlink" title="Zookeeper"></a>Zookeeper</h2><h3 id="StatefulSet"><a href="#StatefulSet" class="headerlink" title="StatefulSet"></a>StatefulSet</h3><div class="code-wrapper"><pre><code class="hljs bash">kubectl apply -f - &lt;&lt;<span class="hljs-string">EOF</span>
 <span class="hljs-string">apiVersion: apps/v1</span>
 <span class="hljs-string">kind: StatefulSet</span>
 <span class="hljs-string">metadata:</span>
@@ -300,7 +300,8 @@
 <span class="hljs-string">              name: zookeeperclient</span>
 <span class="hljs-string">      imagePullSecrets:</span>
 <span class="hljs-string">        - name: harbor</span>
-<span class="hljs-string">---</span>
+<span class="hljs-string">EOF</span></code></pre></div>
+<h3 id="Service"><a href="#Service" class="headerlink" title="Service"></a>Service</h3><div class="code-wrapper"><pre><code class="hljs bash">kubectl apply -f - &lt;&lt;<span class="hljs-string">EOF</span>
 <span class="hljs-string">apiVersion: v1</span>
 <span class="hljs-string">kind: Service</span>
 <span class="hljs-string">metadata:</span>
@@ -314,7 +315,7 @@
 <span class="hljs-string">    app: zookeeper</span>
 <span class="hljs-string">EOF</span></code></pre></div>
 
-<h2 id="Kafka"><a href="#Kafka" class="headerlink" title="Kafka"></a>Kafka</h2><div class="code-wrapper"><pre><code class="hljs bash">kubectl apply -f - &lt;&lt;<span class="hljs-string">EOF</span>
+<h2 id="Kafka"><a href="#Kafka" class="headerlink" title="Kafka"></a>Kafka</h2><h3 id="StatefulSet-1"><a href="#StatefulSet-1" class="headerlink" title="StatefulSet"></a>StatefulSet</h3><div class="code-wrapper"><pre><code class="hljs bash">kubectl apply -f - &lt;&lt;<span class="hljs-string">EOF</span>
 <span class="hljs-string">apiVersion: apps/v1</span>
 <span class="hljs-string">kind: StatefulSet</span>
 <span class="hljs-string">metadata:</span>
@@ -345,7 +346,8 @@
 <span class="hljs-string">              value: &quot;zookeeper:2181&quot;</span>
 <span class="hljs-string">            - name: ALLOW_PLAINTEXT_LISTENER</span>
 <span class="hljs-string">              value: &quot;yes&quot;</span>
-<span class="hljs-string">---</span>
+<span class="hljs-string">EOF</span></code></pre></div>
+<h3 id="Service-1"><a href="#Service-1" class="headerlink" title="Service"></a>Service</h3><div class="code-wrapper"><pre><code class="hljs bash">kubectl apply -f - &lt;&lt;<span class="hljs-string">EOF</span>
 <span class="hljs-string">apiVersion: v1</span>
 <span class="hljs-string">kind: Service</span>
 <span class="hljs-string">metadata:</span>
@@ -365,142 +367,142 @@ kubectl <span class="hljs-built_in">exec</span> -it kafka-0 -n logging -- /opt/b
 <span class="hljs-comment"># 列出topic</span>
 kubectl <span class="hljs-built_in">exec</span> -it kafka-0 -n logging -- /opt/bitnami/kafka/bin/kafka-topics.sh --list --bootstrap-server kafka:9092</code></pre></div>
 
-<h1 id="FluentBit"><a href="#FluentBit" class="headerlink" title="FluentBit"></a>FluentBit</h1><h2 id="配置-1"><a href="#配置-1" class="headerlink" title="配置"></a>配置</h2><div class="code-wrapper"><pre><code class="hljs perl">kubectl apply -f - &lt;&lt;EOF
-kind: ConfigMap
-apiVersion: v1
-metadata:
-  name: fluent-bit-config
-  namespace: logging
-  labels:
-    k8s-app: fluent-bit
-data:
-  filter.conf: |-
-    [FILTER]
-        Name                kubernetes
-        Match               kube.*
-        Kube_URL            https:<span class="hljs-regexp">//</span>kubernetes.default.svc:<span class="hljs-number">443</span>
-        Kube_CA_File        /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
-        Kube_Token_File     /var/run/secrets/kubernetes.io/serviceaccount/token
-        Kube_Tag_Prefix     kube.var.log.containers.
-        Merge_Log           On
-        K8S-Logging.Parser  On
-        K8S-Logging.Exclude Off
-        Annotations         Off
-    [FILTER]
-        Name           <span class="hljs-keyword">grep</span>
-        Match          kube.*
-        regex         \$kubernetes[<span class="hljs-string">&#x27;labels&#x27;</span>][<span class="hljs-string">&#x27;logging&#x27;</span>] true
-    [FILTER]
-        Name record_modifier
-        Match kube.*
-        Remove_key kubernetes.container*
-        Remove_key kubernetes.pod_id
-        Remove_key kubernetes.docker_id
-        Remove_key kubernetes.labels
-        Remove_key <span class="hljs-keyword">log</span>
-  fluent-bit.conf: |-
-    [SERVICE]
-        Flush         <span class="hljs-number">1</span>
-        Log_Level     info
-        Daemon        off
-        Parsers_File  parsers.conf
-        HTTP_Server   On
-        HTTP_Listen   <span class="hljs-number">0</span>.<span class="hljs-number">0</span>.<span class="hljs-number">0</span>.<span class="hljs-number">0</span>
-        HTTP_Port     <span class="hljs-number">2020</span>
-
-    @INCLUDE input.conf
-    @INCLUDE filter.conf
-    @INCLUDE output-kafka.conf
-  input.conf: |-
-    [INPUT]
-        Name              tail
-        Tag               kube.*
-        Path              /var/<span class="hljs-keyword">log</span>/containers/*.log
-        Parser            docker
-        DB                /var/<span class="hljs-keyword">log</span>/flb_kube.db
-        Mem_Buf_Limit     <span class="hljs-number">1</span>MB
-        Skip_Long_Lines   On
-        Refresh_Interval  <span class="hljs-number">10</span>
-  output-kafka.conf: |-
-    [OUTPUT]
-        Name           kafka
-        Match          kube.*
-        Brokers        kafka:<span class="hljs-number">9092</span>
-        Topics         k8s-logs
-        Timestamp_Key  @timestamp
-        Timestamp_Format iso8601
-        Retry_Limit    false
-        <span class="hljs-comment"># hides errors &quot;Receive failed: Disconnected&quot; when kafka kills idle connections</span>
-        rdkafka.log.connection.close false
-        <span class="hljs-comment"># producer buffer is not included in http://fluentbit.io/documentation/0.12/configuration/memory_usage.html#estimating</span>
-        rdkafka.queue.buffering.max.kbytes <span class="hljs-number">20240</span>
-        <span class="hljs-comment"># for logs you&#x27;ll probably want this ot be 0 or 1, not more</span>
-        rdkafka.request.required.acks <span class="hljs-number">1</span>
-  parsers.conf: |-
-    [PARSER]
-        Name axzo_json
-        Format json
-    [PARSER]
-        Name   apache
-        Format regex
-        Regex  ^(?&lt;host&gt;[^ ]*) [^ ]* (?&lt;user&gt;[^ ]*) \[(?&lt;<span class="hljs-keyword">time</span>&gt;[^\]]*)\] <span class="hljs-string">&quot;(?&lt;method&gt;\S+)(?: +(?&lt;path&gt;[^\&quot;]*?)(?: +\S*)?)?&quot;</span> (?&lt;code&gt;[^ ]*) (?&lt;size&gt;[^ ]*)(?: <span class="hljs-string">&quot;(?&lt;referer&gt;[^\&quot;]*)&quot;</span> <span class="hljs-string">&quot;(?&lt;agent&gt;[^\&quot;]*)&quot;</span>)?\$
-        Time_Key <span class="hljs-keyword">time</span>
-        Time_Format %d/%b/%Y:%H:%M:%S %z
-
-    [PARSER]
-        Name   apache2
-        Format regex
-        Regex  ^(?&lt;host&gt;[^ ]*) [^ ]* (?&lt;user&gt;[^ ]*) \[(?&lt;<span class="hljs-keyword">time</span>&gt;[^\]]*)\] <span class="hljs-string">&quot;(?&lt;method&gt;\S+)(?: +(?&lt;path&gt;[^ ]*) +\S*)?&quot;</span> (?&lt;code&gt;[^ ]*) (?&lt;size&gt;[^ ]*)(?: <span class="hljs-string">&quot;(?&lt;referer&gt;[^\&quot;]*)&quot;</span> <span class="hljs-string">&quot;(?&lt;agent&gt;[^\&quot;]*)&quot;</span>)?\$
-        Time_Key <span class="hljs-keyword">time</span>
-        Time_Format %d/%b/%Y:%H:%M:%S %z
-
-    [PARSER]
-        Name   apache_error
-        Format regex
-        Regex  ^\[[^ ]* (?&lt;<span class="hljs-keyword">time</span>&gt;[^\]]*)\] \[(?&lt;level&gt;[^\]]*)\](?: \[pid (?&lt;pid&gt;[^\]]*)\])?( \[client (?&lt;client&gt;[^\]]*)\])? (?&lt;message&gt;.*)\$
-
-    [PARSER]
-        Name   nginx
-        Format regex
-        Regex ^(?&lt;remote&gt;[^ ]*) (?&lt;host&gt;[^ ]*) (?&lt;user&gt;[^ ]*) \[(?&lt;<span class="hljs-keyword">time</span>&gt;[^\]]*)\] <span class="hljs-string">&quot;(?&lt;method&gt;\S+)(?: +(?&lt;path&gt;[^\&quot;]*?)(?: +\S*)?)?&quot;</span> (?&lt;code&gt;[^ ]*) (?&lt;size&gt;[^ ]*)(?: <span class="hljs-string">&quot;(?&lt;referer&gt;[^\&quot;]*)&quot;</span> <span class="hljs-string">&quot;(?&lt;agent&gt;[^\&quot;]*)&quot;</span>)?\$
-        Time_Key <span class="hljs-keyword">time</span>
-        Time_Format %d/%b/%Y:%H:%M:%S %z
-
-    [PARSER]
-        Name   json
-        Format json
-        Time_Key <span class="hljs-keyword">time</span>
-        Time_Format %d/%b/%Y:%H:%M:%S %z
-
-    [PARSER]
-        Name        docker
-        Format      json
-        Time_Key    <span class="hljs-keyword">time</span>
-        Time_Format %Y-%m-%dT%H:%M:%S.%L
-        Time_Keep   On
-
-    [PARSER]
-        Name        syslog
-        Format      regex
-        Regex       ^\&lt;(?&lt;pri&gt;[<span class="hljs-number">0</span>-<span class="hljs-number">9</span>]+)\&gt;(?&lt;<span class="hljs-keyword">time</span>&gt;[^ ]* &#123;<span class="hljs-number">1</span>,<span class="hljs-number">2</span>&#125;[^ ]* [^ ]*) (?&lt;host&gt;[^ ]*) (?&lt;ident&gt;[a-zA-Z<span class="hljs-number">0</span>-<span class="hljs-number">9_</span>\/\.\-]*)(?:\[(?&lt;pid&gt;[<span class="hljs-number">0</span>-<span class="hljs-number">9</span>]+)\])?(?:[^\:]*\:)? *(?&lt;message&gt;.*)\$
-        Time_Key    <span class="hljs-keyword">time</span>
-        Time_Format %b %d %H:%M:%S
-
-    [PARSER]
-        Name        axzo-os-<span class="hljs-keyword">log</span>
-        Format      regex
-        Regex       ^(?&lt;<span class="hljs-keyword">time</span>&gt;[^ ]* &#123;<span class="hljs-number">1</span>,<span class="hljs-number">2</span>&#125;[^ ]* [^ ]*) (?&lt;host&gt;[^ ]*) (?&lt;process&gt;[^ ]*)\: (?&lt;message&gt;.*)\$
-        Time_Key    <span class="hljs-keyword">time</span>
-        Time_Format %b %d %H:%M:%S
-EOF</code></pre></div>
-<h2 id="Serviceaccount"><a href="#Serviceaccount" class="headerlink" title="Serviceaccount"></a>Serviceaccount</h2><div class="code-wrapper"><pre><code class="hljs bash">kubectl apply -f - &lt;&lt;<span class="hljs-string">EOF</span>
+<h1 id="FluentBit"><a href="#FluentBit" class="headerlink" title="FluentBit"></a>FluentBit</h1><h2 id="ConfigMap"><a href="#ConfigMap" class="headerlink" title="ConfigMap"></a>ConfigMap</h2><div class="code-wrapper"><pre><code class="hljs bash">kubectl apply -f - &lt;&lt;<span class="hljs-string">EOF</span>
+<span class="hljs-string">kind: ConfigMap</span>
+<span class="hljs-string">apiVersion: v1</span>
+<span class="hljs-string">metadata:</span>
+<span class="hljs-string">  name: fluent-bit-config</span>
+<span class="hljs-string">  namespace: logging</span>
+<span class="hljs-string">  labels:</span>
+<span class="hljs-string">    app: fluent-bit</span>
+<span class="hljs-string">data:</span>
+<span class="hljs-string">  filter.conf: |-</span>
+<span class="hljs-string">    [FILTER]</span>
+<span class="hljs-string">        Name                kubernetes</span>
+<span class="hljs-string">        Match               kube.*</span>
+<span class="hljs-string">        Kube_URL            https://kubernetes.default.svc:443</span>
+<span class="hljs-string">        Kube_CA_File        /var/run/secrets/kubernetes.io/serviceaccount/ca.crt</span>
+<span class="hljs-string">        Kube_Token_File     /var/run/secrets/kubernetes.io/serviceaccount/token</span>
+<span class="hljs-string">        Kube_Tag_Prefix     kube.var.log.containers.</span>
+<span class="hljs-string">        Merge_Log           On</span>
+<span class="hljs-string">        K8S-Logging.Parser  On</span>
+<span class="hljs-string">        K8S-Logging.Exclude Off</span>
+<span class="hljs-string">        Annotations         Off</span>
+<span class="hljs-string">    [FILTER]</span>
+<span class="hljs-string">        Name           grep</span>
+<span class="hljs-string">        Match          kube.*</span>
+<span class="hljs-string">        regex         \$kubernetes[&#x27;labels&#x27;][&#x27;logging&#x27;] true</span>
+<span class="hljs-string">    [FILTER]</span>
+<span class="hljs-string">        Name record_modifier</span>
+<span class="hljs-string">        Match kube.*</span>
+<span class="hljs-string">        Remove_key kubernetes.container*</span>
+<span class="hljs-string">        Remove_key kubernetes.pod_id</span>
+<span class="hljs-string">        Remove_key kubernetes.docker_id</span>
+<span class="hljs-string">        Remove_key kubernetes.labels</span>
+<span class="hljs-string">        Remove_key log</span>
+<span class="hljs-string">  fluent-bit.conf: |-</span>
+<span class="hljs-string">    [SERVICE]</span>
+<span class="hljs-string">        Flush         1</span>
+<span class="hljs-string">        Log_Level     info</span>
+<span class="hljs-string">        Daemon        off</span>
+<span class="hljs-string">        Parsers_File  parsers.conf</span>
+<span class="hljs-string">        HTTP_Server   On</span>
+<span class="hljs-string">        HTTP_Listen   0.0.0.0</span>
+<span class="hljs-string">        HTTP_Port     2020</span>
+<span class="hljs-string"></span>
+<span class="hljs-string">    @INCLUDE input.conf</span>
+<span class="hljs-string">    @INCLUDE filter.conf</span>
+<span class="hljs-string">    @INCLUDE output-kafka.conf</span>
+<span class="hljs-string">  input.conf: |-</span>
+<span class="hljs-string">    [INPUT]</span>
+<span class="hljs-string">        Name              tail</span>
+<span class="hljs-string">        Tag               kube.*</span>
+<span class="hljs-string">        Path              /var/log/containers/*.log</span>
+<span class="hljs-string">        Parser            docker</span>
+<span class="hljs-string">        DB                /var/log/flb_kube.db</span>
+<span class="hljs-string">        Mem_Buf_Limit     1MB</span>
+<span class="hljs-string">        Skip_Long_Lines   On</span>
+<span class="hljs-string">        Refresh_Interval  10</span>
+<span class="hljs-string">  output-kafka.conf: |-</span>
+<span class="hljs-string">    [OUTPUT]</span>
+<span class="hljs-string">        Name           kafka</span>
+<span class="hljs-string">        Match          kube.*</span>
+<span class="hljs-string">        Brokers        kafka:9092</span>
+<span class="hljs-string">        Topics         k8s-logs</span>
+<span class="hljs-string">        Timestamp_Key  @timestamp</span>
+<span class="hljs-string">        Timestamp_Format iso8601</span>
+<span class="hljs-string">        Retry_Limit    false</span>
+<span class="hljs-string">        # hides errors &quot;Receive failed: Disconnected&quot; when kafka kills idle connections</span>
+<span class="hljs-string">        rdkafka.log.connection.close false</span>
+<span class="hljs-string">        # producer buffer is not included in http://fluentbit.io/documentation/0.12/configuration/memory_usage.html#estimating</span>
+<span class="hljs-string">        rdkafka.queue.buffering.max.kbytes 20240</span>
+<span class="hljs-string">        # for logs you&#x27;ll probably want this ot be 0 or 1, not more</span>
+<span class="hljs-string">        rdkafka.request.required.acks 1</span>
+<span class="hljs-string">  parsers.conf: |-</span>
+<span class="hljs-string">    [PARSER]</span>
+<span class="hljs-string">        Name axzo_json</span>
+<span class="hljs-string">        Format json</span>
+<span class="hljs-string">    [PARSER]</span>
+<span class="hljs-string">        Name   apache</span>
+<span class="hljs-string">        Format regex</span>
+<span class="hljs-string">        Regex  ^(?&lt;host&gt;[^ ]*) [^ ]* (?&lt;user&gt;[^ ]*) \[(?&lt;time&gt;[^\]]*)\] &quot;(?&lt;method&gt;\S+)(?: +(?&lt;path&gt;[^\&quot;]*?)(?: +\S*)?)?&quot; (?&lt;code&gt;[^ ]*) (?&lt;size&gt;[^ ]*)(?: &quot;(?&lt;referer&gt;[^\&quot;]*)&quot; &quot;(?&lt;agent&gt;[^\&quot;]*)&quot;)?\$</span>
+<span class="hljs-string">        Time_Key time</span>
+<span class="hljs-string">        Time_Format %d/%b/%Y:%H:%M:%S %z</span>
+<span class="hljs-string"></span>
+<span class="hljs-string">    [PARSER]</span>
+<span class="hljs-string">        Name   apache2</span>
+<span class="hljs-string">        Format regex</span>
+<span class="hljs-string">        Regex  ^(?&lt;host&gt;[^ ]*) [^ ]* (?&lt;user&gt;[^ ]*) \[(?&lt;time&gt;[^\]]*)\] &quot;(?&lt;method&gt;\S+)(?: +(?&lt;path&gt;[^ ]*) +\S*)?&quot; (?&lt;code&gt;[^ ]*) (?&lt;size&gt;[^ ]*)(?: &quot;(?&lt;referer&gt;[^\&quot;]*)&quot; &quot;(?&lt;agent&gt;[^\&quot;]*)&quot;)?\$</span>
+<span class="hljs-string">        Time_Key time</span>
+<span class="hljs-string">        Time_Format %d/%b/%Y:%H:%M:%S %z</span>
+<span class="hljs-string"></span>
+<span class="hljs-string">    [PARSER]</span>
+<span class="hljs-string">        Name   apache_error</span>
+<span class="hljs-string">        Format regex</span>
+<span class="hljs-string">        Regex  ^\[[^ ]* (?&lt;time&gt;[^\]]*)\] \[(?&lt;level&gt;[^\]]*)\](?: \[pid (?&lt;pid&gt;[^\]]*)\])?( \[client (?&lt;client&gt;[^\]]*)\])? (?&lt;message&gt;.*)\$</span>
+<span class="hljs-string"></span>
+<span class="hljs-string">    [PARSER]</span>
+<span class="hljs-string">        Name   nginx</span>
+<span class="hljs-string">        Format regex</span>
+<span class="hljs-string">        Regex ^(?&lt;remote&gt;[^ ]*) (?&lt;host&gt;[^ ]*) (?&lt;user&gt;[^ ]*) \[(?&lt;time&gt;[^\]]*)\] &quot;(?&lt;method&gt;\S+)(?: +(?&lt;path&gt;[^\&quot;]*?)(?: +\S*)?)?&quot; (?&lt;code&gt;[^ ]*) (?&lt;size&gt;[^ ]*)(?: &quot;(?&lt;referer&gt;[^\&quot;]*)&quot; &quot;(?&lt;agent&gt;[^\&quot;]*)&quot;)?\$</span>
+<span class="hljs-string">        Time_Key time</span>
+<span class="hljs-string">        Time_Format %d/%b/%Y:%H:%M:%S %z</span>
+<span class="hljs-string"></span>
+<span class="hljs-string">    [PARSER]</span>
+<span class="hljs-string">        Name   json</span>
+<span class="hljs-string">        Format json</span>
+<span class="hljs-string">        Time_Key time</span>
+<span class="hljs-string">        Time_Format %d/%b/%Y:%H:%M:%S %z</span>
+<span class="hljs-string"></span>
+<span class="hljs-string">    [PARSER]</span>
+<span class="hljs-string">        Name        docker</span>
+<span class="hljs-string">        Format      json</span>
+<span class="hljs-string">        Time_Key    time</span>
+<span class="hljs-string">        Time_Format %Y-%m-%dT%H:%M:%S.%L</span>
+<span class="hljs-string">        Time_Keep   On</span>
+<span class="hljs-string"></span>
+<span class="hljs-string">    [PARSER]</span>
+<span class="hljs-string">        Name        syslog</span>
+<span class="hljs-string">        Format      regex</span>
+<span class="hljs-string">        Regex       ^\&lt;(?&lt;pri&gt;[0-9]+)\&gt;(?&lt;time&gt;[^ ]* &#123;1,2&#125;[^ ]* [^ ]*) (?&lt;host&gt;[^ ]*) (?&lt;ident&gt;[a-zA-Z0-9_\/\.\-]*)(?:\[(?&lt;pid&gt;[0-9]+)\])?(?:[^\:]*\:)? *(?&lt;message&gt;.*)\$</span>
+<span class="hljs-string">        Time_Key    time</span>
+<span class="hljs-string">        Time_Format %b %d %H:%M:%S</span>
+<span class="hljs-string"></span>
+<span class="hljs-string">    [PARSER]</span>
+<span class="hljs-string">        Name        axzo-os-log</span>
+<span class="hljs-string">        Format      regex</span>
+<span class="hljs-string">        Regex       ^(?&lt;time&gt;[^ ]* &#123;1,2&#125;[^ ]* [^ ]*) (?&lt;host&gt;[^ ]*) (?&lt;process&gt;[^ ]*)\: (?&lt;message&gt;.*)\$</span>
+<span class="hljs-string">        Time_Key    time</span>
+<span class="hljs-string">        Time_Format %b %d %H:%M:%S</span>
+<span class="hljs-string">EOF</span></code></pre></div>
+<h2 id="ServiceAccount"><a href="#ServiceAccount" class="headerlink" title="ServiceAccount"></a>ServiceAccount</h2><div class="code-wrapper"><pre><code class="hljs bash">kubectl apply -f - &lt;&lt;<span class="hljs-string">EOF</span>
 <span class="hljs-string">apiVersion: v1</span>
 <span class="hljs-string">kind: ServiceAccount</span>
 <span class="hljs-string">metadata:</span>
 <span class="hljs-string">  name: fluent-bit</span>
 <span class="hljs-string">  namespace: logging</span>
 <span class="hljs-string">EOF</span></code></pre></div>
-<h2 id="clusterroles"><a href="#clusterroles" class="headerlink" title="clusterroles"></a>clusterroles</h2><div class="code-wrapper"><pre><code class="hljs bash">kubectl apply -f - &lt;&lt;<span class="hljs-string">EOF</span>
+<h2 id="ClusterRole"><a href="#ClusterRole" class="headerlink" title="ClusterRole"></a>ClusterRole</h2><div class="code-wrapper"><pre><code class="hljs bash">kubectl apply -f - &lt;&lt;<span class="hljs-string">EOF</span>
 <span class="hljs-string">apiVersion: rbac.authorization.k8s.io/v1</span>
 <span class="hljs-string">kind: ClusterRole</span>
 <span class="hljs-string">metadata:</span>
@@ -517,7 +519,7 @@ EOF</code></pre></div>
 <span class="hljs-string">  - watch</span>
 <span class="hljs-string">EOF</span></code></pre></div>
 
-<h2 id="clusterrolebindings"><a href="#clusterrolebindings" class="headerlink" title="clusterrolebindings"></a>clusterrolebindings</h2><div class="code-wrapper"><pre><code class="hljs bash">kubectl apply -f - &lt;&lt;<span class="hljs-string">EOF</span>
+<h2 id="ClusterRoleBinding"><a href="#ClusterRoleBinding" class="headerlink" title="ClusterRoleBinding"></a>ClusterRoleBinding</h2><div class="code-wrapper"><pre><code class="hljs bash">kubectl apply -f - &lt;&lt;<span class="hljs-string">EOF</span>
 <span class="hljs-string">apiVersion: rbac.authorization.k8s.io/v1</span>
 <span class="hljs-string">kind: ClusterRoleBinding</span>
 <span class="hljs-string">metadata:</span>
@@ -532,26 +534,22 @@ EOF</code></pre></div>
 <span class="hljs-string">  namespace: logging</span>
 <span class="hljs-string">EOF</span></code></pre></div>
 
-<h2 id="服务"><a href="#服务" class="headerlink" title="服务"></a>服务</h2><div class="code-wrapper"><pre><code class="hljs bash">kubectl apply -f - &lt;&lt;<span class="hljs-string">EOF</span>
+<h2 id="DaemonSet"><a href="#DaemonSet" class="headerlink" title="DaemonSet"></a>DaemonSet</h2><div class="code-wrapper"><pre><code class="hljs bash">kubectl apply -f - &lt;&lt;<span class="hljs-string">EOF</span>
 <span class="hljs-string">kind: DaemonSet</span>
 <span class="hljs-string">apiVersion: apps/v1</span>
 <span class="hljs-string">metadata:</span>
 <span class="hljs-string">  name: fluent-bit</span>
 <span class="hljs-string">  namespace: logging</span>
 <span class="hljs-string">  labels:</span>
-<span class="hljs-string">    k8s-app: fluent-bit-logging</span>
-<span class="hljs-string">    kubernetes.io/cluster-service: &#x27;true&#x27;</span>
-<span class="hljs-string">    version: v1</span>
+<span class="hljs-string">    app: fluent-bit-logging</span>
 <span class="hljs-string">spec:</span>
 <span class="hljs-string">  selector:</span>
 <span class="hljs-string">    matchLabels:</span>
-<span class="hljs-string">      k8s-app: fluent-bit-logging</span>
+<span class="hljs-string">      app: fluent-bit-logging</span>
 <span class="hljs-string">  template:</span>
 <span class="hljs-string">    metadata:</span>
 <span class="hljs-string">      labels:</span>
-<span class="hljs-string">        k8s-app: fluent-bit-logging</span>
-<span class="hljs-string">        kubernetes.io/cluster-service: &#x27;true&#x27;</span>
-<span class="hljs-string">        version: v1</span>
+<span class="hljs-string">        app: fluent-bit-logging</span>
 <span class="hljs-string">    spec:</span>
 <span class="hljs-string">      volumes:</span>
 <span class="hljs-string">        - name: varlog</span>
@@ -638,7 +636,7 @@ EOF</code></pre></div>
 <span class="hljs-string">  revisionHistoryLimit: 10</span>
 <span class="hljs-string">EOF</span></code></pre></div>
 
-<h1 id="ELK"><a href="#ELK" class="headerlink" title="ELK"></a>ELK</h1><h2 id="ElasticSearch"><a href="#ElasticSearch" class="headerlink" title="ElasticSearch"></a>ElasticSearch</h2><div class="code-wrapper"><pre><code class="hljs bash">kubectl apply -f - &lt;&lt;<span class="hljs-string">EOF</span>
+<h1 id="ELK"><a href="#ELK" class="headerlink" title="ELK"></a>ELK</h1><h2 id="ElasticSearch"><a href="#ElasticSearch" class="headerlink" title="ElasticSearch"></a>ElasticSearch</h2><h3 id="Service-2"><a href="#Service-2" class="headerlink" title="Service"></a>Service</h3><div class="code-wrapper"><pre><code class="hljs bash">kubectl apply -f - &lt;&lt;<span class="hljs-string">EOF</span>
 <span class="hljs-string">---</span>
 <span class="hljs-string">apiVersion: v1</span>
 <span class="hljs-string">kind: Service</span>
@@ -651,8 +649,8 @@ EOF</code></pre></div>
 <span class="hljs-string">    - port: 9200</span>
 <span class="hljs-string">  selector:</span>
 <span class="hljs-string">    app: elasticsearch</span>
-<span class="hljs-string">---</span>
-<span class="hljs-string"># RBAC authn and authz</span>
+<span class="hljs-string">EOF</span></code></pre></div>
+<h3 id="ServiceAccount-1"><a href="#ServiceAccount-1" class="headerlink" title="ServiceAccount"></a>ServiceAccount</h3><div class="code-wrapper"><pre><code class="hljs bash">kubectl apply -f - &lt;&lt;<span class="hljs-string">EOF</span>
 <span class="hljs-string">apiVersion: v1</span>
 <span class="hljs-string">kind: ServiceAccount</span>
 <span class="hljs-string">metadata:</span>
@@ -660,7 +658,8 @@ EOF</code></pre></div>
 <span class="hljs-string">  namespace: logging</span>
 <span class="hljs-string">  labels:</span>
 <span class="hljs-string">    app: elasticsearch</span>
-<span class="hljs-string">---</span>
+<span class="hljs-string">EOF</span></code></pre></div>
+<h3 id="ClusterRole-1"><a href="#ClusterRole-1" class="headerlink" title="ClusterRole"></a>ClusterRole</h3><div class="code-wrapper"><pre><code class="hljs bash">kubectl apply -f - &lt;&lt;<span class="hljs-string">EOF</span>
 <span class="hljs-string">kind: ClusterRole</span>
 <span class="hljs-string">apiVersion: rbac.authorization.k8s.io/v1</span>
 <span class="hljs-string">metadata:</span>
@@ -675,8 +674,8 @@ EOF</code></pre></div>
 <span class="hljs-string">  - &quot;namespaces&quot;</span>
 <span class="hljs-string">  - &quot;endpoints&quot;</span>
 <span class="hljs-string">  verbs:</span>
-<span class="hljs-string">  - &quot;get&quot;</span>
-<span class="hljs-string">---</span>
+<span class="hljs-string">  - &quot;get&quot;</span></code></pre></div>
+<h3 id="ClusterRoleBinding-1"><a href="#ClusterRoleBinding-1" class="headerlink" title="ClusterRoleBinding"></a>ClusterRoleBinding</h3><div class="code-wrapper"><pre><code class="hljs bash">kubectl apply -f - &lt;&lt;<span class="hljs-string">EOF</span>
 <span class="hljs-string">kind: ClusterRoleBinding</span>
 <span class="hljs-string">apiVersion: rbac.authorization.k8s.io/v1</span>
 <span class="hljs-string">metadata:</span>
@@ -692,9 +691,8 @@ EOF</code></pre></div>
 <span class="hljs-string">roleRef:</span>
 <span class="hljs-string">  kind: ClusterRole</span>
 <span class="hljs-string">  name: elasticsearch</span>
-<span class="hljs-string">  apiGroup: &quot;&quot;</span>
-<span class="hljs-string">---</span>
-<span class="hljs-string"># Elasticsearch deployment itself</span>
+<span class="hljs-string">  apiGroup: &quot;&quot;</span></code></pre></div>
+<h3 id="StatefulSet-2"><a href="#StatefulSet-2" class="headerlink" title="StatefulSet"></a>StatefulSet</h3><div class="code-wrapper"><pre><code class="hljs bash">kubectl apply -f - &lt;&lt;<span class="hljs-string">EOF</span>
 <span class="hljs-string">apiVersion: apps/v1</span>
 <span class="hljs-string">kind: StatefulSet #使用statefulset创建Pod</span>
 <span class="hljs-string">metadata:</span>
@@ -753,7 +751,40 @@ EOF</code></pre></div>
 <span class="hljs-string">          value: &quot;TvTOidLL3R9xEDN@&quot;</span>
 <span class="hljs-string">EOF</span></code></pre></div>
 
-<h2 id="LogStash"><a href="#LogStash" class="headerlink" title="LogStash"></a>LogStash</h2><div class="code-wrapper"><pre><code class="hljs bash">kubectl apply -f - &lt;&lt;<span class="hljs-string">EOF</span>
+<h2 id="LogStash"><a href="#LogStash" class="headerlink" title="LogStash"></a>LogStash</h2><h3 id="ConfigMap-1"><a href="#ConfigMap-1" class="headerlink" title="ConfigMap"></a>ConfigMap</h3><div class="code-wrapper"><pre><code class="hljs bash">kubectl apply -f - &lt;&lt;<span class="hljs-string">EOF</span>
+<span class="hljs-string">kind: ConfigMap</span>
+<span class="hljs-string">apiVersion: v1</span>
+<span class="hljs-string">metadata:</span>
+<span class="hljs-string">  name: logstash-os-configmap</span>
+<span class="hljs-string">  namespace: logging</span>
+<span class="hljs-string">data:</span>
+<span class="hljs-string">  logstash.conf: |</span>
+<span class="hljs-string">    input &#123;</span>
+<span class="hljs-string">       kafka&#123;</span>
+<span class="hljs-string">        bootstrap_servers =&gt; &quot;kafka:9092&quot;</span>
+<span class="hljs-string">        topics =&gt; &quot;axzo-linux-os&quot;</span>
+<span class="hljs-string">        consumer_threads =&gt; 10</span>
+<span class="hljs-string">        decorate_events =&gt; true</span>
+<span class="hljs-string">        codec =&gt; json</span>
+<span class="hljs-string">        auto_offset_reset =&gt; &quot;latest&quot;</span>
+<span class="hljs-string">      &#125;</span>
+<span class="hljs-string">    &#125;</span>
+<span class="hljs-string">    output &#123;</span>
+<span class="hljs-string">      elasticsearch &#123;</span>
+<span class="hljs-string">        hosts =&gt; [&quot;elasticsearch:9200&quot;]</span>
+<span class="hljs-string">        user =&gt; &quot;elastic&quot;</span>
+<span class="hljs-string">        password =&gt; &quot;TvTOidLL3R9xEDN@&quot;</span>
+<span class="hljs-string">        index =&gt; &quot;axzo-log-os-%&#123;+YYYY.MM.dd&#125;&quot;</span>
+<span class="hljs-string">      &#125;</span>
+<span class="hljs-string">      stdout &#123;</span>
+<span class="hljs-string">        codec =&gt; rubydebug</span>
+<span class="hljs-string">      &#125;</span>
+<span class="hljs-string">    &#125;</span>
+<span class="hljs-string">  logstash.yml: |</span>
+<span class="hljs-string">    http.host: &quot;0.0.0.0&quot;</span>
+<span class="hljs-string">    path.config: /usr/share/logstash/pipeline</span>
+<span class="hljs-string">EOF</span></code></pre></div>
+<h3 id="Deployment"><a href="#Deployment" class="headerlink" title="Deployment"></a>Deployment</h3><div class="code-wrapper"><pre><code class="hljs bash">kubectl apply -f - &lt;&lt;<span class="hljs-string">EOF</span>
 <span class="hljs-string">kind: Deployment</span>
 <span class="hljs-string">apiVersion: apps/v1</span>
 <span class="hljs-string">metadata:</span>
@@ -822,53 +853,9 @@ EOF</code></pre></div>
 <span class="hljs-string">      maxSurge: 25%</span>
 <span class="hljs-string">  revisionHistoryLimit: 10</span>
 <span class="hljs-string">  progressDeadlineSeconds: 600</span>
-<span class="hljs-string">---</span>
-<span class="hljs-string">kind: ConfigMap</span>
-<span class="hljs-string">apiVersion: v1</span>
-<span class="hljs-string">metadata:</span>
-<span class="hljs-string">  name: logstash-os-configmap</span>
-<span class="hljs-string">  namespace: logging</span>
-<span class="hljs-string">  managedFields:</span>
-<span class="hljs-string">    - manager: cfe-apiserver</span>
-<span class="hljs-string">      operation: Update</span>
-<span class="hljs-string">      apiVersion: v1</span>
-<span class="hljs-string">      time: &#x27;2024-06-26T05:51:50Z&#x27;</span>
-<span class="hljs-string">      fieldsType: FieldsV1</span>
-<span class="hljs-string">      fieldsV1:</span>
-<span class="hljs-string">        f:data:</span>
-<span class="hljs-string">          .: &#123;&#125;</span>
-<span class="hljs-string">          f:logstash.conf: &#123;&#125;</span>
-<span class="hljs-string">          f:logstash.yml: &#123;&#125;</span>
-<span class="hljs-string">data:</span>
-<span class="hljs-string">  logstash.conf: |</span>
-<span class="hljs-string">    input &#123;</span>
-<span class="hljs-string">       kafka&#123;</span>
-<span class="hljs-string">        bootstrap_servers =&gt; &quot;kafka:9092&quot;</span>
-<span class="hljs-string">        topics =&gt; &quot;axzo-linux-os&quot;</span>
-<span class="hljs-string">        consumer_threads =&gt; 10</span>
-<span class="hljs-string">        decorate_events =&gt; true</span>
-<span class="hljs-string">        codec =&gt; json</span>
-<span class="hljs-string">        auto_offset_reset =&gt; &quot;latest&quot;</span>
-<span class="hljs-string">      &#125;</span>
-<span class="hljs-string">    &#125;</span>
-<span class="hljs-string">    output &#123;</span>
-<span class="hljs-string">      elasticsearch &#123;</span>
-<span class="hljs-string">        hosts =&gt; [&quot;elasticsearch:9200&quot;]</span>
-<span class="hljs-string">        user =&gt; &quot;elastic&quot;</span>
-<span class="hljs-string">        password =&gt; &quot;TvTOidLL3R9xEDN@&quot;</span>
-<span class="hljs-string">        index =&gt; &quot;axzo-log-os-%&#123;+YYYY.MM.dd&#125;&quot;</span>
-<span class="hljs-string">      &#125;</span>
-<span class="hljs-string">      stdout &#123;</span>
-<span class="hljs-string">        codec =&gt; rubydebug</span>
-<span class="hljs-string">      &#125;</span>
-<span class="hljs-string">    &#125;</span>
-<span class="hljs-string">  logstash.yml: |</span>
-<span class="hljs-string">    http.host: &quot;0.0.0.0&quot;</span>
-<span class="hljs-string">    path.config: /usr/share/logstash/pipeline</span>
 <span class="hljs-string">EOF</span></code></pre></div>
 
-<h2 id="Kibana"><a href="#Kibana" class="headerlink" title="Kibana"></a>Kibana</h2><div class="code-wrapper"><pre><code class="hljs bash">kubectl apply -f - &lt;&lt;<span class="hljs-string">EOF</span>
-<span class="hljs-string">---</span>
+<h2 id="Kibana"><a href="#Kibana" class="headerlink" title="Kibana"></a>Kibana</h2><h3 id="Service-3"><a href="#Service-3" class="headerlink" title="Service"></a>Service</h3><div class="code-wrapper"><pre><code class="hljs bash">kubectl apply -f - &lt;&lt;<span class="hljs-string">EOF</span>
 <span class="hljs-string">apiVersion: v1</span>
 <span class="hljs-string">kind: Service</span>
 <span class="hljs-string">metadata:</span>
@@ -882,7 +869,8 @@ EOF</code></pre></div>
 <span class="hljs-string">    protocol: TCP</span>
 <span class="hljs-string">  selector:</span>
 <span class="hljs-string">    app: kibana</span>
-<span class="hljs-string">---</span>
+<span class="hljs-string">EOF</span></code></pre></div>
+<h3 id="Deployment-1"><a href="#Deployment-1" class="headerlink" title="Deployment"></a>Deployment</h3><div class="code-wrapper"><pre><code class="hljs bash">kubectl apply -f - &lt;&lt;<span class="hljs-string">EOF</span>
 <span class="hljs-string">apiVersion: apps/v1</span>
 <span class="hljs-string">kind: Deployment</span>
 <span class="hljs-string">metadata:</span>
