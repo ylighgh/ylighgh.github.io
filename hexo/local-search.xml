@@ -79,31 +79,6 @@
   
   
   <entry>
-    <title>EMQX-备份还原</title>
-    <link href="/hexo/2024/06/11/EMQX-%E5%A4%87%E4%BB%BD%E8%BF%98%E5%8E%9F/"/>
-    <url>/hexo/2024/06/11/EMQX-%E5%A4%87%E4%BB%BD%E8%BF%98%E5%8E%9F/</url>
-    
-    <content type="html"><![CDATA[<p><a href="https://docs.emqx.com/zh/emqx/latest/operations/backup-restore.html">官方文档</a></p><h1 id="备份"><a href="#备份" class="headerlink" title="备份"></a>备份</h1><div class="code-wrapper"><pre><code class="hljs bash">emqx_ctl data <span class="hljs-built_in">export</span></code></pre></div><h1 id="还原"><a href="#还原" class="headerlink" title="还原"></a>还原</h1><p><strong>注意</strong> &lt;filename&gt; 必须是绝对路径</p><div class="code-wrapper"><pre><code class="hljs bash">emqx_ctl data import &lt;filename&gt;</code></pre></div>]]></content>
-    
-    
-    <categories>
-      
-      <category>EMQX</category>
-      
-    </categories>
-    
-    
-    <tags>
-      
-      <tag>EMQX</tag>
-      
-    </tags>
-    
-  </entry>
-  
-  
-  
-  <entry>
     <title>FluentBit安装</title>
     <link href="/hexo/2024/06/11/ELK-FluentBit/"/>
     <url>/hexo/2024/06/11/ELK-FluentBit/</url>
@@ -121,6 +96,31 @@
     <tags>
       
       <tag>ELK</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>EMQX-备份还原</title>
+    <link href="/hexo/2024/06/11/EMQX-%E5%A4%87%E4%BB%BD%E8%BF%98%E5%8E%9F/"/>
+    <url>/hexo/2024/06/11/EMQX-%E5%A4%87%E4%BB%BD%E8%BF%98%E5%8E%9F/</url>
+    
+    <content type="html"><![CDATA[<p><a href="https://docs.emqx.com/zh/emqx/latest/operations/backup-restore.html">官方文档</a></p><h1 id="备份"><a href="#备份" class="headerlink" title="备份"></a>备份</h1><div class="code-wrapper"><pre><code class="hljs bash">emqx_ctl data <span class="hljs-built_in">export</span></code></pre></div><h1 id="还原"><a href="#还原" class="headerlink" title="还原"></a>还原</h1><p><strong>注意</strong> &lt;filename&gt; 必须是绝对路径</p><div class="code-wrapper"><pre><code class="hljs bash">emqx_ctl data import &lt;filename&gt;</code></pre></div>]]></content>
+    
+    
+    <categories>
+      
+      <category>EMQX</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>EMQX</tag>
       
     </tags>
     
@@ -208,7 +208,7 @@
     <link href="/hexo/2024/06/11/Linux-%E5%B8%B8%E7%94%A8Shell%E5%91%BD%E4%BB%A4%20copy%202/"/>
     <url>/hexo/2024/06/11/Linux-%E5%B8%B8%E7%94%A8Shell%E5%91%BD%E4%BB%A4%20copy%202/</url>
     
-    <content type="html"><![CDATA[<h1 id="批量删除指定状态的pods"><a href="#批量删除指定状态的pods" class="headerlink" title="批量删除指定状态的pods"></a>批量删除指定状态的pods</h1><div class="code-wrapper"><pre><code class="hljs bash">kubectl --kubeconfig gxq-config get pods -A|grep Evicted|awk <span class="hljs-string">&#x27;&#123;print $1&quot; &quot;$2&#125;&#x27;</span>|<span class="hljs-keyword">while</span> <span class="hljs-built_in">read</span> LINE<span class="hljs-keyword">do</span>    namespace=`<span class="hljs-built_in">echo</span> <span class="hljs-variable">$LINE</span>|awk <span class="hljs-string">&#x27;&#123;print $1&#125;&#x27;</span>`    pod=`<span class="hljs-built_in">echo</span> <span class="hljs-variable">$LINE</span>|awk <span class="hljs-string">&#x27;&#123;print $2&#125;&#x27;</span>`    kubectl --kubeconfig gxq-config delete pod -n <span class="hljs-variable">$namespace</span> <span class="hljs-variable">$pod</span><span class="hljs-keyword">done</span></code></pre></div>]]></content>
+    <content type="html"><![CDATA[<h1 id="批量删除指定状态的pods"><a href="#批量删除指定状态的pods" class="headerlink" title="批量删除指定状态的pods"></a>批量删除指定状态的pods</h1><div class="code-wrapper"><pre><code class="hljs bash">kubectl --kubeconfig gxq-config get pods -A|grep Evicted|awk <span class="hljs-string">&#x27;&#123;print $1&quot; &quot;$2&#125;&#x27;</span>|<span class="hljs-keyword">while</span> <span class="hljs-built_in">read</span> LINE<span class="hljs-keyword">do</span>    namespace=`<span class="hljs-built_in">echo</span> <span class="hljs-variable">$LINE</span>|awk <span class="hljs-string">&#x27;&#123;print $1&#125;&#x27;</span>`    pod=`<span class="hljs-built_in">echo</span> <span class="hljs-variable">$LINE</span>|awk <span class="hljs-string">&#x27;&#123;print $2&#125;&#x27;</span>`    kubectl --kubeconfig gxq-config delete pod -n <span class="hljs-variable">$namespace</span> <span class="hljs-variable">$pod</span><span class="hljs-keyword">done</span></code></pre></div><h1 id="阿里云增加DNS解析"><a href="#阿里云增加DNS解析" class="headerlink" title="阿里云增加DNS解析"></a>阿里云增加DNS解析</h1><div class="code-wrapper"><pre><code class="hljs bash"><span class="hljs-comment"># A记录</span>aliyun alidns AddDomainRecord --region cn-beijing --DomainName <span class="hljs-string">&#x27;xx.cn&#x27;</span> --Type A --RR <span class="hljs-string">&#x27;www&#x27;</span> --Value <span class="hljs-string">&#x27;1.1.1.1&#x27;</span><span class="hljs-comment"># CNAME</span>aliyun alidns AddDomainRecord --region cn-beijing --DomainName <span class="hljs-string">&#x27;xx.cn&#x27;</span> --Type CNAME --RR <span class="hljs-string">&#x27;xxx&#x27;</span> --Value <span class="hljs-string">&#x27;bbb.yy.cn&#x27;</span></code></pre></div>]]></content>
     
     
     <categories>
