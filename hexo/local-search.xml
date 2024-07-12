@@ -183,7 +183,7 @@
     <link href="/hexo/2024/06/11/Kubectl-%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/"/>
     <url>/hexo/2024/06/11/Kubectl-%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/</url>
     
-    <content type="html"><![CDATA[<h1 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h1><h2 id="创建证书"><a href="#创建证书" class="headerlink" title="创建证书"></a>创建证书</h2><div class="code-wrapper"><pre><code class="hljs bash">kubectl create secret tls api-cdht-https --cert api-cdht.cdhtgycs.cn.pem --key api-cdht.cdhtgycs.cn.key -n prod</code></pre></div>]]></content>
+    <content type="html"><![CDATA[<h1 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h1><h2 id="创建证书"><a href="#创建证书" class="headerlink" title="创建证书"></a>创建证书</h2><div class="code-wrapper"><pre><code class="hljs bash">kubectl create secret tls api-cdht-https --cert api-cdht.cdhtgycs.cn.pem --key api-cdht.cdhtgycs.cn.key -n prod</code></pre></div><h2 id="扩缩容"><a href="#扩缩容" class="headerlink" title="扩缩容"></a>扩缩容</h2><div class="code-wrapper"><pre><code class="hljs bash">kubectl scale deployment foo --replicas=0</code></pre></div>]]></content>
     
     
     <categories>
