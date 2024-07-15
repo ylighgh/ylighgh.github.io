@@ -16,22 +16,22 @@
   <meta name="author" content="三石">
   <meta name="keywords" content="">
   
-    <meta name="description" content="Service概念Kubernetes 中 Service 是 将运行在一个或一组 Pod 上的网络应用程序公开为网络服务的方法。 类型 ClusterIP ExternalName: 返回定义的CNAME别名，可以配置为域名 NodePort: 所有node上绑定一个端口 在任意一个节点+端口号都能访问 LoadBalancer: 负载均衡器  Ingress概念Ingress 是对集群中服务的">
+    <meta name="description" content="安装dnf install -y device-mapper-persistent-data lvm2  dnf config-manager --add-repo&#x3D;https:&#x2F;&#x2F;mirrors.aliyun.com&#x2F;docker-ce&#x2F;linux&#x2F;centos&#x2F;docker-ce.repo  dnf install -y docker-ce --nobest  docker -v  syste">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Kubernetes-Service&#x2F;Ingress">
-<meta property="og:url" content="https://ylighgh.github.io/hexo/2024/05/29/Kubernetes-Service/index.html">
+<meta property="og:title" content="Docker-安装">
+<meta property="og:url" content="https://ylighgh.github.io/hexo/2024/07/15/Docker-%E5%AE%89%E8%A3%85/index.html">
 <meta property="og:site_name" content="运维杂记">
-<meta property="og:description" content="Service概念Kubernetes 中 Service 是 将运行在一个或一组 Pod 上的网络应用程序公开为网络服务的方法。 类型 ClusterIP ExternalName: 返回定义的CNAME别名，可以配置为域名 NodePort: 所有node上绑定一个端口 在任意一个节点+端口号都能访问 LoadBalancer: 负载均衡器  Ingress概念Ingress 是对集群中服务的">
+<meta property="og:description" content="安装dnf install -y device-mapper-persistent-data lvm2  dnf config-manager --add-repo&#x3D;https:&#x2F;&#x2F;mirrors.aliyun.com&#x2F;docker-ce&#x2F;linux&#x2F;centos&#x2F;docker-ce.repo  dnf install -y docker-ce --nobest  docker -v  syste">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2024-05-29T14:26:00.000Z">
-<meta property="article:modified_time" content="2024-05-29T14:43:54.221Z">
+<meta property="article:published_time" content="2024-07-15T14:44:21.000Z">
+<meta property="article:modified_time" content="2024-07-15T14:56:40.443Z">
 <meta property="article:author" content="三石">
-<meta property="article:tag" content="Kubernetes">
+<meta property="article:tag" content="Docker">
 <meta name="twitter:card" content="summary_large_image">
   
   
   
-  <title>Kubernetes-Service/Ingress - 运维杂记</title>
+  <title>Docker-安装 - 运维杂记</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -197,7 +197,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="Kubernetes-Service/Ingress"></span>
+            <span id="subtitle" data-typed-text="Docker-安装"></span>
           
         </div>
 
@@ -208,8 +208,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2024-05-29 22:26" pubdate>
-          2024年5月29日 晚上
+        <time datetime="2024-07-15 22:44" pubdate>
+          2024年7月15日 晚上
         </time>
       </span>
     
@@ -220,7 +220,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          165 字
+          25 字
         
       </span>
     
@@ -231,7 +231,7 @@
         
         
         
-          2 分钟
+          1 分钟
         
       </span>
     
@@ -268,28 +268,24 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">Kubernetes-Service/Ingress</h1>
+            <h1 id="seo-header">Docker-安装</h1>
             
             
               <div class="markdown-body">
                 
-                <h1 id="Service"><a href="#Service" class="headerlink" title="Service"></a>Service</h1><h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><p>Kubernetes 中 Service 是 将运行在一个或一组 Pod 上的网络应用程序公开为网络服务的方法。</p>
-<h2 id="类型"><a href="#类型" class="headerlink" title="类型"></a>类型</h2><ul>
-<li>ClusterIP</li>
-<li>ExternalName: 返回定义的CNAME别名，可以配置为域名</li>
-<li>NodePort: 所有node上绑定一个端口 在任意一个节点+端口号都能访问</li>
-<li>LoadBalancer: 负载均衡器</li>
-</ul>
-<h1 id="Ingress"><a href="#Ingress" class="headerlink" title="Ingress"></a>Ingress</h1><h2 id="概念-1"><a href="#概念-1" class="headerlink" title="概念"></a>概念</h2><p>Ingress 是对集群中服务的外部访问进行管理的 API 对象，典型的访问方式是 HTTP。</p>
-<p>Ingress 可以提供负载均衡、SSL 终结和基于名称的虚拟托管。</p>
-<h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><h3 id="添加Helm仓库"><a href="#添加Helm仓库" class="headerlink" title="添加Helm仓库"></a>添加Helm仓库</h3><div class="code-wrapper"><pre><code class="hljs bash">helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx</code></pre></div>
+                <h1 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h1><div class="code-wrapper"><pre><code class="hljs bash">dnf install -y device-mapper-persistent-data lvm2
 
-<h3 id="解压"><a href="#解压" class="headerlink" title="解压"></a>解压</h3><div class="code-wrapper"><pre><code class="hljs bash">helm pull ingress-nginx/ingress-nginx
-tar xf ingress-nginx-4.10.1.tgz</code></pre></div>
+dnf config-manager --add-repo=https://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo
 
-<h3 id="安装-1"><a href="#安装-1" class="headerlink" title="安装"></a>安装</h3><div class="code-wrapper"><pre><code class="hljs bash"><span class="hljs-built_in">cd</span> ingress-nginx
-helm install ingress-nginx --create-namespace -n ingress-nginx .</code></pre></div>
+dnf install -y docker-ce --nobest
 
+docker -v
+
+systemctl start docker
+
+systemctl <span class="hljs-built_in">enable</span> docker
+
+systemctl status docker</code></pre></div>
                 
               </div>
             
@@ -307,7 +303,7 @@ helm install ingress-nginx --create-namespace -n ingress-nginx .</code></pre></d
     
       <span class="category-chain">
         
-  <a href="/hexo/categories/Kubernetes/" class="category-chain-item">Kubernetes</a>
+  <a href="/hexo/categories/Docker/" class="category-chain-item">Docker</a>
   
   
 
@@ -322,7 +318,7 @@ helm install ingress-nginx --create-namespace -n ingress-nginx .</code></pre></d
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
-        <a href="/hexo/tags/Kubernetes/" class="print-no-link">#Kubernetes</a>
+        <a href="/hexo/tags/Docker/" class="print-no-link">#Docker</a>
       
     </div>
   
@@ -336,18 +332,12 @@ helm install ingress-nginx --create-namespace -n ingress-nginx .</code></pre></d
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/hexo/2024/06/11/Linux-%E5%B8%B8%E7%94%A8Shell%E5%91%BD%E4%BB%A4%20copy%202/" title="Linux-常用Shell命令">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">Linux-常用Shell命令</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/hexo/2024/05/29/Kubernetes-%E5%AD%98%E5%82%A8%E4%B8%8E%E9%85%8D%E7%BD%AE/" title="Kubernetes-存储与配置">
-                        <span class="hidden-mobile">Kubernetes-存储与配置</span>
+                      <a href="/hexo/2024/06/25/Kubernetes-StorageClass/" title="Kubernetes-StorageClass">
+                        <span class="hidden-mobile">Kubernetes-StorageClass</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
