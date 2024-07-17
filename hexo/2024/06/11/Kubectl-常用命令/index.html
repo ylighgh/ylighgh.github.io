@@ -16,15 +16,15 @@
   <meta name="author" content="三石">
   <meta name="keywords" content="">
   
-    <meta name="description" content="常用命令创建证书kubectl create secret tls api-cdht-https --cert api-cdht.cdhtgycs.cn.pem --key api-cdht.cdhtgycs.cn.key -n prod  扩缩容kubectl scale deployment foo --replicas&#x3D;0">
+    <meta name="description" content="常用命令创建证书kubectl create secret tls api-cdht-https --cert api-cdht.cdhtgycs.cn.pem --key api-cdht.cdhtgycs.cn.key -n prod  扩缩容kubectl scale deployment foo --replicas&#x3D;0  创建ServiceAccount并绑定Secretkubectl">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Kubectl-常用命令">
 <meta property="og:url" content="https://ylighgh.github.io/hexo/2024/06/11/Kubectl-%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/index.html">
 <meta property="og:site_name" content="运维杂记">
-<meta property="og:description" content="常用命令创建证书kubectl create secret tls api-cdht-https --cert api-cdht.cdhtgycs.cn.pem --key api-cdht.cdhtgycs.cn.key -n prod  扩缩容kubectl scale deployment foo --replicas&#x3D;0">
+<meta property="og:description" content="常用命令创建证书kubectl create secret tls api-cdht-https --cert api-cdht.cdhtgycs.cn.pem --key api-cdht.cdhtgycs.cn.key -n prod  扩缩容kubectl scale deployment foo --replicas&#x3D;0  创建ServiceAccount并绑定Secretkubectl">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2024-06-11T06:12:17.000Z">
-<meta property="article:modified_time" content="2024-07-15T14:55:09.797Z">
+<meta property="article:modified_time" content="2024-07-17T05:49:54.004Z">
 <meta property="article:author" content="三石">
 <meta property="article:tag" content="Kubectl">
 <meta name="twitter:card" content="summary_large_image">
@@ -220,7 +220,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          27 字
+          71 字
         
       </span>
     
@@ -276,6 +276,26 @@
                 <h1 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h1><h2 id="创建证书"><a href="#创建证书" class="headerlink" title="创建证书"></a>创建证书</h2><div class="code-wrapper"><pre><code class="hljs bash">kubectl create secret tls api-cdht-https --cert api-cdht.cdhtgycs.cn.pem --key api-cdht.cdhtgycs.cn.key -n prod</code></pre></div>
 
 <h2 id="扩缩容"><a href="#扩缩容" class="headerlink" title="扩缩容"></a>扩缩容</h2><div class="code-wrapper"><pre><code class="hljs bash">kubectl scale deployment foo --replicas=0</code></pre></div>
+
+<h2 id="创建ServiceAccount并绑定Secret"><a href="#创建ServiceAccount并绑定Secret" class="headerlink" title="创建ServiceAccount并绑定Secret"></a>创建ServiceAccount并绑定Secret</h2><div class="code-wrapper"><pre><code class="hljs bash">kubectl apply -f &lt;&lt;<span class="hljs-string">EOF -</span>
+<span class="hljs-string">apiVersion: v1</span>
+<span class="hljs-string">automountServiceAccountToken: true</span>
+<span class="hljs-string">kind: ServiceAccount</span>
+<span class="hljs-string">metadata:</span>
+<span class="hljs-string">  name: jenkins-blue</span>
+<span class="hljs-string">  namespace: kube-ops</span>
+<span class="hljs-string">secrets:</span>
+<span class="hljs-string">- name: jenkins-blue</span>
+<span class="hljs-string">---</span>
+<span class="hljs-string">apiVersion: v1</span>
+<span class="hljs-string">kind: Secret</span>
+<span class="hljs-string">metadata:</span>
+<span class="hljs-string">  name: jenkins-blue</span>
+<span class="hljs-string">  namespace: kube-ops</span>
+<span class="hljs-string">  annotations:</span>
+<span class="hljs-string">    kubernetes.io/service-account.name: &quot;jenkins-blue&quot;</span>
+<span class="hljs-string">type: kubernetes.io/service-account-token</span>
+<span class="hljs-string">EOF</span></code></pre></div>
                 
               </div>
             
