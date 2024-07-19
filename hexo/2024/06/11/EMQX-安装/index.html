@@ -24,7 +24,7 @@
 <meta property="og:description" content="安装官方文档 kubectl create ns pro-emqx  kubectl apply -f - &lt;&lt;EOF kind: StatefulSet apiVersion: apps&#x2F;v1 metadata:   name: emqx   namespace: pro-emqx   labels:     app.kubernetes.io&#x2F;instance: emqx">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2024-06-11T06:12:17.000Z">
-<meta property="article:modified_time" content="2024-06-18T01:56:58.604Z">
+<meta property="article:modified_time" content="2024-07-19T06:59:53.680Z">
 <meta property="article:author" content="三石">
 <meta property="article:tag" content="EMQX">
 <meta name="twitter:card" content="summary_large_image">
@@ -220,7 +220,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          452 字
+          601 字
         
       </span>
     
@@ -231,7 +231,7 @@
         
         
         
-          4 分钟
+          6 分钟
         
       </span>
     
@@ -564,6 +564,71 @@
 <span class="hljs-string">  namespace: pro-emqx</span>
 <span class="hljs-string">---</span>
 <span class="hljs-string"></span>
+<span class="hljs-string">EOF</span></code></pre></div>
+
+<h1 id="5-X版本安装"><a href="#5-X版本安装" class="headerlink" title="5.X版本安装"></a>5.X版本安装</h1><h2 id="安装cert-manager"><a href="#安装cert-manager" class="headerlink" title="安装cert-manager"></a>安装cert-manager</h2><div class="code-wrapper"><pre><code class="hljs bash">helm repo add jetstack https://charts.jetstack.io
+helm repo update
+helm upgrade --install cert-manager jetstack/cert-manager \
+  --namespace cert-manager \
+  --create-namespace \
+  --<span class="hljs-built_in">set</span> installCRDs=<span class="hljs-literal">true</span></code></pre></div>
+
+<h2 id="安装-EMQX-Operator"><a href="#安装-EMQX-Operator" class="headerlink" title="安装 EMQX Operator"></a>安装 EMQX Operator</h2><div class="code-wrapper"><pre><code class="hljs bash">helm repo add emqx https://repos.emqx.io/charts
+helm repo update
+helm upgrade --install emqx-operator emqx/emqx-operator \
+  --namespace emqx-operator-system \
+  --create-namespace
+
+<span class="hljs-comment"># 确认 Operator 状态</span>
+kubectl <span class="hljs-built_in">wait</span> --<span class="hljs-keyword">for</span>=condition=Ready pods -l <span class="hljs-string">&quot;control-plane=controller-manager&quot;</span> -n emqx-operator-system</code></pre></div>
+
+<h2 id="安装-EMQX"><a href="#安装-EMQX" class="headerlink" title="安装 EMQX"></a>安装 EMQX</h2><div class="code-wrapper"><pre><code class="hljs bash">kubectl apply -f - &lt;&lt;<span class="hljs-string">EOF</span>
+<span class="hljs-string">apiVersion: apps.emqx.io/v2beta1</span>
+<span class="hljs-string">kind: EMQX</span>
+<span class="hljs-string">metadata:</span>
+<span class="hljs-string">   name: open-emqx</span>
+<span class="hljs-string">   namespace: java-dev</span>
+<span class="hljs-string">spec:</span>
+<span class="hljs-string">   image: harbor.axzo.cn/library/emqx:5</span>
+<span class="hljs-string">   coreTemplate:</span>
+<span class="hljs-string">    spec:</span>
+<span class="hljs-string">      volumeClaimTemplates:</span>
+<span class="hljs-string">        storageClassName: sfsturbo-sc-dev</span>
+<span class="hljs-string">        resources:</span>
+<span class="hljs-string">          requests:</span>
+<span class="hljs-string">            storage: 10Gi</span>
+<span class="hljs-string">        accessModes:</span>
+<span class="hljs-string">          - ReadWriteMany</span>
+<span class="hljs-string">EOF</span>
+
+<span class="hljs-comment"># 确认EMQX状态</span>
+kubectl get emqx -n java-dev
+
+
+<span class="hljs-comment"># 增加nodePort</span>
+kubectl apply -f - &lt;&lt;<span class="hljs-string">EOF</span>
+<span class="hljs-string">metadata:</span>
+<span class="hljs-string">  name: open-emqx-nodeport</span>
+<span class="hljs-string">  namespace: java-dev</span>
+<span class="hljs-string">  labels:</span>
+<span class="hljs-string">    apps.emqx.io/instance: open-emqx</span>
+<span class="hljs-string">    apps.emqx.io/managed-by: emqx-operator</span>
+<span class="hljs-string">spec:</span>
+<span class="hljs-string">  ports:</span>
+<span class="hljs-string">    - name: open-emqx-1883</span>
+<span class="hljs-string">      protocol: TCP</span>
+<span class="hljs-string">      port: 1883</span>
+<span class="hljs-string">      targetPort: 1883</span>
+<span class="hljs-string">    - name: open-emqx-8883</span>
+<span class="hljs-string">      protocol: TCP</span>
+<span class="hljs-string">      port: 8883</span>
+<span class="hljs-string">      targetPort: 8883</span>
+<span class="hljs-string">  selector:</span>
+<span class="hljs-string">    apps.emqx.io/instance: open-emqx</span>
+<span class="hljs-string">    apps.emqx.io/managed-by: emqx-operator</span>
+<span class="hljs-string">  type: NodePort</span>
+<span class="hljs-string">apiVersion: v1</span>
+<span class="hljs-string">kind: Service</span>
 <span class="hljs-string">EOF</span></code></pre></div>
                 
               </div>
