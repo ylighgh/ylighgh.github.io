@@ -1,0 +1,1329 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/hexo/img/fluid.png">
+  <link rel="icon" href="/hexo/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="三石">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="安装创建Role RoleBindingkubectl apply -f - &lt;&lt;EOF apiVersion: rbac.authorization.k8s.io&#x2F;v1 kind: RoleBinding metadata:   name: jenkins-blue   namespace: kube-ops roleRef:   apiGroup: rbac.authorizati">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Jenkins-安装">
+<meta property="og:url" content="https://ylighgh.github.io/hexo/2024/07/22/Jenkins-%E5%AE%89%E8%A3%85/index.html">
+<meta property="og:site_name" content="运维杂记">
+<meta property="og:description" content="安装创建Role RoleBindingkubectl apply -f - &lt;&lt;EOF apiVersion: rbac.authorization.k8s.io&#x2F;v1 kind: RoleBinding metadata:   name: jenkins-blue   namespace: kube-ops roleRef:   apiGroup: rbac.authorizati">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2024-07-22T14:44:21.000Z">
+<meta property="article:modified_time" content="2024-07-22T01:37:12.360Z">
+<meta property="article:author" content="三石">
+<meta property="article:tag" content="Jenkins">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>Jenkins-安装 - 运维杂记</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/hexo/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/hexo/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/hexo/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"ylighgh.github.io","root":"/hexo/","version":"1.9.7","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/hexo/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/hexo/js/utils.js" ></script>
+  <script  src="/hexo/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.2.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/hexo/">
+      <strong>Fluid</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/hexo/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/hexo/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/hexo/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/hexo/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/hexo/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/hexo/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Jenkins-安装"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-07-22 22:44" pubdate>
+          2024年7月22日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          2.2k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          18 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">Jenkins-安装</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h1><h2 id="创建Role-RoleBinding"><a href="#创建Role-RoleBinding" class="headerlink" title="创建Role RoleBinding"></a>创建Role RoleBinding</h2><div class="code-wrapper"><pre><code class="hljs bash">kubectl apply -f - &lt;&lt;<span class="hljs-string">EOF</span>
+<span class="hljs-string">apiVersion: rbac.authorization.k8s.io/v1</span>
+<span class="hljs-string">kind: RoleBinding</span>
+<span class="hljs-string">metadata:</span>
+<span class="hljs-string">  name: jenkins-blue</span>
+<span class="hljs-string">  namespace: kube-ops</span>
+<span class="hljs-string">roleRef:</span>
+<span class="hljs-string">  apiGroup: rbac.authorization.k8s.io</span>
+<span class="hljs-string">  kind: Role</span>
+<span class="hljs-string">  name: jenkins-blue</span>
+<span class="hljs-string">subjects:</span>
+<span class="hljs-string">- kind: ServiceAccount</span>
+<span class="hljs-string">  name: jenkins-blue</span>
+<span class="hljs-string">---</span>
+<span class="hljs-string">apiVersion: rbac.authorization.k8s.io/v1</span>
+<span class="hljs-string">kind: Role</span>
+<span class="hljs-string">metadata:</span>
+<span class="hljs-string">  name: jenkins-blue</span>
+<span class="hljs-string">  namespace: kube-ops</span>
+<span class="hljs-string">rules:</span>
+<span class="hljs-string">- apiGroups:</span>
+<span class="hljs-string">  - extensions</span>
+<span class="hljs-string">  - apps</span>
+<span class="hljs-string">  resources:</span>
+<span class="hljs-string">  - deployments</span>
+<span class="hljs-string">  verbs:</span>
+<span class="hljs-string">  - create</span>
+<span class="hljs-string">  - delete</span>
+<span class="hljs-string">  - get</span>
+<span class="hljs-string">  - list</span>
+<span class="hljs-string">  - watch</span>
+<span class="hljs-string">  - patch</span>
+<span class="hljs-string">  - update</span>
+<span class="hljs-string">- apiGroups:</span>
+<span class="hljs-string">  - &quot;&quot;</span>
+<span class="hljs-string">  resources:</span>
+<span class="hljs-string">  - services</span>
+<span class="hljs-string">  verbs:</span>
+<span class="hljs-string">  - create</span>
+<span class="hljs-string">  - delete</span>
+<span class="hljs-string">  - get</span>
+<span class="hljs-string">  - list</span>
+<span class="hljs-string">  - watch</span>
+<span class="hljs-string">  - patch</span>
+<span class="hljs-string">  - update</span>
+<span class="hljs-string">- apiGroups:</span>
+<span class="hljs-string">  - &quot;&quot;</span>
+<span class="hljs-string">  resources:</span>
+<span class="hljs-string">  - pods</span>
+<span class="hljs-string">  verbs:</span>
+<span class="hljs-string">  - create</span>
+<span class="hljs-string">  - delete</span>
+<span class="hljs-string">  - get</span>
+<span class="hljs-string">  - list</span>
+<span class="hljs-string">  - patch</span>
+<span class="hljs-string">  - update</span>
+<span class="hljs-string">  - watch</span>
+<span class="hljs-string">- apiGroups:</span>
+<span class="hljs-string">  - &quot;&quot;</span>
+<span class="hljs-string">  resources:</span>
+<span class="hljs-string">  - pods/exec</span>
+<span class="hljs-string">  verbs:</span>
+<span class="hljs-string">  - create</span>
+<span class="hljs-string">  - delete</span>
+<span class="hljs-string">  - get</span>
+<span class="hljs-string">  - list</span>
+<span class="hljs-string">  - patch</span>
+<span class="hljs-string">  - update</span>
+<span class="hljs-string">  - watch</span>
+<span class="hljs-string">- apiGroups:</span>
+<span class="hljs-string">  - &quot;&quot;</span>
+<span class="hljs-string">  resources:</span>
+<span class="hljs-string">  - pods/log</span>
+<span class="hljs-string">  verbs:</span>
+<span class="hljs-string">  - get</span>
+<span class="hljs-string">  - list</span>
+<span class="hljs-string">  - watch</span>
+<span class="hljs-string">- apiGroups:</span>
+<span class="hljs-string">  - &quot;&quot;</span>
+<span class="hljs-string">  resources:</span>
+<span class="hljs-string">  - secrets</span>
+<span class="hljs-string">  verbs:</span>
+<span class="hljs-string">  - get</span>
+<span class="hljs-string">EOF</span></code></pre></div>
+
+<h2 id="创建serviceAccount-并创建sa的sercret"><a href="#创建serviceAccount-并创建sa的sercret" class="headerlink" title="创建serviceAccount,并创建sa的sercret"></a>创建serviceAccount,并创建sa的sercret</h2><div class="code-wrapper"><pre><code class="hljs bash">kubectl apply -f - &lt;&lt;<span class="hljs-string">EOF</span>
+<span class="hljs-string">apiVersion: v1</span>
+<span class="hljs-string">automountServiceAccountToken: true</span>
+<span class="hljs-string">kind: ServiceAccount</span>
+<span class="hljs-string">metadata:</span>
+<span class="hljs-string">  name: jenkins-blue</span>
+<span class="hljs-string">  namespace: kube-ops</span>
+<span class="hljs-string">secrets:</span>
+<span class="hljs-string">- name: jenkins-blue</span>
+<span class="hljs-string">---</span>
+<span class="hljs-string">apiVersion: v1</span>
+<span class="hljs-string">kind: Secret</span>
+<span class="hljs-string">metadata:</span>
+<span class="hljs-string">  name: jenkins-blue</span>
+<span class="hljs-string">  namespace: kube-ops</span>
+<span class="hljs-string">  annotations:</span>
+<span class="hljs-string">    kubernetes.io/service-account.name: &quot;jenkins-blue&quot;</span>
+<span class="hljs-string">type: kubernetes.io/service-account-token</span>
+<span class="hljs-string">EOF</span></code></pre></div>
+
+
+<h2 id="创建configmaps"><a href="#创建configmaps" class="headerlink" title="创建configmaps"></a>创建configmaps</h2><div class="code-wrapper"><pre><code class="hljs bash">kubectl apply -f - &lt;&lt;<span class="hljs-string">EOF</span>
+<span class="hljs-string">apiVersion: v1</span>
+<span class="hljs-string">data:</span>
+<span class="hljs-string">  addJavaAppStart.sh: &gt;</span>
+<span class="hljs-string">    #!/bin/sh</span>
+<span class="hljs-string"></span>
+<span class="hljs-string"></span>
+<span class="hljs-string">    echo &quot;获取包依赖关系： &quot;</span>
+<span class="hljs-string"></span>
+<span class="hljs-string">    mvn dependency:tree -D outputFile=/pipeline-stage-share/dependency_tree.txt</span>
+<span class="hljs-string">    -D outputType=dot -D includes=cn.axzo.*</span>
+<span class="hljs-string"></span>
+<span class="hljs-string"></span>
+<span class="hljs-string">    echo &#x27; </span>
+<span class="hljs-string"></span>
+<span class="hljs-string">    #!/bin/bash</span>
+<span class="hljs-string"></span>
+<span class="hljs-string"></span>
+<span class="hljs-string">    # Copyright 2019-2039 AXZO Co. Ltd.</span>
+<span class="hljs-string"></span>
+<span class="hljs-string">    # Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
+<span class="hljs-string"></span>
+<span class="hljs-string">    # you may not use this file except in compliance with the License.</span>
+<span class="hljs-string"></span>
+<span class="hljs-string">    # You may obtain a copy of the License at</span>
+<span class="hljs-string"></span>
+<span class="hljs-string"></span>
+<span class="hljs-string">    #      http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="hljs-string"></span>
+<span class="hljs-string">    #</span>
+<span class="hljs-string"></span>
+<span class="hljs-string">    # Unless required by applicable law or agreed to in writing, software</span>
+<span class="hljs-string"></span>
+<span class="hljs-string">    # distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
+<span class="hljs-string"></span>
+<span class="hljs-string">    # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="hljs-string"></span>
+<span class="hljs-string">    # See the License for the specific language governing permissions and</span>
+<span class="hljs-string"></span>
+<span class="hljs-string">    # limitations under the License.</span>
+<span class="hljs-string"></span>
+<span class="hljs-string">    artifact=\$1</span>
+<span class="hljs-string"></span>
+<span class="hljs-string"></span>
+<span class="hljs-string">    if [[ \$# -le 0 ]]; then</span>
+<span class="hljs-string">      echo &quot;Usage: \$0 example.jar&quot;</span>
+<span class="hljs-string">      exit 255</span>
+<span class="hljs-string">    fi</span>
+<span class="hljs-string"></span>
+<span class="hljs-string"></span>
+<span class="hljs-string">    readonly megabytes=1048576</span>
+<span class="hljs-string"></span>
+<span class="hljs-string">    # shellcheck disable=SC2004</span>
+<span class="hljs-string"></span>
+<span class="hljs-string"></span>
+<span class="hljs-string">    # jvm堆内存占容器内存上限的比例, 如果没有设置, 则默认为60%</span>
+<span class="hljs-string"></span>
+<span class="hljs-string">    if [ &quot;\$&#123;JVM_MEM_PERCENT&#125;&quot; == &quot;&quot; ]; then</span>
+<span class="hljs-string">      JVM_MEM_PERCENT=&quot;60&quot;</span>
+<span class="hljs-string">    fi</span>
+<span class="hljs-string"></span>
+<span class="hljs-string"></span>
+<span class="hljs-string">    # jvm堆内存数值计算, 如果容器内存上限没有设置, 则堆内存直接设置为1024m</span>
+<span class="hljs-string"></span>
+<span class="hljs-string">    if [ &quot;\$&#123;MY_MEMORY_LIMIT&#125;&quot; == &quot;&quot; ]; then</span>
+<span class="hljs-string">      heapmem=&quot;1024m&quot;</span>
+<span class="hljs-string">    else</span>
+<span class="hljs-string">      heapmem=\$(printf &quot;%sm&quot; \$(((\$MY_MEMORY_LIMIT / \$megabytes) * \$JVM_MEM_PERCENT / 100)))</span>
+<span class="hljs-string">    fi</span>
+<span class="hljs-string"></span>
+<span class="hljs-string"></span>
+<span class="hljs-string">    # jvm堆内存精细化设置, 会覆盖前面的jvm堆内存设置, 并添加非堆内存的设置</span>
+<span class="hljs-string"></span>
+<span class="hljs-string">    if [ x&quot;\$&#123;JVM_MEM_HEAP&#125;&quot; != x ]; then</span>
+<span class="hljs-string">      heapmem=\$&#123;JVM_MEM_HEAP&#125;</span>
+<span class="hljs-string">    fi</span>
+<span class="hljs-string"></span>
+<span class="hljs-string">    if [ &quot;\$&#123;JVM_MEM_DIRECT&#125;&quot; == &quot;&quot; ]; then</span>
+<span class="hljs-string">      directmem=&quot;512m&quot;</span>
+<span class="hljs-string">    else</span>
+<span class="hljs-string">      directmem=\$&#123;JVM_MEM_DIRECT&#125;</span>
+<span class="hljs-string">    fi</span>
+<span class="hljs-string"></span>
+<span class="hljs-string">    if [ &quot;\$&#123;JVM_MEM_METASPACE&#125;&quot; == &quot;&quot; ]; then</span>
+<span class="hljs-string">      metaspacemem=&quot;512m&quot;</span>
+<span class="hljs-string">    else</span>
+<span class="hljs-string">      metaspacemem=\$&#123;JVM_MEM_METASPACE&#125;</span>
+<span class="hljs-string">    fi</span>
+<span class="hljs-string"></span>
+<span class="hljs-string"></span>
+<span class="hljs-string">    if [ &quot;\$&#123;JVM_OCCUPANCY_PERCENT&#125;&quot; == &quot;&quot; ]; then</span>
+<span class="hljs-string">      jvm_occupancy_percent=&quot;50&quot;</span>
+<span class="hljs-string">    else</span>
+<span class="hljs-string">      jvm_occupancy_percent=\$&#123;JVM_OCCUPANCY_PERCENT&#125;</span>
+<span class="hljs-string">    fi</span>
+<span class="hljs-string"></span>
+<span class="hljs-string"></span>
+<span class="hljs-string">    if [ &quot;\$&#123;JVM_NEWSIZE_PERCENT&#125;&quot; == &quot;&quot; ]; then</span>
+<span class="hljs-string">      jvm_newsize_percent=&quot;60&quot;</span>
+<span class="hljs-string">    else</span>
+<span class="hljs-string">      jvm_newsize_percent=\$&#123;JVM_NEWSIZE_PERCENT&#125;</span>
+<span class="hljs-string">    fi</span>
+<span class="hljs-string"></span>
+<span class="hljs-string"></span>
+<span class="hljs-string">    export COLLECTOR=&quot;-XX:+UseG1GC -XX:ConcGCThreads=4</span>
+<span class="hljs-string">    -XX:+UnlockExperimentalVMOptions</span>
+<span class="hljs-string">    -XX:G1MaxNewSizePercent=\$&#123;jvm_newsize_percent&#125;</span>
+<span class="hljs-string">    -XX:InitiatingHeapOccupancyPercent=\$&#123;jvm_occupancy_percent&#125;</span>
+<span class="hljs-string">    -XX:G1HeapRegionSize=4M -XX:MaxTenuringThreshold=15 -XX:ParallelGCThreads=8&quot;</span>
+<span class="hljs-string"></span>
+<span class="hljs-string">    export LOGGER=&quot;-Xloggc:/tmp/gc.log -XX:+PrintGCDetails</span>
+<span class="hljs-string">    -XX:+PrintGCDateStamps&quot;</span>
+<span class="hljs-string"></span>
+<span class="hljs-string">    export HEAP=&quot;-Xmx\$&#123;heapmem&#125; -Xms\$&#123;heapmem&#125;&quot;</span>
+<span class="hljs-string"></span>
+<span class="hljs-string">    export NON_HEAP=&quot;-XX:MaxDirectMemorySize=\$&#123;directmem&#125;</span>
+<span class="hljs-string">    -XX:MaxMetaspaceSize=\$&#123;metaspacemem&#125;&quot;</span>
+<span class="hljs-string"></span>
+<span class="hljs-string">    export DUMP=&quot;-XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/tmp/dump/&quot;</span>
+<span class="hljs-string"></span>
+<span class="hljs-string">    export MON=&quot;-XX:NativeMemoryTracking=detail&quot;</span>
+<span class="hljs-string"></span>
+<span class="hljs-string"></span>
+<span class="hljs-string">    JAVA_OPTS=&quot;\$JAVA_OPTS \$&#123;JAVA_HEAP:-\$&#123;HEAP&#125;&#125;&quot;</span>
+<span class="hljs-string"></span>
+<span class="hljs-string">    JAVA_OPTS=&quot;\$JAVA_OPTS \$&#123;JAVA_NON_HEAP:-\$&#123;NON_HEAP&#125;&#125;&quot;</span>
+<span class="hljs-string"></span>
+<span class="hljs-string">    JAVA_OPTS=&quot;\$JAVA_OPTS \$&#123;JAVA_GC:-\$&#123;COLLECTOR&#125;&#125;&quot;</span>
+<span class="hljs-string"></span>
+<span class="hljs-string">    JAVA_OPTS=&quot;\$JAVA_OPTS \$&#123;JAVA_LOGS:-\$&#123;LOGGER&#125;&#125;&quot;</span>
+<span class="hljs-string"></span>
+<span class="hljs-string">    JAVA_OPTS=&quot;\$JAVA_OPTS \$&#123;JAVA_DUMP:-\$&#123;DUMP&#125;&#125;&quot;</span>
+<span class="hljs-string"></span>
+<span class="hljs-string">    JAVA_OPTS=&quot;\$JAVA_OPTS \$&#123;JAVA_MON:-\$&#123;MON&#125;&#125;&quot;</span>
+<span class="hljs-string"></span>
+<span class="hljs-string"></span>
+<span class="hljs-string">    # prometheus jmx agent加载, 主动开启才加载，默认不加载</span>
+<span class="hljs-string"></span>
+<span class="hljs-string">    if [ &quot;\$&#123;PROMETHEUS_JMX_AGENT&#125;&quot; == &quot;true&quot; ]; then</span>
+<span class="hljs-string">      JAVA_OPTS=&quot;\$JAVA_OPTS -javaagent:/mnt/jvm-agent/prometheus-javaagent/jmx_prometheus_javaagent-0.20.0.jar=12345:/mnt/jvm-agent/prometheus-javaagent/config.yaml&quot;</span>
+<span class="hljs-string">    fi</span>
+<span class="hljs-string"></span>
+<span class="hljs-string"></span>
+<span class="hljs-string">    # tingyun agent加载, 主动开启才加载，默认不加载</span>
+<span class="hljs-string"></span>
+<span class="hljs-string">    if [ &quot;\$&#123;TINGYUN_JMX_AGENT&#125;&quot; == &quot;true&quot; ]; then</span>
+<span class="hljs-string">      JAVA_OPTS=&quot;\$JAVA_OPTS -javaagent:/mnt/skywalking-es7/agent/tingyun/tingyun-agent-java.jar -Dtingyun.app_name=\$&#123;MY_PROJECT_NAME&#125;&quot;</span>
+<span class="hljs-string">    fi</span>
+<span class="hljs-string"></span>
+<span class="hljs-string"></span>
+<span class="hljs-string">    # 其他JVM_AGENT设置, 可能会与前面的agent设置重复</span>
+<span class="hljs-string"></span>
+<span class="hljs-string">    JAVA_OPTS=&quot;\$JAVA_OPTS \$&#123;JVM_AGENT&#125;&quot;</span>
+<span class="hljs-string"></span>
+<span class="hljs-string"></span>
+<span class="hljs-string">    # 其他JVM追加设置, 可能会与前面的设置重复</span>
+<span class="hljs-string"></span>
+<span class="hljs-string">    JAVA_OPTS=&quot;\$JAVA_OPTS \$&#123;JVM_EXT_ARG&#125;&quot;</span>
+<span class="hljs-string"></span>
+<span class="hljs-string"></span>
+<span class="hljs-string">    # 其他固定的JAVA_OPTS</span>
+<span class="hljs-string"></span>
+<span class="hljs-string">    JAVA_OPTS=&quot;\$JAVA_OPTS -Dfile.encoding=UTF-8 -Duser.timezone=Asia/Shanghai&quot;</span>
+<span class="hljs-string"></span>
+<span class="hljs-string">    JAVA_OPTS=&quot;\$JAVA_OPTS -jar \$&#123;artifact&#125;&quot;</span>
+<span class="hljs-string"></span>
+<span class="hljs-string"></span>
+<span class="hljs-string">    echo &quot;starting appliction \$&#123;artifact%????&#125;&quot;</span>
+<span class="hljs-string"></span>
+<span class="hljs-string">    echo &quot;running command: java \$JAVA_OPTS&quot;</span>
+<span class="hljs-string"></span>
+<span class="hljs-string">    eval &quot;exec java \$JAVA_OPTS&quot;</span>
+<span class="hljs-string"></span>
+<span class="hljs-string"></span>
+<span class="hljs-string">    &#x27; &gt; axzo_java_app_startup.sh</span>
+<span class="hljs-string"></span>
+<span class="hljs-string"></span>
+<span class="hljs-string">    JarFile=`echo \$&#123;ENTRYPOINT&#125; | awk -F , &#x27;&#123;print \$NF&#125;&#x27;`</span>
+<span class="hljs-string"></span>
+<span class="hljs-string">    JarFile=`echo \$&#123;JarFile&#125; | sed &#x27;s/&quot;//g&#x27;`</span>
+<span class="hljs-string"></span>
+<span class="hljs-string"></span>
+<span class="hljs-string">    echo &quot;\n&quot; &gt;&gt; Dockerfile</span>
+<span class="hljs-string"></span>
+<span class="hljs-string"></span>
+<span class="hljs-string">    # 注入MY_PROJECT_NAME环境变量</span>
+<span class="hljs-string"></span>
+<span class="hljs-string">    echo &quot;env MY_PROJECT_NAME \$&#123;ProjectName&#125;&quot; &gt;&gt; Dockerfile</span>
+<span class="hljs-string"></span>
+<span class="hljs-string"></span>
+<span class="hljs-string">    # 注入启动脚本并使用此脚本为容器启动脚本，覆盖Dockerfile中原有的ENTRYPOINT</span>
+<span class="hljs-string"></span>
+<span class="hljs-string">    echo &quot;ADD axzo_java_app_startup.sh /axzo_java_app_startup.sh&quot; &gt;&gt; Dockerfile</span>
+<span class="hljs-string"></span>
+<span class="hljs-string">    echo &quot;ADD dependency_tree.txt /dependency_tree.txt&quot; &gt;&gt; Dockerfile</span>
+<span class="hljs-string"></span>
+<span class="hljs-string">    echo &quot;ENTRYPOINT sh /axzo_java_app_startup.sh \$&#123;JarFile&#125;&quot; &gt;&gt; Dockerfile</span>
+<span class="hljs-string"></span>
+<span class="hljs-string"></span>
+<span class="hljs-string">    cat Dockerfile</span>
+<span class="hljs-string">  mvDockerBuildDep.py: |-</span>
+<span class="hljs-string">    #! /usr/bin/env python</span>
+<span class="hljs-string">    # -*- coding: utf-8 -*-</span>
+<span class="hljs-string">    import sys</span>
+<span class="hljs-string">    import subprocess</span>
+<span class="hljs-string">    import os</span>
+<span class="hljs-string">    import re</span>
+<span class="hljs-string">    import json</span>
+<span class="hljs-string">    import requests</span>
+<span class="hljs-string">    import hashlib</span>
+<span class="hljs-string"></span>
+<span class="hljs-string">    def runCommand(commandStr):</span>
+<span class="hljs-string">        r = subprocess.getstatusoutput(commandStr)</span>
+<span class="hljs-string">        if r[0] == 0:</span>
+<span class="hljs-string">            print(r[1])</span>
+<span class="hljs-string">            return r[1]</span>
+<span class="hljs-string">        else:</span>
+<span class="hljs-string">            print(r[1])</span>
+<span class="hljs-string">            return False</span>
+<span class="hljs-string"></span>
+<span class="hljs-string">    if not os.path.exists(&quot;Dockerfile&quot;):</span>
+<span class="hljs-string">        print(&quot;No Dockerfile found,quit.&quot;)</span>
+<span class="hljs-string">        sys.exit(0)</span>
+<span class="hljs-string">    if not os.path.exists(&quot;dockerBuildOnly&quot;):</span>
+<span class="hljs-string">        os.mkdir(&quot;dockerBuildOnly&quot;)</span>
+<span class="hljs-string"></span>
+<span class="hljs-string">    # java类应用计算包依赖</span>
+<span class="hljs-string">    axzoDepList = []</span>
+<span class="hljs-string">    if os.path.exists(&quot;/pipeline-stage-share/dependency_tree.txt&quot;):</span>
+<span class="hljs-string">        for line in open(&quot;/pipeline-stage-share/dependency_tree.txt&quot;,&quot;r&quot;):</span>
+<span class="hljs-string">            try:</span>
+<span class="hljs-string">                if re.search(&quot; -&gt; &quot;,line):</span>
+<span class="hljs-string">                    depLeftGroupId = line.strip().split(&quot; -&gt; &quot;)[0].split(&quot;\&quot;&quot;)[1].split(&quot;:&quot;)[0]</span>
+<span class="hljs-string">                    depLeftArtifactId = line.strip().split(&quot; -&gt; &quot;)[0].split(&quot;\&quot;&quot;)[1].split(&quot;:&quot;)[1]</span>
+<span class="hljs-string"></span>
+<span class="hljs-string">                    depRightGroupId = line.strip().split(&quot; -&gt; &quot;)[1].split(&quot;\&quot;&quot;)[1].split(&quot;:&quot;)[0]</span>
+<span class="hljs-string">                    depRightArtifactId = line.strip().split(&quot; -&gt; &quot;)[1].split(&quot;\&quot;&quot;)[1].split(&quot;:&quot;)[1]</span>
+<span class="hljs-string">                    </span>
+<span class="hljs-string">                    if depLeftGroupId.startswith(&quot;cn.axzo&quot;) and depRightGroupId.startswith(&quot;cn.axzo&quot;):</span>
+<span class="hljs-string">                        #print(line.strip())</span>
+<span class="hljs-string"></span>
+<span class="hljs-string">                        depRight = &quot;&#123;&#125;:&#123;&#125;&quot;.format(depRightGroupId,depRightArtifactId)</span>
+<span class="hljs-string">                        # print(depRight)</span>
+<span class="hljs-string">                        if depRight not in axzoDepList:</span>
+<span class="hljs-string">                            axzoDepList.append(depRight)      </span>
+<span class="hljs-string">            except:</span>
+<span class="hljs-string">                continue</span>
+<span class="hljs-string"></span>
+<span class="hljs-string">    # 查询依赖包的版本信息</span>
+<span class="hljs-string">    with open(&quot;/pipeline-stage-share/dependency_tree.txt&quot;,&quot;w+&quot;) as f:</span>
+<span class="hljs-string">        for axzoDep in axzoDepList:</span>
+<span class="hljs-string">            if os.getenv(&quot;targetEnv&quot;) in [&quot;axzo-pro&quot;,&quot;axzo-live&quot;] or os.getenv(&quot;targetEnv&quot;).endswith(&quot;-prod&quot;):</span>
+<span class="hljs-string">                repository = &quot;axzo-master&quot;</span>
+<span class="hljs-string">            else:</span>
+<span class="hljs-string">                repository = os.getenv(&quot;targetEnv&quot;)</span>
+<span class="hljs-string">            url = &quot;https://nexus.axzo.cn/service/rest/v1/search?repository=&#123;&#125;&amp;group=&#123;&#125;&amp;name=&#123;&#125;&amp;sort=version&amp;direction=desc&quot;.format(repository,axzoDep.split(&quot;:&quot;)[0],axzoDep.split(&quot;:&quot;)[1])</span>
+<span class="hljs-string">            headers = &#123;</span>
+<span class="hljs-string">                &#x27;content-type&#x27;: &#x27;application/json&#x27;,</span>
+<span class="hljs-string">                &#x27;Accept&#x27;: &#x27;application/json;charset=utf-8&#x27;</span>
+<span class="hljs-string">            &#125;</span>
+<span class="hljs-string">            try:</span>
+<span class="hljs-string">                r = requests.get(url=url, headers=headers)</span>
+<span class="hljs-string">                # print(r.text)</span>
+<span class="hljs-string">                r_json = json.loads(r.text)</span>
+<span class="hljs-string">                for i in r_json[&quot;items&quot;]:</span>
+<span class="hljs-string">                    print(&quot;&#123;&#125;.&#123;&#125;: &#123;&#125;&quot;.format(axzoDep.split(&quot;:&quot;)[0],axzoDep.split(&quot;:&quot;)[1],i[&quot;version&quot;]))</span>
+<span class="hljs-string">                    f.write(&quot;&#123;&#125;.&#123;&#125;: &#123;&#125;\n&quot;.format(axzoDep.split(&quot;:&quot;)[0],axzoDep.split(&quot;:&quot;)[1],i[&quot;version&quot;]))</span>
+<span class="hljs-string">                    f.flush()</span>
+<span class="hljs-string">                    break</span>
+<span class="hljs-string">            except:</span>
+<span class="hljs-string">                # traceback.print_exc()</span>
+<span class="hljs-string">                continue</span>
+<span class="hljs-string"></span>
+<span class="hljs-string">    # 计算依赖清单md5值</span>
+<span class="hljs-string">    if os.path.exists(&quot;/pipeline-stage-share/dependency_tree.txt&quot;):</span>
+<span class="hljs-string">        with open(&quot;/pipeline-stage-share/dependency_tree.txt&quot;, &#x27;rb&#x27;) as fp:</span>
+<span class="hljs-string">            data = fp.read()</span>
+<span class="hljs-string">        file_md5= hashlib.md5(data).hexdigest()</span>
+<span class="hljs-string"></span>
+<span class="hljs-string">        with open(&quot;/pipeline-stage-share/dependency_tree.txt.md5sum&quot;,&quot;w&quot;) as f:</span>
+<span class="hljs-string">            f.write(file_md5)</span>
+<span class="hljs-string">            f.flush()</span>
+<span class="hljs-string">        commandStr = &quot;cat /pipeline-stage-share/dependency_tree.txt &gt; dependency_tree.txt&quot;</span>
+<span class="hljs-string">        runCommand(commandStr)</span>
+<span class="hljs-string">        </span>
+<span class="hljs-string"></span>
+<span class="hljs-string">    depFiles = []</span>
+<span class="hljs-string">    for line in open(&quot;Dockerfile&quot;):</span>
+<span class="hljs-string">        line = line.strip()</span>
+<span class="hljs-string">        if line.startswith(&quot;COPY&quot;) or line.startswith(&quot;ADD&quot;):</span>
+<span class="hljs-string">            lineWords = line.split()</span>
+<span class="hljs-string">            del lineWords[0]</span>
+<span class="hljs-string">            del lineWords[-1]</span>
+<span class="hljs-string">            for depFile in lineWords:</span>
+<span class="hljs-string">                depFile = depFile.strip(&quot;/&quot;)</span>
+<span class="hljs-string">                depFiles.append(depFile)</span>
+<span class="hljs-string">    depFiles.append(&quot;Dockerfile&quot;)</span>
+<span class="hljs-string"></span>
+<span class="hljs-string">    for depFile in depFiles:</span>
+<span class="hljs-string">        if not os.path.exists(depFile):</span>
+<span class="hljs-string">            print(&quot;Not found: &#123;&#125;&quot;.format(depFile))</span>
+<span class="hljs-string">            sys.exit(1)</span>
+<span class="hljs-string">        commandStr = &quot;cp --parents -raf &#123;&#125; dockerBuildOnly/&quot;.format(depFile)</span>
+<span class="hljs-string">        print(commandStr)</span>
+<span class="hljs-string">        r = runCommand(commandStr)</span>
+<span class="hljs-string">        if r == False:</span>
+<span class="hljs-string">            sys.exit(1)</span>
+<span class="hljs-string"></span>
+<span class="hljs-string"></span>
+<span class="hljs-string"></span>
+<span class="hljs-string">    sys.exit(0)</span>
+<span class="hljs-string">  pomTrack.py: &gt;</span>
+<span class="hljs-string">    #! /usr/bin/env python</span>
+<span class="hljs-string"></span>
+<span class="hljs-string">    # -*- coding: utf-8 -*-</span>
+<span class="hljs-string"></span>
+<span class="hljs-string"></span>
+<span class="hljs-string">    import xml.etree.ElementTree as et</span>
+<span class="hljs-string"></span>
+<span class="hljs-string">    import sys</span>
+<span class="hljs-string"></span>
+<span class="hljs-string">    import json</span>
+<span class="hljs-string"></span>
+<span class="hljs-string">    import os</span>
+<span class="hljs-string"></span>
+<span class="hljs-string">    import traceback</span>
+<span class="hljs-string"></span>
+<span class="hljs-string">    import requests</span>
+<span class="hljs-string"></span>
+<span class="hljs-string"></span>
+<span class="hljs-string">    envName = sys.argv[1]</span>
+<span class="hljs-string"></span>
+<span class="hljs-string"></span>
+<span class="hljs-string"></span>
+<span class="hljs-string">    def pomTrack(xmlFile,module):</span>
+<span class="hljs-string">        global deploy_list</span>
+<span class="hljs-string">        global my_group_id</span>
+<span class="hljs-string">        deploy_list[module] = &#123;&#125;</span>
+<span class="hljs-string">        deploy_list[module][&quot;pom&quot;] = xmlFile</span>
+<span class="hljs-string"></span>
+<span class="hljs-string">        dependency_list_by_pom[xmlFile] = []</span>
+<span class="hljs-string">        if not os.path.exists(xmlFile):</span>
+<span class="hljs-string">            print(&quot;Not found: &quot;,xmlFile)</span>
+<span class="hljs-string">            return True</span>
+<span class="hljs-string">        try:</span>
+<span class="hljs-string">            tree = et.parse(xmlFile)</span>
+<span class="hljs-string">            #print(tree)</span>
+<span class="hljs-string">        except:</span>
+<span class="hljs-string">            traceback.print_exc()</span>
+<span class="hljs-string">            return False</span>
+<span class="hljs-string">        # print(xmlFile)</span>
+<span class="hljs-string">        root = tree.getroot()</span>
+<span class="hljs-string">        #print(thisXml.attrib)</span>
+<span class="hljs-string">        for i in root:</span>
+<span class="hljs-string">            if i.tag.endswith(&quot;name&quot;):</span>
+<span class="hljs-string">                deploy_list[module][&quot;name&quot;] = i.text</span>
+<span class="hljs-string">                break</span>
+<span class="hljs-string">        for i in root:</span>
+<span class="hljs-string">            if i.tag.endswith(&quot;artifactId&quot;):</span>
+<span class="hljs-string">                deploy_list[module][&quot;artifactId&quot;] = i.text</span>
+<span class="hljs-string">                break</span>
+<span class="hljs-string">        for i in root:</span>
+<span class="hljs-string">            if i.tag.endswith(&quot;groupId&quot;):</span>
+<span class="hljs-string">                my_group_id = i.text</span>
+<span class="hljs-string">                deploy_list[module][&quot;groupId&quot;] = i.text</span>
+<span class="hljs-string">                break</span>
+<span class="hljs-string">        for i in root:</span>
+<span class="hljs-string">            if i.tag.endswith(&quot;packaging&quot;):</span>
+<span class="hljs-string">                deploy_list[module][&quot;packaging&quot;] = i.text</span>
+<span class="hljs-string">                break</span>
+<span class="hljs-string">        for i in root:</span>
+<span class="hljs-string">            if i.tag.endswith(&quot;version&quot;):</span>
+<span class="hljs-string">                deploy_list[module][&quot;version&quot;] = i.text</span>
+<span class="hljs-string">                break</span>
+<span class="hljs-string">        if &quot;groupId&quot; not in deploy_list[module].keys():</span>
+<span class="hljs-string">            deploy_list[module][&quot;groupId&quot;] = my_group_id</span>
+<span class="hljs-string">        </span>
+<span class="hljs-string">        </span>
+<span class="hljs-string">        for i in root:</span>
+<span class="hljs-string">            if i.tag.endswith(&quot;dependencies&quot;):</span>
+<span class="hljs-string">                #print(&quot;\tdependencies:&quot;)</span>
+<span class="hljs-string">                for j in i:</span>
+<span class="hljs-string">                    if j.tag.endswith(&quot;dependency&quot;):</span>
+<span class="hljs-string">                        isDepAxzo = False</span>
+<span class="hljs-string">                        thisMap = &#123;&#125;</span>
+<span class="hljs-string">                        for k in j:</span>
+<span class="hljs-string">                            thisMap[k.tag.replace(&#x27;&#123;http://maven.apache.org/POM/4.0.0&#125;&#x27;,&quot;&quot;)] = k.text</span>
+<span class="hljs-string">                            if k.tag.replace(&#x27;&#123;http://maven.apache.org/POM/4.0.0&#125;&#x27;,&quot;&quot;) == &quot;groupId&quot; and k.text.startswith(&quot;cn.axzo.&quot;):</span>
+<span class="hljs-string">                                if k.text not in dependency_list.keys():</span>
+<span class="hljs-string">                                    dependency_list[k.text] = []</span>
+<span class="hljs-string">                                isDepAxzo = True</span>
+<span class="hljs-string">                        if isDepAxzo:</span>
+<span class="hljs-string">                            for k in j:</span>
+<span class="hljs-string">                                if k.tag.replace(&#x27;&#123;http://maven.apache.org/POM/4.0.0&#125;&#x27;,&quot;&quot;) == &quot;groupId&quot; and k.text.startswith(&quot;cn.axzo.&quot;):</span>
+<span class="hljs-string">                                    dependency_list_by_pom[xmlFile].append(thisMap)</span>
+<span class="hljs-string">                                    if thisMap[&quot;artifactId&quot;] not in dependency_list[k.text]:</span>
+<span class="hljs-string">                                        dependency_list[k.text].append(thisMap[&quot;artifactId&quot;])</span>
+<span class="hljs-string">                break</span>
+<span class="hljs-string">        for i in root:</span>
+<span class="hljs-string">            if i.tag.endswith(&quot;modules&quot;):</span>
+<span class="hljs-string">                for j in i:</span>
+<span class="hljs-string">                    if j.tag.endswith(&quot;module&quot;):</span>
+<span class="hljs-string">                        xmlFileName = xmlFile.split(&quot;/&quot;)[-1]</span>
+<span class="hljs-string">                        moduleXmlFile = &quot;&#123;&#125;/pom.xml&quot;.format(xmlFile.replace(xmlFileName,j.text))</span>
+<span class="hljs-string">                        pomTrack(moduleXmlFile,j.text)</span>
+<span class="hljs-string"></span>
+<span class="hljs-string">    my_group_id = &quot;None&quot;</span>
+<span class="hljs-string"></span>
+<span class="hljs-string">    deploy_list = &#123;&#125;</span>
+<span class="hljs-string"></span>
+<span class="hljs-string">    dependency_list = &#123;&#125;</span>
+<span class="hljs-string"></span>
+<span class="hljs-string">    dependency_list_by_pom = &#123;&#125;</span>
+<span class="hljs-string"></span>
+<span class="hljs-string">    pomTrack(&quot;./pom.xml&quot;,&quot;root&quot;)       </span>
+<span class="hljs-string"></span>
+<span class="hljs-string"></span>
+<span class="hljs-string"></span>
+<span class="hljs-string">    # print(json.dumps(deploy_list,sort_keys=True, indent=4,</span>
+<span class="hljs-string">    ensure_ascii=False))</span>
+<span class="hljs-string"></span>
+<span class="hljs-string">    # print(json.dumps(dependency_list,sort_keys=True, indent=4,</span>
+<span class="hljs-string">    ensure_ascii=False))</span>
+<span class="hljs-string"></span>
+<span class="hljs-string"></span>
+<span class="hljs-string">    print(&quot;依赖清单：&quot;)</span>
+<span class="hljs-string"></span>
+<span class="hljs-string">    for k,v in dependency_list.items():</span>
+<span class="hljs-string">        for x in v:</span>
+<span class="hljs-string">            if envName in [&quot;axzo-pro&quot;,&quot;axzo-live&quot;] or envName.endswith(&quot;-prod&quot;):</span>
+<span class="hljs-string">                repository = &quot;axzo-master&quot;</span>
+<span class="hljs-string">            else:</span>
+<span class="hljs-string">                repository = envName</span>
+<span class="hljs-string">            url = &quot;https://nexus.axzo.cn/service/rest/v1/search?repository=&#123;&#125;&amp;group=&#123;&#125;&amp;name=&#123;&#125;&amp;sort=version&amp;direction=desc&quot;.format(repository,k,x)</span>
+<span class="hljs-string">            headers = &#123;</span>
+<span class="hljs-string">                &#x27;content-type&#x27;: &#x27;application/json&#x27;,</span>
+<span class="hljs-string">                &#x27;Accept&#x27;: &#x27;application/json;charset=utf-8&#x27;</span>
+<span class="hljs-string">            &#125;</span>
+<span class="hljs-string">            try:</span>
+<span class="hljs-string">                r = requests.get(url=url, headers=headers)</span>
+<span class="hljs-string">                # print(r.text)</span>
+<span class="hljs-string">                r_json = json.loads(r.text)</span>
+<span class="hljs-string">                for i in r_json[&quot;items&quot;]:</span>
+<span class="hljs-string">                    print(&quot;&#123;&#125;.&#123;&#125;: &#123;&#125;&quot;.format(k,x,i[&quot;version&quot;]))</span>
+<span class="hljs-string">                    break</span>
+<span class="hljs-string">            except:</span>
+<span class="hljs-string">                # traceback.print_exc()</span>
+<span class="hljs-string">                continue</span>
+<span class="hljs-string">    #print(json.dumps(dependency_list_by_pom,sort_keys=True, indent=4,</span>
+<span class="hljs-string">    ensure_ascii=False))</span>
+<span class="hljs-string"></span>
+<span class="hljs-string"></span>
+<span class="hljs-string">    # sys.exit(0)</span>
+<span class="hljs-string">kind: ConfigMap</span>
+<span class="hljs-string">metadata:</span>
+<span class="hljs-string">  name: jenkins-scripts</span>
+<span class="hljs-string">  namespace: kube-ops</span>
+<span class="hljs-string">EOF</span></code></pre></div>
+
+<h2 id="创建secrets"><a href="#创建secrets" class="headerlink" title="创建secrets"></a>创建secrets</h2><div class="code-wrapper"><pre><code class="hljs bash">kubectl apply -f - &lt;&lt;<span class="hljs-string">EOF</span>
+<span class="hljs-string">apiVersion: v1</span>
+<span class="hljs-string">data:</span>
+<span class="hljs-string">  git-credentials: xxxx</span>
+<span class="hljs-string">kind: Secret</span>
+<span class="hljs-string">metadata:</span>
+<span class="hljs-string">  name: jenkins-secret</span>
+<span class="hljs-string">  namespace: kube-ops</span>
+<span class="hljs-string">type: Opaque</span>
+<span class="hljs-string">EOF</span></code></pre></div>
+
+<h2 id="创建PVC"><a href="#创建PVC" class="headerlink" title="创建PVC"></a>创建PVC</h2><div class="code-wrapper"><pre><code class="hljs bash">kubectl apply -f - &lt;&lt;<span class="hljs-string">EOF</span>
+<span class="hljs-string">kind: PersistentVolumeClaim</span>
+<span class="hljs-string">apiVersion: v1</span>
+<span class="hljs-string">metadata:</span>
+<span class="hljs-string">  name: jenkins-1223</span>
+<span class="hljs-string">  namespace: kube-ops</span>
+<span class="hljs-string">  annotations:</span>
+<span class="hljs-string">    volume.beta.kubernetes.io/storage-provisioner: everest-csi-provisioner</span>
+<span class="hljs-string">spec:</span>
+<span class="hljs-string">  accessModes:</span>
+<span class="hljs-string">    - ReadWriteMany</span>
+<span class="hljs-string">  resources:</span>
+<span class="hljs-string">    requests:</span>
+<span class="hljs-string">      storage: 50Gi</span>
+<span class="hljs-string">  storageClassName: sfsturbo-k8s-ops</span>
+<span class="hljs-string">  volumeMode: Filesystem</span>
+<span class="hljs-string">---</span>
+<span class="hljs-string">kind: PersistentVolumeClaim</span>
+<span class="hljs-string">apiVersion: v1</span>
+<span class="hljs-string">metadata:</span>
+<span class="hljs-string">  name: maven</span>
+<span class="hljs-string">  namespace: kube-ops</span>
+<span class="hljs-string">  annotations:</span>
+<span class="hljs-string">    volume.beta.kubernetes.io/storage-provisioner: everest-csi-provisioner</span>
+<span class="hljs-string">spec:</span>
+<span class="hljs-string">  accessModes:</span>
+<span class="hljs-string">    - ReadWriteMany</span>
+<span class="hljs-string">  resources:</span>
+<span class="hljs-string">    requests:</span>
+<span class="hljs-string">      storage: 550Gi</span>
+<span class="hljs-string">  storageClassName: sfsturbo-k8s-ops</span>
+<span class="hljs-string">  volumeMode: Filesystem</span>
+<span class="hljs-string">---</span>
+<span class="hljs-string">kind: PersistentVolumeClaim</span>
+<span class="hljs-string">apiVersion: v1</span>
+<span class="hljs-string">metadata:</span>
+<span class="hljs-string">  name: jnlp-data</span>
+<span class="hljs-string">  namespace: kube-ops</span>
+<span class="hljs-string">  annotations:</span>
+<span class="hljs-string">    volume.beta.kubernetes.io/storage-provisioner: everest-csi-provisioner</span>
+<span class="hljs-string">spec:</span>
+<span class="hljs-string">  accessModes:</span>
+<span class="hljs-string">    - ReadWriteMany</span>
+<span class="hljs-string">  resources:</span>
+<span class="hljs-string">    requests:</span>
+<span class="hljs-string">      storage: 550Gi</span>
+<span class="hljs-string">  storageClassName: sfsturbo-k8s-ops</span>
+<span class="hljs-string">  volumeMode: Filesystem</span>
+<span class="hljs-string">EOF</span></code></pre></div>
+
+<h2 id="创建deploy-service"><a href="#创建deploy-service" class="headerlink" title="创建deploy service"></a>创建deploy service</h2><div class="code-wrapper"><pre><code class="hljs bash">kubectl apply -f - &lt;&lt;<span class="hljs-string">EOF</span>
+<span class="hljs-string">apiVersion: apps/v1</span>
+<span class="hljs-string">kind: Deployment</span>
+<span class="hljs-string">metadata:</span>
+<span class="hljs-string">  labels:</span>
+<span class="hljs-string">    name: jenkins-new</span>
+<span class="hljs-string">  name: jenkins-new</span>
+<span class="hljs-string">  namespace: kube-ops</span>
+<span class="hljs-string">spec:</span>
+<span class="hljs-string">  progressDeadlineSeconds: 600</span>
+<span class="hljs-string">  replicas: 0</span>
+<span class="hljs-string">  revisionHistoryLimit: 10</span>
+<span class="hljs-string">  selector:</span>
+<span class="hljs-string">    matchLabels:</span>
+<span class="hljs-string">      name: jenkins-new</span>
+<span class="hljs-string">  strategy:</span>
+<span class="hljs-string">    type: Recreate</span>
+<span class="hljs-string">  template:</span>
+<span class="hljs-string">    metadata:</span>
+<span class="hljs-string">      labels:</span>
+<span class="hljs-string">        name: jenkins-new</span>
+<span class="hljs-string">      name: jenkins-new</span>
+<span class="hljs-string">    spec:</span>
+<span class="hljs-string">      automountServiceAccountToken: true</span>
+<span class="hljs-string">      containers:</span>
+<span class="hljs-string">        - env:</span>
+<span class="hljs-string">            - name: JAVA_OPTS</span>
+<span class="hljs-string">              value: &gt;-</span>
+<span class="hljs-string">                -Xmx16g -Xms16g -XshowSettings:vm</span>
+<span class="hljs-string">                -Dhudson.slaves.NodeProvisioner.initialDelay=0</span>
+<span class="hljs-string">                -Dhudson.slaves.NodeProvisioner.MARGIN=50</span>
+<span class="hljs-string">                -Dhudson.slaves.NodeProvisioner.MARGIN0=0.85</span>
+<span class="hljs-string">                -Duser.timezone=Asia/Shanghai</span>
+<span class="hljs-string">            - name: LIMITS_MEMORY</span>
+<span class="hljs-string">              valueFrom:</span>
+<span class="hljs-string">                resourceFieldRef:</span>
+<span class="hljs-string">                  divisor: &#x27;0&#x27;</span>
+<span class="hljs-string">                  resource: limits.memory</span>
+<span class="hljs-string">          image: &#x27;harbor.axzo.cn/devops/jenkins:2.375.1-lts&#x27;</span>
+<span class="hljs-string">          imagePullPolicy: IfNotPresent</span>
+<span class="hljs-string">          livenessProbe:</span>
+<span class="hljs-string">            failureThreshold: 3</span>
+<span class="hljs-string">            httpGet:</span>
+<span class="hljs-string">              path: /login</span>
+<span class="hljs-string">              port: 8080</span>
+<span class="hljs-string">              scheme: HTTP</span>
+<span class="hljs-string">            initialDelaySeconds: 30</span>
+<span class="hljs-string">            periodSeconds: 5</span>
+<span class="hljs-string">            successThreshold: 1</span>
+<span class="hljs-string">            timeoutSeconds: 2</span>
+<span class="hljs-string">          name: jenkins-new</span>
+<span class="hljs-string">          ports:</span>
+<span class="hljs-string">            - containerPort: 8080</span>
+<span class="hljs-string">              name: 8080tcp2</span>
+<span class="hljs-string">              protocol: TCP</span>
+<span class="hljs-string">            - containerPort: 50000</span>
+<span class="hljs-string">              name: 50000tcp2</span>
+<span class="hljs-string">              protocol: TCP</span>
+<span class="hljs-string">          securityContext:</span>
+<span class="hljs-string">            privileged: true</span>
+<span class="hljs-string">          terminationMessagePath: /dev/termination-log</span>
+<span class="hljs-string">          terminationMessagePolicy: File</span>
+<span class="hljs-string">          volumeMounts:</span>
+<span class="hljs-string">            - mountPath: /etc/localtime</span>
+<span class="hljs-string">              name: tz-config</span>
+<span class="hljs-string">            - mountPath: /var/jenkins_home</span>
+<span class="hljs-string">              name: jenkins-1223</span>
+<span class="hljs-string">      dnsPolicy: ClusterFirst</span>
+<span class="hljs-string">      hostAliases:</span>
+<span class="hljs-string">        - hostnames:</span>
+<span class="hljs-string">            - harbor.axzo.cn</span>
+<span class="hljs-string">          ip: 172.16.2.25</span>
+<span class="hljs-string">      imagePullSecrets:</span>
+<span class="hljs-string">        - name: harbor</span>
+<span class="hljs-string">      restartPolicy: Always</span>
+<span class="hljs-string">      schedulerName: default-scheduler</span>
+<span class="hljs-string">      securityContext:</span>
+<span class="hljs-string">        fsGroup: 1000</span>
+<span class="hljs-string">      serviceAccount: jenkins-blue</span>
+<span class="hljs-string">      serviceAccountName: jenkins-blue</span>
+<span class="hljs-string">      terminationGracePeriodSeconds: 10</span>
+<span class="hljs-string">      volumes:</span>
+<span class="hljs-string">        - hostPath:</span>
+<span class="hljs-string">            path: /usr/share/zoneinfo/Asia/Shanghai</span>
+<span class="hljs-string">          name: tz-config</span>
+<span class="hljs-string">        - name: jenkins-1223</span>
+<span class="hljs-string">          persistentVolumeClaim:</span>
+<span class="hljs-string">            claimName: jenkins-1223</span>
+<span class="hljs-string">---</span>
+<span class="hljs-string">apiVersion: v1</span>
+<span class="hljs-string">kind: Service</span>
+<span class="hljs-string">metadata:</span>
+<span class="hljs-string">  name: jenkins-new</span>
+<span class="hljs-string">  namespace: kube-ops</span>
+<span class="hljs-string">spec:</span>
+<span class="hljs-string">  ports:</span>
+<span class="hljs-string">    - name: http</span>
+<span class="hljs-string">      port: 80</span>
+<span class="hljs-string">      protocol: TCP</span>
+<span class="hljs-string">      targetPort: 8080</span>
+<span class="hljs-string">    - name: agent</span>
+<span class="hljs-string">      port: 50000</span>
+<span class="hljs-string">      protocol: TCP</span>
+<span class="hljs-string">      targetPort: 50000</span>
+<span class="hljs-string">  selector:</span>
+<span class="hljs-string">    name: jenkins-new</span>
+<span class="hljs-string">  type: NodePort</span>
+<span class="hljs-string">EOF</span></code></pre></div>
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/hexo/categories/Jenkins/" class="category-chain-item">Jenkins</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/hexo/tags/Jenkins/" class="print-no-link">#Jenkins</a>
+      
+    </div>
+  
+</div>
+
+
+              
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/hexo/2024/07/22/Verdaccio-%E5%AE%89%E8%A3%85/" title="Verdaccio-安装">
+                        <span class="hidden-mobile">Verdaccio-安装</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/hexo/js/events.js" ></script>
+<script  src="/hexo/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/hexo/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/hexo/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/hexo/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

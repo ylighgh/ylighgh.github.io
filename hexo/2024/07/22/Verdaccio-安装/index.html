@@ -16,22 +16,22 @@
   <meta name="author" content="三石">
   <meta name="keywords" content="">
   
-    <meta name="description" content="安装dnf install -y device-mapper-persistent-data lvm2  dnf config-manager --add-repo&#x3D;https:&#x2F;&#x2F;mirrors.aliyun.com&#x2F;docker-ce&#x2F;linux&#x2F;centos&#x2F;docker-ce.repo  dnf install -y docker-ce --nobest  docker -v  syste">
+    <meta name="description" content="Verdaccio安装前端私服库: 官方文档 安装node环境curl -o- https:&#x2F;&#x2F;raw.githubusercontent.com&#x2F;nvm-sh&#x2F;nvm&#x2F;v0.39.7&#x2F;install.sh | bash source ~&#x2F;.bashrc nvm install 18  ln -s &quot;$(which node)&quot; &#x2F;usr&#x2F;bin&#x2F;node ln -s &amp;quo">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Docker-安装">
-<meta property="og:url" content="https://ylighgh.github.io/hexo/2024/07/15/Docker-%E5%AE%89%E8%A3%85/index.html">
+<meta property="og:title" content="Verdaccio-安装">
+<meta property="og:url" content="https://ylighgh.github.io/hexo/2024/07/22/Verdaccio-%E5%AE%89%E8%A3%85/index.html">
 <meta property="og:site_name" content="运维杂记">
-<meta property="og:description" content="安装dnf install -y device-mapper-persistent-data lvm2  dnf config-manager --add-repo&#x3D;https:&#x2F;&#x2F;mirrors.aliyun.com&#x2F;docker-ce&#x2F;linux&#x2F;centos&#x2F;docker-ce.repo  dnf install -y docker-ce --nobest  docker -v  syste">
+<meta property="og:description" content="Verdaccio安装前端私服库: 官方文档 安装node环境curl -o- https:&#x2F;&#x2F;raw.githubusercontent.com&#x2F;nvm-sh&#x2F;nvm&#x2F;v0.39.7&#x2F;install.sh | bash source ~&#x2F;.bashrc nvm install 18  ln -s &quot;$(which node)&quot; &#x2F;usr&#x2F;bin&#x2F;node ln -s &amp;quo">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2024-07-15T14:44:21.000Z">
-<meta property="article:modified_time" content="2024-07-16T01:54:57.031Z">
+<meta property="article:published_time" content="2024-07-22T14:44:21.000Z">
+<meta property="article:modified_time" content="2024-07-22T05:48:45.125Z">
 <meta property="article:author" content="三石">
-<meta property="article:tag" content="Docker">
+<meta property="article:tag" content="Verdaccio">
 <meta name="twitter:card" content="summary_large_image">
   
   
   
-  <title>Docker-安装 - 运维杂记</title>
+  <title>Verdaccio-安装 - 运维杂记</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -197,7 +197,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="Docker-安装"></span>
+            <span id="subtitle" data-typed-text="Verdaccio-安装"></span>
           
         </div>
 
@@ -208,8 +208,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2024-07-15 22:44" pubdate>
-          2024年7月15日 晚上
+        <time datetime="2024-07-22 22:44" pubdate>
+          2024年7月22日 晚上
         </time>
       </span>
     
@@ -220,7 +220,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          25 字
+          164 字
         
       </span>
     
@@ -231,7 +231,7 @@
         
         
         
-          1 分钟
+          2 分钟
         
       </span>
     
@@ -268,24 +268,72 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">Docker-安装</h1>
+            <h1 id="seo-header">Verdaccio-安装</h1>
             
             
               <div class="markdown-body">
                 
-                <h1 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h1><div class="code-wrapper"><pre><code class="hljs bash">dnf install -y device-mapper-persistent-data lvm2
+                <h1 id="Verdaccio安装"><a href="#Verdaccio安装" class="headerlink" title="Verdaccio安装"></a>Verdaccio安装</h1><p>前端私服库: <a target="_blank" rel="noopener" href="https://verdaccio.org/docs/installation">官方文档</a></p>
+<h2 id="安装node环境"><a href="#安装node环境" class="headerlink" title="安装node环境"></a>安装node环境</h2><div class="code-wrapper"><pre><code class="hljs bash">curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
+<span class="hljs-built_in">source</span> ~/.bashrc
+nvm install 18
 
-dnf config-manager --add-repo=https://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo
+<span class="hljs-built_in">ln</span> -s <span class="hljs-string">&quot;<span class="hljs-subst">$(which node)</span>&quot;</span> /usr/bin/node
+<span class="hljs-built_in">ln</span> -s <span class="hljs-string">&quot;<span class="hljs-subst">$(which npm)</span>&quot;</span> /usr/bin/npm
 
-dnf install -y docker-ce --nobest
+npm install -g npm@10.5.0</code></pre></div>
 
-docker -v
+<h2 id="安装verdaccio"><a href="#安装verdaccio" class="headerlink" title="安装verdaccio"></a>安装verdaccio</h2><div class="code-wrapper"><pre><code class="hljs bash">npm install --location=global verdaccio
 
-systemctl start docker
+<span class="hljs-built_in">ln</span> -s <span class="hljs-string">&quot;<span class="hljs-subst">$(which verdaccio)</span>&quot;</span> /usr/bin/verdaccio</code></pre></div>
 
-systemctl <span class="hljs-built_in">enable</span> docker
+<h2 id="配置verdaccio"><a href="#配置verdaccio" class="headerlink" title="配置verdaccio"></a>配置verdaccio</h2><div class="code-wrapper"><pre><code class="hljs bash"><span class="hljs-built_in">mkdir</span> /verdaccio
+<span class="hljs-built_in">cd</span> /verdaccio
 
-systemctl status docker</code></pre></div>
+<span class="hljs-comment"># 启动了之后马上暂停,这一步主要是让verdaccio自动创建配置文件</span>
+verdaccio
+
+<span class="hljs-comment"># 增加systemd文件</span>
+<span class="hljs-built_in">cat</span> &lt;&lt;<span class="hljs-string">EOF&gt; /etc/systemd/system/verdaccio.service</span>
+<span class="hljs-string">[Unit]</span>
+<span class="hljs-string">Description=Verdaccio lightweight npm proxy registry</span>
+<span class="hljs-string"></span>
+<span class="hljs-string">[Service]</span>
+<span class="hljs-string">Type=simple</span>
+<span class="hljs-string">Restart=on-failure</span>
+<span class="hljs-string">ExecStart=/usr/bin/verdaccio --config /verdaccio/config.yaml</span>
+<span class="hljs-string">SyslogIdentifier=verdaccio</span>
+<span class="hljs-string">StandardOutput=append:/var/log/verdaccio/verdaccio.log</span>
+<span class="hljs-string">StandardError=syslog</span>
+<span class="hljs-string"></span>
+<span class="hljs-string"></span>
+<span class="hljs-string">[Install]</span>
+<span class="hljs-string">WantedBy=multi-user.target</span>
+<span class="hljs-string">EOF</span>
+
+<span class="hljs-comment"># 创建日志轮替</span>
+<span class="hljs-built_in">cat</span> &lt;&lt;<span class="hljs-string">EOF&gt; /etc/logrotate.d/verdaccio</span>
+<span class="hljs-string">/var/log/verdaccio/*.log &#123;</span>
+<span class="hljs-string">        daily</span>
+<span class="hljs-string">        missingok</span>
+<span class="hljs-string">        rotate 7</span>
+<span class="hljs-string">        compress</span>
+<span class="hljs-string">        delaycompress</span>
+<span class="hljs-string">        notifempty</span>
+<span class="hljs-string">	dateext</span>
+<span class="hljs-string">        create 640 root root</span>
+<span class="hljs-string">        sharedscripts</span>
+<span class="hljs-string">        postrotate</span>
+<span class="hljs-string">	   /usr/bin/systemctl restart verdaccio</span>
+<span class="hljs-string">	   /usr/bin/systemctl restart rsyslog</span>
+<span class="hljs-string">        endscript</span>
+<span class="hljs-string">&#125;</span>
+<span class="hljs-string">EOF</span>
+
+systemctl daemon-reload</code></pre></div>
+
+<h2 id="启动verdaccio"><a href="#启动verdaccio" class="headerlink" title="启动verdaccio"></a>启动verdaccio</h2><div class="code-wrapper"><pre><code class="hljs bash">systemdct <span class="hljs-built_in">enable</span> verdaccio
+systemctl start verdaccio</code></pre></div>
                 
               </div>
             
@@ -303,7 +351,7 @@ systemctl status docker</code></pre></div>
     
       <span class="category-chain">
         
-  <a href="/hexo/categories/Docker/" class="category-chain-item">Docker</a>
+  <a href="/hexo/categories/Verdaccio/" class="category-chain-item">Verdaccio</a>
   
   
 
@@ -318,7 +366,7 @@ systemctl status docker</code></pre></div>
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
-        <a href="/hexo/tags/Docker/" class="print-no-link">#Docker</a>
+        <a href="/hexo/tags/Verdaccio/" class="print-no-link">#Verdaccio</a>
       
     </div>
   
@@ -332,9 +380,9 @@ systemctl status docker</code></pre></div>
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/hexo/2024/07/22/Verdaccio-%E5%AE%89%E8%A3%85/" title="Verdaccio-安装">
+                      <a href="/hexo/2024/07/22/Jenkins-%E5%AE%89%E8%A3%85/" title="Jenkins-安装">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">Verdaccio-安装</span>
+                        <span class="hidden-mobile">Jenkins-安装</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
@@ -342,8 +390,8 @@ systemctl status docker</code></pre></div>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/hexo/2024/07/15/Kubernetes-Prometheus%E7%9B%91%E6%8E%A7/" title="Kubernetes-Prometheus监控">
-                        <span class="hidden-mobile">Kubernetes-Prometheus监控</span>
+                      <a href="/hexo/2024/07/15/Docker-%E5%AE%89%E8%A3%85/" title="Docker-安装">
+                        <span class="hidden-mobile">Docker-安装</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
