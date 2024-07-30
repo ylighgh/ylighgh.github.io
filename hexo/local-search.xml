@@ -4,6 +4,31 @@
   
   
   <entry>
+    <title>Thesuns-安装</title>
+    <link href="/hexo/2024/07/26/Thesuns-%E5%AE%89%E8%A3%85/"/>
+    <url>/hexo/2024/07/26/Thesuns-%E5%AE%89%E8%A3%85/</url>
+    
+    <content type="html"><![CDATA[<h1 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h1><div class="code-wrapper"><pre><code class="hljs bash">curl https://raw.githubusercontent.com/starsliao/TenSunS/main/install/k8s/install.sh | bash</code></pre></div>]]></content>
+    
+    
+    <categories>
+      
+      <category>Thesuns</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Thesuns</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>Jenkins-安装</title>
     <link href="/hexo/2024/07/22/Jenkins-%E5%AE%89%E8%A3%85/"/>
     <url>/hexo/2024/07/22/Jenkins-%E5%AE%89%E8%A3%85/</url>
@@ -308,7 +333,7 @@
     <link href="/hexo/2024/06/11/Linux-%E5%B8%B8%E7%94%A8Shell%E5%91%BD%E4%BB%A4%20copy%202/"/>
     <url>/hexo/2024/06/11/Linux-%E5%B8%B8%E7%94%A8Shell%E5%91%BD%E4%BB%A4%20copy%202/</url>
     
-    <content type="html"><![CDATA[<h1 id="批量删除指定状态的pods"><a href="#批量删除指定状态的pods" class="headerlink" title="批量删除指定状态的pods"></a>批量删除指定状态的pods</h1><div class="code-wrapper"><pre><code class="hljs bash">kubectl --kubeconfig gxq-config get pods -A|grep Evicted|awk <span class="hljs-string">&#x27;&#123;print $1&quot; &quot;$2&#125;&#x27;</span>|<span class="hljs-keyword">while</span> <span class="hljs-built_in">read</span> LINE<span class="hljs-keyword">do</span>    namespace=`<span class="hljs-built_in">echo</span> <span class="hljs-variable">$LINE</span>|awk <span class="hljs-string">&#x27;&#123;print $1&#125;&#x27;</span>`    pod=`<span class="hljs-built_in">echo</span> <span class="hljs-variable">$LINE</span>|awk <span class="hljs-string">&#x27;&#123;print $2&#125;&#x27;</span>`    kubectl --kubeconfig gxq-config delete pod -n <span class="hljs-variable">$namespace</span> <span class="hljs-variable">$pod</span><span class="hljs-keyword">done</span></code></pre></div><h1 id="阿里云增加DNS解析"><a href="#阿里云增加DNS解析" class="headerlink" title="阿里云增加DNS解析"></a>阿里云增加DNS解析</h1><div class="code-wrapper"><pre><code class="hljs bash"><span class="hljs-comment"># A记录</span>aliyun alidns AddDomainRecord --region cn-beijing --DomainName <span class="hljs-string">&#x27;xx.cn&#x27;</span> --Type A --RR <span class="hljs-string">&#x27;www&#x27;</span> --Value <span class="hljs-string">&#x27;1.1.1.1&#x27;</span><span class="hljs-comment"># CNAME</span>aliyun alidns AddDomainRecord --region cn-beijing --DomainName <span class="hljs-string">&#x27;xx.cn&#x27;</span> --Type CNAME --RR <span class="hljs-string">&#x27;xxx&#x27;</span> --Value <span class="hljs-string">&#x27;bbb.yy.cn&#x27;</span></code></pre></div>]]></content>
+    <content type="html"><![CDATA[<h1 id="批量删除指定状态的pods"><a href="#批量删除指定状态的pods" class="headerlink" title="批量删除指定状态的pods"></a>批量删除指定状态的pods</h1><div class="code-wrapper"><pre><code class="hljs bash">kubectl --kubeconfig gxq-config get pods -A|grep Evicted|awk <span class="hljs-string">&#x27;&#123;print $1&quot; &quot;$2&#125;&#x27;</span>|<span class="hljs-keyword">while</span> <span class="hljs-built_in">read</span> LINE<span class="hljs-keyword">do</span>    namespace=`<span class="hljs-built_in">echo</span> <span class="hljs-variable">$LINE</span>|awk <span class="hljs-string">&#x27;&#123;print $1&#125;&#x27;</span>`    pod=`<span class="hljs-built_in">echo</span> <span class="hljs-variable">$LINE</span>|awk <span class="hljs-string">&#x27;&#123;print $2&#125;&#x27;</span>`    kubectl --kubeconfig gxq-config delete pod -n <span class="hljs-variable">$namespace</span> <span class="hljs-variable">$pod</span><span class="hljs-keyword">done</span></code></pre></div><h1 id="阿里云增加DNS解析"><a href="#阿里云增加DNS解析" class="headerlink" title="阿里云增加DNS解析"></a>阿里云增加DNS解析</h1><div class="code-wrapper"><pre><code class="hljs bash"><span class="hljs-comment"># A记录</span>aliyun alidns AddDomainRecord --region cn-beijing --DomainName <span class="hljs-string">&#x27;xx.cn&#x27;</span> --Type A --RR <span class="hljs-string">&#x27;www&#x27;</span> --Value <span class="hljs-string">&#x27;1.1.1.1&#x27;</span><span class="hljs-comment"># CNAME</span>aliyun alidns AddDomainRecord --region cn-beijing --DomainName <span class="hljs-string">&#x27;xx.cn&#x27;</span> --Type CNAME --RR <span class="hljs-string">&#x27;xxx&#x27;</span> --Value <span class="hljs-string">&#x27;bbb.yy.cn&#x27;</span></code></pre></div><h1 id="安装Node-Expoter"><a href="#安装Node-Expoter" class="headerlink" title="安装Node Expoter"></a>安装Node Expoter</h1><div class="code-wrapper"><pre><code class="hljs bash"><span class="hljs-comment"># 一句话安装</span>curl http://47.109.36.211:9090/install_node_expoter.sh | bash</code></pre></div><div class="code-wrapper"><pre><code class="hljs bash"><span class="hljs-meta">#!/bin/bash</span><span class="hljs-built_in">set</span> -e  <span class="hljs-comment"># Exit immediately if a command exits with a non-zero status</span><span class="hljs-comment"># Define variables</span>DOWNLOAD_URL=<span class="hljs-string">&quot;http://47.109.36.211:9090/node_exporter-1.8.2.linux-amd64.tar.gz&quot;</span>DOWNLOAD_DIR=<span class="hljs-string">&quot;/tmp/downloads&quot;</span>INSTALL_DIR=<span class="hljs-string">&quot;/opt/node_exporter&quot;</span>SERVICE_FILE=<span class="hljs-string">&quot;/etc/systemd/system/node_exporter.service&quot;</span><span class="hljs-comment"># Create necessary directories</span><span class="hljs-built_in">mkdir</span> -p <span class="hljs-variable">$DOWNLOAD_DIR</span> <span class="hljs-variable">$INSTALL_DIR</span><span class="hljs-comment"># Download and extract node_exporter</span>wget <span class="hljs-variable">$DOWNLOAD_URL</span> -O <span class="hljs-variable">$DOWNLOAD_DIR</span>/node_exporter.tar.gztar xf <span class="hljs-variable">$DOWNLOAD_DIR</span>/node_exporter.tar.gz -C <span class="hljs-variable">$DOWNLOAD_DIR</span><span class="hljs-built_in">mv</span> <span class="hljs-variable">$DOWNLOAD_DIR</span>/node_exporter-*/node_exporter <span class="hljs-variable">$INSTALL_DIR</span>/<span class="hljs-built_in">rm</span> -rf <span class="hljs-variable">$DOWNLOAD_DIR</span>/node_exporter*<span class="hljs-comment"># Create systemd service file</span><span class="hljs-built_in">cat</span> &lt;&lt;<span class="hljs-string">EOF &gt; $SERVICE_FILE</span><span class="hljs-string">[Unit]</span><span class="hljs-string">Description=Prometheus Node Exporter</span><span class="hljs-string">Documentation=https://github.com/prometheus/node_exporter</span><span class="hljs-string">After=network-online.target</span><span class="hljs-string"></span><span class="hljs-string">[Service]</span><span class="hljs-string">User=root</span><span class="hljs-string">ExecStart=$INSTALL_DIR/node_exporter</span><span class="hljs-string">Restart=on-failure</span><span class="hljs-string">RestartSec=5</span><span class="hljs-string"></span><span class="hljs-string">[Install]</span><span class="hljs-string">WantedBy=multi-user.target</span><span class="hljs-string">EOF</span><span class="hljs-comment"># Reload systemd configuration and start the service</span>systemctl daemon-reloadsystemctl <span class="hljs-built_in">enable</span> --now node_exporter<span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;Node Exporter installation and configuration completed&quot;</span></code></pre></div>]]></content>
     
     
     <categories>

@@ -24,7 +24,7 @@
 <meta property="og:description" content="批量删除指定状态的podskubectl --kubeconfig gxq-config get pods -A|grep Evicted|awk &#x27;&#123;print $1&quot; &quot;$2&#125;&#x27;|while read LINE do     namespace&#x3D;&#96;echo $LINE|awk &#x27;&#123;print $1&#125;&amp;#x">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2024-06-11T06:12:17.000Z">
-<meta property="article:modified_time" content="2024-06-28T02:01:14.162Z">
+<meta property="article:modified_time" content="2024-07-30T06:51:49.108Z">
 <meta property="article:author" content="三石">
 <meta property="article:tag" content="Linux">
 <meta name="twitter:card" content="summary_large_image">
@@ -220,7 +220,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          98 字
+          216 字
         
       </span>
     
@@ -231,7 +231,7 @@
         
         
         
-          1 分钟
+          2 分钟
         
       </span>
     
@@ -285,6 +285,54 @@ aliyun alidns AddDomainRecord --region cn-beijing --DomainName <span class="hljs
 
 <span class="hljs-comment"># CNAME</span>
 aliyun alidns AddDomainRecord --region cn-beijing --DomainName <span class="hljs-string">&#x27;xx.cn&#x27;</span> --Type CNAME --RR <span class="hljs-string">&#x27;xxx&#x27;</span> --Value <span class="hljs-string">&#x27;bbb.yy.cn&#x27;</span></code></pre></div>
+
+
+
+<h1 id="安装Node-Expoter"><a href="#安装Node-Expoter" class="headerlink" title="安装Node Expoter"></a>安装Node Expoter</h1><div class="code-wrapper"><pre><code class="hljs bash"><span class="hljs-comment"># 一句话安装</span>
+curl http://47.109.36.211:9090/install_node_expoter.sh | bash</code></pre></div>
+
+<div class="code-wrapper"><pre><code class="hljs bash"><span class="hljs-meta">#!/bin/bash</span>
+<span class="hljs-built_in">set</span> -e  <span class="hljs-comment"># Exit immediately if a command exits with a non-zero status</span>
+
+<span class="hljs-comment"># Define variables</span>
+DOWNLOAD_URL=<span class="hljs-string">&quot;http://47.109.36.211:9090/node_exporter-1.8.2.linux-amd64.tar.gz&quot;</span>
+DOWNLOAD_DIR=<span class="hljs-string">&quot;/tmp/downloads&quot;</span>
+INSTALL_DIR=<span class="hljs-string">&quot;/opt/node_exporter&quot;</span>
+SERVICE_FILE=<span class="hljs-string">&quot;/etc/systemd/system/node_exporter.service&quot;</span>
+
+<span class="hljs-comment"># Create necessary directories</span>
+<span class="hljs-built_in">mkdir</span> -p <span class="hljs-variable">$DOWNLOAD_DIR</span> <span class="hljs-variable">$INSTALL_DIR</span>
+
+<span class="hljs-comment"># Download and extract node_exporter</span>
+wget <span class="hljs-variable">$DOWNLOAD_URL</span> -O <span class="hljs-variable">$DOWNLOAD_DIR</span>/node_exporter.tar.gz
+tar xf <span class="hljs-variable">$DOWNLOAD_DIR</span>/node_exporter.tar.gz -C <span class="hljs-variable">$DOWNLOAD_DIR</span>
+<span class="hljs-built_in">mv</span> <span class="hljs-variable">$DOWNLOAD_DIR</span>/node_exporter-*/node_exporter <span class="hljs-variable">$INSTALL_DIR</span>/
+<span class="hljs-built_in">rm</span> -rf <span class="hljs-variable">$DOWNLOAD_DIR</span>/node_exporter*
+
+<span class="hljs-comment"># Create systemd service file</span>
+<span class="hljs-built_in">cat</span> &lt;&lt;<span class="hljs-string">EOF &gt; $SERVICE_FILE</span>
+<span class="hljs-string">[Unit]</span>
+<span class="hljs-string">Description=Prometheus Node Exporter</span>
+<span class="hljs-string">Documentation=https://github.com/prometheus/node_exporter</span>
+<span class="hljs-string">After=network-online.target</span>
+<span class="hljs-string"></span>
+<span class="hljs-string">[Service]</span>
+<span class="hljs-string">User=root</span>
+<span class="hljs-string">ExecStart=$INSTALL_DIR/node_exporter</span>
+<span class="hljs-string">Restart=on-failure</span>
+<span class="hljs-string">RestartSec=5</span>
+<span class="hljs-string"></span>
+<span class="hljs-string">[Install]</span>
+<span class="hljs-string">WantedBy=multi-user.target</span>
+<span class="hljs-string">EOF</span>
+
+<span class="hljs-comment"># Reload systemd configuration and start the service</span>
+systemctl daemon-reload
+systemctl <span class="hljs-built_in">enable</span> --now node_exporter
+
+<span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;Node Exporter installation and configuration completed&quot;</span></code></pre></div>
+
+
                 
               </div>
             
