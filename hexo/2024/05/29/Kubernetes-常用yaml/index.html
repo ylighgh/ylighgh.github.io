@@ -24,7 +24,7 @@
 <meta property="og:description" content="logstash服务kubectl apply -f - &lt;&lt;EOF kind: Deployment apiVersion: apps&#x2F;v1 metadata:   name: logstash-os   namespace: logging spec:   replicas: 1   selector:     matchLabels:       app: logstash-os">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2024-05-29T14:26:00.000Z">
-<meta property="article:modified_time" content="2024-06-28T12:42:27.705Z">
+<meta property="article:modified_time" content="2024-08-04T06:44:04.149Z">
 <meta property="article:author" content="三石">
 <meta property="article:tag" content="Kubernetes">
 <meta name="twitter:card" content="summary_large_image">
@@ -220,7 +220,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          424 字
+          568 字
         
       </span>
     
@@ -231,7 +231,7 @@
         
         
         
-          4 分钟
+          5 分钟
         
       </span>
     
@@ -415,6 +415,102 @@
 <span class="hljs-string">  storageClassName: sfsturbo-k8s-sc</span>
 <span class="hljs-string">  volumeMode: Filesystem</span>
 <span class="hljs-string">EOF</span></code></pre></div>
+
+<h1 id="NFS-server"><a href="#NFS-server" class="headerlink" title="NFS-server"></a>NFS-server</h1><div class="code-wrapper"><pre><code class="hljs yaml"><span class="hljs-attr">apiVersion:</span> <span class="hljs-string">v1</span>
+<span class="hljs-attr">kind:</span> <span class="hljs-string">Namespace</span>
+<span class="hljs-attr">metadata:</span>
+  <span class="hljs-attr">labels:</span>
+    <span class="hljs-attr">kubernetes.io/metadata.name:</span> <span class="hljs-string">storage</span>
+  <span class="hljs-attr">name:</span> <span class="hljs-string">storage</span>
+<span class="hljs-meta">---</span>
+<span class="hljs-attr">apiVersion:</span> <span class="hljs-string">v1</span>
+<span class="hljs-attr">data:</span>
+  <span class="hljs-attr">exports:</span> <span class="hljs-string">&#x27;/data/nfs *(rw,fsid=0,insecure,no_root_squash)&#x27;</span>
+<span class="hljs-attr">kind:</span> <span class="hljs-string">ConfigMap</span>
+<span class="hljs-attr">metadata:</span>
+  <span class="hljs-attr">name:</span> <span class="hljs-string">nfs-server-conf</span>
+  <span class="hljs-attr">namespace:</span> <span class="hljs-string">storage</span>
+<span class="hljs-meta">---</span>
+<span class="hljs-attr">kind:</span> <span class="hljs-string">Deployment</span>
+<span class="hljs-attr">apiVersion:</span> <span class="hljs-string">apps/v1</span>
+<span class="hljs-attr">metadata:</span>
+  <span class="hljs-attr">name:</span> <span class="hljs-string">nfs-server</span>
+  <span class="hljs-attr">namespace:</span> <span class="hljs-string">storage</span>
+<span class="hljs-attr">spec:</span>
+  <span class="hljs-attr">replicas:</span> <span class="hljs-number">1</span>
+  <span class="hljs-attr">selector:</span>
+    <span class="hljs-attr">matchLabels:</span>
+      <span class="hljs-attr">app:</span> <span class="hljs-string">nfs-server</span>
+  <span class="hljs-attr">template:</span>
+    <span class="hljs-attr">metadata:</span>
+      <span class="hljs-attr">labels:</span>
+        <span class="hljs-attr">app:</span> <span class="hljs-string">nfs-server</span>
+    <span class="hljs-attr">spec:</span>
+      <span class="hljs-attr">volumes:</span>
+        <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">nfs-server-conf</span>
+          <span class="hljs-attr">configMap:</span>
+            <span class="hljs-attr">name:</span> <span class="hljs-string">nfs-server-conf</span>
+            <span class="hljs-attr">defaultMode:</span> <span class="hljs-number">420</span>
+        <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">nfs-data</span>
+          <span class="hljs-attr">persistentVolumeClaim:</span>
+            <span class="hljs-attr">claimName:</span> <span class="hljs-string">nfs-data</span>
+      <span class="hljs-attr">containers:</span>
+        <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">nfs-server</span>
+          <span class="hljs-attr">image:</span> <span class="hljs-string">harbor.axzo.cn/library/nfs-server:v1</span>
+          <span class="hljs-attr">ports:</span>
+            <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">nfs</span>
+              <span class="hljs-attr">containerPort:</span> <span class="hljs-number">2049</span>
+              <span class="hljs-attr">protocol:</span> <span class="hljs-string">TCP</span>
+            <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">mountd</span>
+              <span class="hljs-attr">containerPort:</span> <span class="hljs-number">20048</span>
+              <span class="hljs-attr">protocol:</span> <span class="hljs-string">TCP</span>
+            <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">rpcbind</span>
+              <span class="hljs-attr">containerPort:</span> <span class="hljs-number">111</span>
+              <span class="hljs-attr">protocol:</span> <span class="hljs-string">TCP</span>
+          <span class="hljs-attr">volumeMounts:</span>
+            <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">nfs-server-conf</span>
+              <span class="hljs-attr">readOnly:</span> <span class="hljs-literal">true</span>
+              <span class="hljs-attr">mountPath:</span> <span class="hljs-string">/etc/exports</span>
+              <span class="hljs-attr">subPath:</span> <span class="hljs-string">exports</span>
+            <span class="hljs-bullet">-</span> <span class="hljs-attr">mountPath:</span> <span class="hljs-string">/data/nfs</span>
+              <span class="hljs-attr">name:</span> <span class="hljs-string">nfs-data</span>
+          <span class="hljs-attr">terminationMessagePath:</span> <span class="hljs-string">/dev/termination-log</span>
+          <span class="hljs-attr">terminationMessagePolicy:</span> <span class="hljs-string">File</span>
+          <span class="hljs-attr">imagePullPolicy:</span> <span class="hljs-string">IfNotPresent</span>
+          <span class="hljs-attr">securityContext:</span>
+            <span class="hljs-attr">privileged:</span> <span class="hljs-literal">true</span>
+      <span class="hljs-attr">restartPolicy:</span> <span class="hljs-string">Always</span>
+      <span class="hljs-attr">terminationGracePeriodSeconds:</span> <span class="hljs-number">30</span>
+      <span class="hljs-attr">dnsPolicy:</span> <span class="hljs-string">ClusterFirst</span>
+  <span class="hljs-attr">strategy:</span>
+    <span class="hljs-attr">type:</span> <span class="hljs-string">RollingUpdate</span>
+    <span class="hljs-attr">rollingUpdate:</span>
+      <span class="hljs-attr">maxUnavailable:</span> <span class="hljs-number">25</span><span class="hljs-string">%</span>
+      <span class="hljs-attr">maxSurge:</span> <span class="hljs-number">25</span><span class="hljs-string">%</span>
+  <span class="hljs-attr">revisionHistoryLimit:</span> <span class="hljs-number">10</span>
+  <span class="hljs-attr">progressDeadlineSeconds:</span> <span class="hljs-number">600</span>
+<span class="hljs-meta">---</span>
+<span class="hljs-attr">apiVersion:</span> <span class="hljs-string">v1</span>
+<span class="hljs-attr">kind:</span> <span class="hljs-string">Service</span>
+<span class="hljs-attr">metadata:</span>
+  <span class="hljs-attr">name:</span> <span class="hljs-string">nfs-service</span>
+  <span class="hljs-attr">namespace:</span> <span class="hljs-string">storage</span>
+<span class="hljs-attr">spec:</span>
+  <span class="hljs-attr">ports:</span>
+    <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">nfs</span>
+      <span class="hljs-attr">port:</span> <span class="hljs-number">2049</span>
+      <span class="hljs-attr">protocol:</span> <span class="hljs-string">TCP</span>
+      <span class="hljs-attr">targetPort:</span> <span class="hljs-number">2049</span>
+    <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">mountd</span>
+      <span class="hljs-attr">port:</span> <span class="hljs-number">20048</span>
+      <span class="hljs-attr">protocol:</span> <span class="hljs-string">TCP</span>
+      <span class="hljs-attr">targetPort:</span> <span class="hljs-number">20048</span>
+    <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">rpcbind</span>
+      <span class="hljs-attr">port:</span> <span class="hljs-number">111</span>
+      <span class="hljs-attr">protocol:</span> <span class="hljs-string">TCP</span>
+      <span class="hljs-attr">targetPort:</span> <span class="hljs-number">111</span>
+  <span class="hljs-attr">selector:</span>
+    <span class="hljs-attr">app:</span> <span class="hljs-string">nfs-server</span></code></pre></div>
                 
               </div>
             
@@ -461,9 +557,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/hexo/2024/05/29/Kubernetes-%E5%AD%98%E5%82%A8%E4%B8%8E%E9%85%8D%E7%BD%AE/" title="Kubernetes-存储与配置">
+                      <a href="/hexo/2024/05/29/Kubernetes-%E6%8C%81%E4%B9%85%E5%8C%96%E5%AD%98%E5%82%A8/" title="Kubernetes-持久化存储">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">Kubernetes-存储与配置</span>
+                        <span class="hidden-mobile">Kubernetes-持久化存储</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
@@ -471,8 +567,8 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/hexo/2024/05/29/Kubernetes-%E6%8C%81%E4%B9%85%E5%8C%96%E5%AD%98%E5%82%A8/" title="Kubernetes-持久化存储">
-                        <span class="hidden-mobile">Kubernetes-持久化存储</span>
+                      <a href="/hexo/2024/05/29/Kubernetes-%E6%97%A5%E5%BF%97%E9%87%87%E9%9B%86/" title="Kubernetes-日志采集">
+                        <span class="hidden-mobile">Kubernetes-日志采集</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
