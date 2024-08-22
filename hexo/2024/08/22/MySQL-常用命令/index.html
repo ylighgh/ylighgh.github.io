@@ -19,12 +19,12 @@
     <meta name="description" content="查看库空间大小select TABLE_SCHEMA, concat(truncate(sum(data_length)&#x2F;1024&#x2F;1024,2),&#x27; MB&#x27;) as data_size, concat(truncate(sum(index_length)&#x2F;1024&#x2F;1024,2),&#x27;MB&#x27;) as index_size, concat(truncate(s">
 <meta property="og:type" content="article">
 <meta property="og:title" content="MySQL-常用命令">
-<meta property="og:url" content="https://ylighgh.github.io/hexo/2024/06/25/MySQL-%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/index.html">
+<meta property="og:url" content="https://ylighgh.github.io/hexo/2024/08/22/MySQL-%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/index.html">
 <meta property="og:site_name" content="运维杂记">
 <meta property="og:description" content="查看库空间大小select TABLE_SCHEMA, concat(truncate(sum(data_length)&#x2F;1024&#x2F;1024,2),&#x27; MB&#x27;) as data_size, concat(truncate(sum(index_length)&#x2F;1024&#x2F;1024,2),&#x27;MB&#x27;) as index_size, concat(truncate(s">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2024-06-25T06:12:17.000Z">
-<meta property="article:modified_time" content="2024-08-02T06:29:52.395Z">
+<meta property="article:published_time" content="2024-08-22T07:46:57.000Z">
+<meta property="article:modified_time" content="2024-08-22T07:46:57.076Z">
 <meta property="article:author" content="三石">
 <meta property="article:tag" content="MySQL">
 <meta name="twitter:card" content="summary_large_image">
@@ -208,8 +208,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2024-06-25 14:12" pubdate>
-          2024年6月25日 下午
+        <time datetime="2024-08-22 15:46" pubdate>
+          2024年8月22日 下午
         </time>
       </span>
     
@@ -220,7 +220,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          147 字
+          162 字
         
       </span>
     
@@ -304,6 +304,8 @@ concat(<span class="hljs-keyword">truncate</span>(<span class="hljs-built_in">su
 <span class="hljs-keyword">select</span> <span class="hljs-operator">*</span> <span class="hljs-keyword">from</span> <span class="hljs-keyword">user</span> <span class="hljs-keyword">where</span> <span class="hljs-keyword">user</span><span class="hljs-operator">=</span><span class="hljs-string">&#x27;xxx&#x27;</span>;</code></pre></div>
 
 <h1 id="创建用户"><a href="#创建用户" class="headerlink" title="创建用户"></a>创建用户</h1><div class="code-wrapper"><pre><code class="hljs sql"><span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">USER</span> <span class="hljs-string">&#x27;finley&#x27;</span>@<span class="hljs-string">&#x27;localhost&#x27;</span> IDENTIFIED <span class="hljs-keyword">BY</span> <span class="hljs-string">&#x27;password&#x27;</span>;</code></pre></div>
+
+<h1 id="授予权限"><a href="#授予权限" class="headerlink" title="授予权限"></a>授予权限</h1><div class="code-wrapper"><pre><code class="hljs sql"><span class="hljs-keyword">GRANT</span> <span class="hljs-keyword">ALL</span> <span class="hljs-keyword">ON</span> `test<span class="hljs-operator">-</span>poseidon`.<span class="hljs-operator">*</span> <span class="hljs-keyword">TO</span> <span class="hljs-string">&#x27;test-poseidon&#x27;</span>@<span class="hljs-string">&#x27;%&#x27;</span> <span class="hljs-keyword">WITH</span> <span class="hljs-keyword">GRANT</span> OPTION;</code></pre></div>
                 
               </div>
             
@@ -350,18 +352,12 @@ concat(<span class="hljs-keyword">truncate</span>(<span class="hljs-built_in">su
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/hexo/2024/06/25/Kubernetes-StorageClass/" title="Kubernetes-StorageClass">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">Kubernetes-StorageClass</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/hexo/2024/06/11/ELK-Filebeat/" title="Filebeat安装">
-                        <span class="hidden-mobile">Filebeat安装</span>
+                      <a href="/hexo/2024/08/07/Kubernetes-Prometheus%E7%9B%91%E6%8E%A7/" title="Kubernetes-Prometheus监控">
+                        <span class="hidden-mobile">Kubernetes-Prometheus监控</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
