@@ -1,0 +1,708 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/hexo/img/fluid.png">
+  <link rel="icon" href="/hexo/img/fluid.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="三石">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="🚀 第一步：准备系统环境# 更新系统 dnf update -y  # 设置主机名 hostnamectl set-hostname &lt;node-name&gt;  # 将主机名加入 &#x2F;etc&#x2F;hosts echo &quot;127.0.0.1 $(hostname)&quot; &gt;&gt; &#x2F;etc&#x2F;hosts  # 关闭 SELinux（临时 + 永久） setenforce">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Kubernetes-v1.34-安装">
+<meta property="og:url" content="https://ylighgh.github.io/hexo/2025/10/13/Kubernetes-v1.34-%E5%AE%89%E8%A3%85/index.html">
+<meta property="og:site_name" content="运维杂记">
+<meta property="og:description" content="🚀 第一步：准备系统环境# 更新系统 dnf update -y  # 设置主机名 hostnamectl set-hostname &lt;node-name&gt;  # 将主机名加入 &#x2F;etc&#x2F;hosts echo &quot;127.0.0.1 $(hostname)&quot; &gt;&gt; &#x2F;etc&#x2F;hosts  # 关闭 SELinux（临时 + 永久） setenforce">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-10-13T14:44:21.000Z">
+<meta property="article:modified_time" content="2025-10-13T14:04:53.867Z">
+<meta property="article:author" content="三石">
+<meta property="article:tag" content="Kubernetes">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>Kubernetes-v1.34-安装 - 运维杂记</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/hexo/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/hexo/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/hexo/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"ylighgh.github.io","root":"/hexo/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null},"woyaola":null,"cnzz":null},"search_path":"/hexo/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/hexo/js/utils.js" ></script>
+  <script  src="/hexo/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/hexo/">
+      <strong>Fluid</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/hexo/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/hexo/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/hexo/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/hexo/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/hexo/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/hexo/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Kubernetes-v1.34-安装"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-10-13 22:44" pubdate>
+          2025年10月13日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          524 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          5 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">Kubernetes-v1.34-安装</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="🚀-第一步：准备系统环境"><a href="#🚀-第一步：准备系统环境" class="headerlink" title="🚀 第一步：准备系统环境"></a>🚀 第一步：准备系统环境</h1><div class="code-wrapper"><pre><code class="hljs bash"><span class="hljs-comment"># 更新系统</span>
+dnf update -y
+
+<span class="hljs-comment"># 设置主机名</span>
+hostnamectl set-hostname &lt;node-name&gt;
+
+<span class="hljs-comment"># 将主机名加入 /etc/hosts</span>
+<span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;127.0.0.1 <span class="hljs-subst">$(hostname)</span>&quot;</span> &gt;&gt; /etc/hosts
+
+<span class="hljs-comment"># 关闭 SELinux（临时 + 永久）</span>
+setenforce 0
+sed -i <span class="hljs-string">&#x27;s/^SELINUX=enforcing/SELINUX=permissive/&#x27;</span> /etc/selinux/config
+
+<span class="hljs-comment"># 禁用 Swap（临时 + 永久）</span>
+swapoff -a
+sed -i <span class="hljs-string">&#x27;/ swap / s/^/#/&#x27;</span> /etc/fstab
+
+<span class="hljs-comment"># 启用网桥转发模块</span>
+modprobe br_netfilter
+
+<span class="hljs-comment"># 配置内核模块自动加载</span>
+<span class="hljs-built_in">cat</span> &lt;&lt;<span class="hljs-string">EOF | tee /etc/modules-load.d/k8s.conf</span>
+<span class="hljs-string">br_netfilter</span>
+<span class="hljs-string">EOF</span>
+
+<span class="hljs-comment"># 配置系统网络参数</span>
+<span class="hljs-built_in">cat</span> &lt;&lt;<span class="hljs-string">EOF | tee /etc/sysctl.d/k8s.conf</span>
+<span class="hljs-string">net.bridge.bridge-nf-call-ip6tables = 1</span>
+<span class="hljs-string">net.bridge.bridge-nf-call-iptables = 1</span>
+<span class="hljs-string">net.ipv4.ip_forward = 1</span>
+<span class="hljs-string">EOF</span>
+
+<span class="hljs-comment"># 使配置立即生效</span>
+sysctl --system</code></pre></div>
+
+<h1 id="🐳-第二步：安装-Containerd-容器运行时"><a href="#🐳-第二步：安装-Containerd-容器运行时" class="headerlink" title="🐳 第二步：安装 Containerd 容器运行时"></a>🐳 第二步：安装 Containerd 容器运行时</h1><div class="code-wrapper"><pre><code class="hljs bash"><span class="hljs-comment"># 安装依赖</span>
+dnf -y install dnf-plugins-core
+
+<span class="hljs-comment"># 添加 Docker 官方仓库</span>
+dnf config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+
+<span class="hljs-comment"># 安装 containerd</span>
+dnf install -y containerd
+
+<span class="hljs-comment"># 创建配置目录</span>
+<span class="hljs-built_in">mkdir</span> -p /etc/containerd
+
+<span class="hljs-comment"># 生成默认配置文件</span>
+containerd config default | <span class="hljs-built_in">tee</span> /etc/containerd/config.toml
+
+<span class="hljs-comment"># 修改 cgroup 驱动为 systemd</span>
+sed -i <span class="hljs-string">&#x27;s/SystemdCgroup = false/SystemdCgroup = true/&#x27;</span> /etc/containerd/config.toml
+
+<span class="hljs-comment"># 启动并设置开机自启</span>
+systemctl <span class="hljs-built_in">enable</span> --now containerd</code></pre></div>
+
+<h1 id="🧩-第三步：安装-Kubernetes-组件"><a href="#🧩-第三步：安装-Kubernetes-组件" class="headerlink" title="🧩 第三步：安装 Kubernetes 组件"></a>🧩 第三步：安装 Kubernetes 组件</h1><h2 id="添加-Kubernetes-官方仓库"><a href="#添加-Kubernetes-官方仓库" class="headerlink" title="添加 Kubernetes 官方仓库"></a>添加 Kubernetes 官方仓库</h2><div class="code-wrapper"><pre><code class="hljs bash"><span class="hljs-built_in">cat</span> &lt;&lt;<span class="hljs-string">EOF | tee /etc/yum.repos.d/kubernetes.repo</span>
+<span class="hljs-string">[kubernetes]</span>
+<span class="hljs-string">name=Kubernetes</span>
+<span class="hljs-string">baseurl=https://pkgs.k8s.io/core:/stable:/v1.34/rpm/</span>
+<span class="hljs-string">enabled=1</span>
+<span class="hljs-string">gpgcheck=1</span>
+<span class="hljs-string">gpgkey=https://pkgs.k8s.io/core:/stable:/v1.34/rpm/repodata/repomd.xml.key</span>
+<span class="hljs-string">EOF</span></code></pre></div>
+
+<h2 id="安装-kubelet、kubeadm、kubectl"><a href="#安装-kubelet、kubeadm、kubectl" class="headerlink" title="安装 kubelet、kubeadm、kubectl"></a>安装 kubelet、kubeadm、kubectl</h2><div class="code-wrapper"><pre><code class="hljs bash">dnf install -y kubelet kubeadm kubectl
+
+<span class="hljs-comment"># 启用 kubelet 服务</span>
+systemctl <span class="hljs-built_in">enable</span> kubelet</code></pre></div>
+
+<h1 id="🧠-第四步：初始化控制节点（Master）"><a href="#🧠-第四步：初始化控制节点（Master）" class="headerlink" title="🧠 第四步：初始化控制节点（Master）"></a>🧠 第四步：初始化控制节点（Master）</h1><div class="code-wrapper"><pre><code class="hljs bash">kubeadm init \
+  --pod-network-cidr=10.244.0.0/16 \
+  --apiserver-advertise-address=&lt;MASTER_IP&gt;
+
+<span class="hljs-comment"># 配置 kubectl 管理权限</span>
+<span class="hljs-built_in">mkdir</span> -p <span class="hljs-variable">$HOME</span>/.kube
+<span class="hljs-built_in">cp</span> -i /etc/kubernetes/admin.conf <span class="hljs-variable">$HOME</span>/.kube/config
+<span class="hljs-built_in">chown</span> $(<span class="hljs-built_in">id</span> -u):$(<span class="hljs-built_in">id</span> -g) <span class="hljs-variable">$HOME</span>/.kube/config</code></pre></div>
+
+<h1 id="🌐-第五步：部署-Flannel-网络插件"><a href="#🌐-第五步：部署-Flannel-网络插件" class="headerlink" title="🌐 第五步：部署 Flannel 网络插件"></a>🌐 第五步：部署 Flannel 网络插件</h1><div class="code-wrapper"><pre><code class="hljs bash">kubectl apply -f https://raw.githubusercontent.com/flannel-io/flannel/master/Documentation/kube-flannel.yml</code></pre></div>
+
+<h1 id="🧑‍🤝‍🧑-第六步：将工作节点加入集群"><a href="#🧑‍🤝‍🧑-第六步：将工作节点加入集群" class="headerlink" title="🧑‍🤝‍🧑 第六步：将工作节点加入集群"></a>🧑‍🤝‍🧑 第六步：将工作节点加入集群</h1><p>在控制节点上运行以下命令以生成加入命令：</p>
+<div class="code-wrapper"><pre><code class="hljs bash">kubeadm token create --print-join-command</code></pre></div>
+
+<p>输出示例：</p>
+<div class="code-wrapper"><pre><code class="hljs bash">kubeadm <span class="hljs-built_in">join</span> MASTER_IP:6443 --token 0iax3l.5xa5l61mspqet \
+  --discovery-token-ca-cert-hash sha256:5660b8sfak43e56sf3dpi13jdd1d4ecde06d55bfed842g3mf1d793daeb9549f4ba3</code></pre></div>
+
+<p>👉 将以上命令复制到 每个工作节点 上执行，即可加入集群。</p>
+<p>🔍 第七步：验证集群状态</p>
+<div class="code-wrapper"><pre><code class="hljs bash"><span class="hljs-comment"># 创建一个测试应用</span>
+kubectl create deployment nginx --image=nginx
+
+<span class="hljs-comment"># 暴露服务（NodePort 方式）</span>
+kubectl expose deployment nginx --port=80 --<span class="hljs-built_in">type</span>=NodePort
+
+<span class="hljs-comment"># 查看服务信息</span>
+kubectl get svc</code></pre></div>
+
+<p>输出示例：</p>
+<div class="code-wrapper"><pre><code class="hljs bash">NAME    TYPE       CLUSTER-IP      EXTERNAL-IP   PORT(S)        AGE
+nginx   NodePort   10.96.232.101   &lt;none&gt;        80:31547/TCP   10s</code></pre></div>
+
+<p>然后使用浏览器访问：</p>
+<div class="code-wrapper"><pre><code class="hljs dts"><span class="hljs-symbol">http:</span><span class="hljs-comment">//&lt;NodeIP&gt;:31547</span></code></pre></div>
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/hexo/categories/Kubernetes/" class="category-chain-item">Kubernetes</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/hexo/tags/Kubernetes/" class="print-no-link">#Kubernetes</a>
+      
+    </div>
+  
+</div>
+
+
+              
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/hexo/2025/10/13/Kubernetes-Istio/" title="Kubernetes-Istio-安装">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Kubernetes-Istio-安装</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/hexo/2024/09/10/Kubernetes-%E9%9D%A2%E8%AF%95%E9%A2%98/" title="Kubernetes-基础">
+                        <span class="hidden-mobile">Kubernetes-基础</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/hexo/js/events.js" ></script>
+<script  src="/hexo/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/hexo/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/hexo/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/hexo/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
